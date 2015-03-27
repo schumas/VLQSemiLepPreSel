@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
+[
+<!ENTITY MC_WJets_LNu_HT100to200_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT100to200_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT200to400_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT200to400_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT400to600_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT400to600_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT600toInf_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT600toInf_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT100to200_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT100to200_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT200to400_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT200to400_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT400to600_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT400to600_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT600toInf_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT600toInf_20x25.xml">
+<!ENTITY MC_TTJets_20x25                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TTJets_20x25.xml">
+<!ENTITY MC_TpJ_TH_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpJ_TH_M800_20x25.xml">
+<!ENTITY MC_TpJ_TH_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpJ_TH_M1200_20x25.xml">
+<!ENTITY MC_TpTp_M1000_20x25            SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpTp_M1000_20x25.xml">
+<!ENTITY MC_BpJ_TW_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_BpJ_TW_M800_20x25.xml">
+<!ENTITY MC_BpJ_TW_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_BpJ_TW_M1200_20x25.xml">
+<!ENTITY QCD_HT250to500                 SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT250To500_20x25_ext1.xml">
+<!ENTITY QCD_HT500to1000                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT500To1000_20x25_ext1.xml">
+<!ENTITY QCD_HT1000ToInf                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT1000ToInf_20x25_ext1.xml">
+]
+>
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+    <Library Name="libSUHH2VLQToHiggsAndLepton"/>
+    <Package Name="SUHH2VLQToHiggsAndLepton.par" />
+
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="20000" > -->
+   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2-tmp/" PostFix="" TargetLumi="20000" >
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="20000" > -->
+
+        <InputData Lumi="31568.03" NEventsMax="-1" Type="MC" Version="MC_TTJets_20x25" Cacheable="False">
+            &MC_TTJets_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="2354.480" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT100to200_20x25" Cacheable="False">
+            &MC_WJets_LNu_HT100to200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="8510.477" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT200to400_20x25" Cacheable="False">
+            &MC_WJets_LNu_HT200to400_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="67844.94" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT400to600_20x25" Cacheable="False">
+            &MC_WJets_LNu_HT400to600_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="198348.0" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT600toInf_20x25" Cacheable="False">
+            &MC_WJets_LNu_HT600toInf_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="18944.66" NEventsMax="-1" Type="MC" Version="MC_ZJets_LL_HT100to200_20x25" Cacheable="False">
+            &MC_ZJets_LL_HT100to200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="81156.45" NEventsMax="-1" Type="MC" Version="MC_ZJets_LL_HT200to400_20x25" Cacheable="False">
+            &MC_ZJets_LL_HT200to400_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="684912.7" NEventsMax="-1" Type="MC" Version="MC_ZJets_LL_HT400to600_20x25" Cacheable="False">
+            &MC_ZJets_LL_HT400to600_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="1872322" NEventsMax="-1" Type="MC" Version="MC_ZJets_LL_HT600toInf_20x25" Cacheable="False">
+            &MC_ZJets_LL_HT600toInf_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="670500.0" NEventsMax="-1" Type="MC" Version="QCD_HT250to500" Cacheable="False">
+            &QCD_HT250to500;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="120.2061" NEventsMax="-1" Type="MC" Version="QCD_HT500to1000" Cacheable="False">
+            &QCD_HT500to1000;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="1469.039" NEventsMax="-1" Type="MC" Version="QCD_HT1000ToInf" Cacheable="False">
+            &QCD_HT1000ToInf;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
+            &MC_TpJ_TH_M800_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M1200_20x25" Cacheable="False">
+            &MC_TpJ_TH_M1200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="211058" NEventsMax="-1" Type="MC" Version="MC_TpTp_M1000_20x25" Cacheable="False">
+            &MC_TpTp_M1000_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="83604" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M800_20x25" Cacheable="False">
+            &MC_BpJ_TW_M800_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="85611" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M1200_20x25" Cacheable="False">
+            &MC_BpJ_TW_M1200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <UserConfig>
+            <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
+            <Item Name="ElectronCollection" Value="slimmedElectrons" />
+            <Item Name="MuonCollection" Value="slimmedMuons" />
+            <Item Name="TauCollection" Value="slimmedTaus" />
+            <Item Name="JetCollection" Value="patJetsAk4PFCHS" />
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="TopJetCollection" Value="patJetsCmsTopTagCHSPacked" />
+            <Item Name="METName" Value="slimmedMETs" />
+            <Item Name="GenParticleCollection" Value="GenParticles" />
+            <Item Name="additionalBranches" Value="ca8GenJets ca15GenJets ca8GenJetsPruned ca15GenJetsFiltered cmsTopTagGen hepTopTagGen triggerNames triggerResults patJetsAk8PFCHS patJetsCa15CHSJets patJetsCa8CHSJets patJetsHepTopTagCHSPacked patJetsCmsTopTagCHSPacked patJetsCa8CHSJetsPrunedPacked patJetsCa15CHSJetsFilteredPacked" />
+            
+            <!-- the class name of the AnalysisModule subclasses to run: -->
+            <Item Name="AnalysisModule" Value="VLQSemiLepPreSel" />
+            
+            <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
+            <Item Name="TestKey" Value="VLQSemiLepPreSel" />
+        </UserConfig>
+    </Cycle>
+</JobConfiguration>
