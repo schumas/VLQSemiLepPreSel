@@ -22,7 +22,7 @@ varial.settings.defaults_Legend.update({
 varial.settings.canvas_size_x = 700
 varial.settings.canvas_size_y = 400
 varial.settings.root_style.SetPadRightMargin(0.3)
-varial.settings.rootfile_postfixes = ['.png']
+varial.settings.rootfile_postfixes = ['.root', '.png']
 
 dir_input = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/'
 dirname1 = 'VLQ_presel_norm'
@@ -106,7 +106,7 @@ p2 = varial.tools.mk_rootfile_plotter(
     name=dirname2,
     plotter_factory=plotter_factory_stack,
     combine_files=True,
-    filter_keyfunc=lambda w: 'Ctrl' in w.in_file_path
+    #filter_keyfunc=lambda w: 'Ctrl' in w.in_file_path
 )
 
 
