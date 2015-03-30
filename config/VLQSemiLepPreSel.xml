@@ -75,7 +75,7 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
-        <InputData Lumi="670500.0" NEventsMax="-1" Type="MC" Version="QCD_HT250to500" Cacheable="False">
+        <InputData Lumi="2.98914094" NEventsMax="-1" Type="MC" Version="QCD_HT250to500" Cacheable="False">
             &QCD_HT250to500;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
