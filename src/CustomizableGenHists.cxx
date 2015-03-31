@@ -91,7 +91,7 @@ std::map<int, std::pair<float, float> > CustomizableGenHists::minmax_masses_ = {
 std::map<int, std::pair<float, float> > CustomizableGenHists::minmax_pts_ = {};
 
 
-void CustomizableGenHists::add_genhistcoll(int pdgid, int order_num, bool mass, bool charge, bool decay,
+void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bool mass, bool charge, bool decay,
                             bool mother, const boost::optional<GenParticleId> & genp_id,
                             std::string suffix)
 {

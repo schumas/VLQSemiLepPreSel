@@ -15,7 +15,8 @@ public:
 
     struct GenHistColl
     {
-        int pdgid, order_num;
+        int pdgid;
+        unsigned int order_num;
         TH1F *h_pt, *h_eta, *h_phi, *h_n, *h_mass, *h_charge, *h_decay, *h_mother;
         boost::optional<GenParticleId> genp_id;
     };
@@ -23,7 +24,7 @@ public:
     // use the same constructor arguments as Hists for forwarding:
     CustomizableGenHists(uhh2::Context & ctx, const std::string & dirname, const std::string & h_part_ht = "parton_ht");
     virtual void fill(const uhh2::Event & ev) override;
-    void add_genhistcoll(int pdgid, int order_num, bool mass = false, bool charge = false,
+    void add_genhistcoll(int pdgid, unsigned int order_num, bool mass = false, bool charge = false,
                 bool decay = false, bool mother = false, const boost::optional<GenParticleId> & genp_id = boost::none,
                 std::string suffix = "");
 

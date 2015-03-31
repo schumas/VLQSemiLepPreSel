@@ -17,7 +17,6 @@
 
 #include "UHH2/VLQSemiLepPreSel/include/VLQCommonModules.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
-//#include "UHH2/VLQSemiLepPreSel/include/VLQToHiggsPairProdHists.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQGenHists.h"
 
 
