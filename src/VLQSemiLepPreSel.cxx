@@ -18,6 +18,7 @@
 #include "UHH2/VLQSemiLepPreSel/include/VLQCommonModules.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQGenHists.h"
+#include "UHH2/VLQSemiLepPreSel/include/EventHists.h"
 
 
 using namespace std;
@@ -85,12 +86,12 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx):
     v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new TopTagCalculator(ctx.get_handle<int>("n_toptags"))));
 
     v_hists.push_back(std::unique_ptr<Hists>(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre")));
-    //v_hists.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventsHistsPre")));
+    v_hists.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventHistsPre")));
     v_hists.push_back(std::unique_ptr<Hists>(new VLQGenHists(ctx, "GenHistsPre")));
 
     v_hists_post.push_back(std::unique_ptr<Hists>(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost")));
-    //v_hists_post.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventsHistsPost")));
-    //v_hists_post.push_back(std::unique_ptr<Hists>(new VLQGenHists(ctx, "GenHistsPost")));
+    v_hists_post.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventHistsPost")));
+    v_hists_post.push_back(std::unique_ptr<Hists>(new VLQGenHists(ctx, "GenHistsPost")));
 }
 
 

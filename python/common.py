@@ -52,3 +52,7 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
                 yield merge_decay_channel(res)
         else:
             yield w
+
+
+def is_signal(name):
+    return not any(t in name for t in ['_M800_', '_M1000_', '_M1200_'])

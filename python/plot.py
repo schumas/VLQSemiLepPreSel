@@ -8,7 +8,6 @@ import time
 import varial.tools
 import varial.generators as gen
 
-
 varial.settings.max_open_root_files = 100
 varial.settings.defaults_Legend.update({
     'x_pos': 0.85,
@@ -19,14 +18,14 @@ varial.settings.defaults_Legend.update({
     'opt_data': 'p',
     'reverse': True
 })
-varial.settings.canvas_size_x = 700
-varial.settings.canvas_size_y = 400
+varial.settings.canvas_size_x = 600
+varial.settings.canvas_size_y = 500
 varial.settings.root_style.SetPadRightMargin(0.3)
 varial.settings.rootfile_postfixes = ['.root', '.png']
 
+varial.settings.max_num_processes = 20
+
 dir_input = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/'
-dirname1 = 'VLQ_presel_norm'
-dirname2 = 'VLQ_presel_stack'
 
 
 def only_leading_n_obj(wrps, n=50):
@@ -37,6 +36,33 @@ def only_leading_n_obj(wrps, n=50):
             yield w
         else:
             break
+
+
+def apply_match_eff(wrps):
+    factors = {
+        # QCD
+        '_HT250to500': 0.1685,
+        '_HT500to1000': 0.2103,
+        '_HT1000ToInf': 0.2358,
+
+        # WJets
+        '_LNu_HT100to200_20x25': 0.096,
+        '_LNu_HT200to400_20x25': 0.084,
+        '_LNu_HT400to600_20x25': 0.075,
+        '_LNu_HT600toInf_20x25': 0.063,
+
+        # ZJets
+        '_LL_HT100to200_20x25': 0.099,
+        '_LL_HT200to400_20x25': 0.081,
+        '_LL_HT400to600_20x25': 0.067,
+        '_LL_HT600toInf_20x25': 0.062,
+    }
+    for w in wrps:
+        for k in factors:
+            if k in w.file_path:
+                w.lumi /= factors[k]
+        w = varial.op.norm_to_lumi(w)
+        yield w
 
 
 def merge_samples(wrps):
@@ -61,7 +87,8 @@ def merge_samples(wrps):
 
 
 def loader_hook(wrps):
-    #wrps = only_leading_n_obj(wrps)
+    #wrps = only_leading_n_obj(wrps, 20)
+    #wrps = apply_match_eff(wrps)
     wrps = common.add_wrp_info(wrps)
     wrps = merge_samples(wrps)
     wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
@@ -81,18 +108,16 @@ def loader_hook_norm(wrps):
     return wrps
 
 
+def plotter_factory(**kws):
+    kws['hook_loaded_histos'] = loader_hook
+    kws['save_lin_log_scale'] = True
+    return varial.tools.Plotter(**kws)
+
+
 def plotter_factory_norm(**kws):
     kws['hook_loaded_histos'] = loader_hook_norm
     kws['save_lin_log_scale'] = True
     return varial.tools.Plotter(**kws)
-
-p1 = varial.tools.mk_rootfile_plotter(
-    pattern=dir_input + '*.root',
-    name=dirname1,
-    plotter_factory=plotter_factory_norm,
-    combine_files=True,
-    #filter_keyfunc=lambda w: 'Ctrl' not in w.in_file_path
-)
 
 
 def plotter_factory_stack(**kws):
@@ -101,12 +126,37 @@ def plotter_factory_stack(**kws):
     kws['plot_setup'] = gen.mc_stack_n_data_sum
     return varial.tools.Plotter(**kws)
 
-p2 = varial.tools.mk_rootfile_plotter(
+p1 = varial.tools.mk_rootfile_plotter(
     pattern=dir_input + '*.root',
-    name=dirname2,
+    name='VLQ_presel_stack',
     plotter_factory=plotter_factory_stack,
     combine_files=True,
-    #filter_keyfunc=lambda w: 'Ctrl' in w.in_file_path
+)
+
+p2 = varial.tools.mk_rootfile_plotter(
+    pattern=dir_input + '*.root',
+    name='VLQ_presel_norm',
+    plotter_factory=plotter_factory_norm,
+    combine_files=True,
+)
+
+p3 = varial.tools.mk_rootfile_plotter(
+    pattern=dir_input + '*.root',
+    name='VLQ_presel_norm_no_signal',
+    plotter_factory=plotter_factory,
+    combine_files=True,
+    filter_keyfunc=lambda w: common.is_signal(w.file_path)
+)
+
+tc_inner = varial.tools.ToolChainParallel(
+    'VLQ_presel', [
+        p1.tool_chain[0],
+        p2.tool_chain[0],
+        p3.tool_chain[0]
+    ]
+)
+tc = varial.tools.ToolChain(
+    'host_toolchain', [tc_inner]
 )
 
 
@@ -115,11 +165,15 @@ if __name__ == '__main__':
 
     #import cProfile
     #varial.settings.use_parallel_chains = False
-    #cProfile.runctx('p1.run()',globals(),locals(),'cProfile_varial_plotting.txt')
+    #cProfile.runctx('p1.run()',globals(),locals(),'prof_varial_plotting.txt')
     #print 'done profiling'
 
-    p1.run()
-    p2.run()
+    tc.run()
     varial.tools.WebCreator().run()
-    varial.tools.CopyTool('~/www/').run()
     print 'done.'
+
+
+
+
+
+

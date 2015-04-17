@@ -132,9 +132,9 @@ void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bo
         order_str = to_string(order_num);
 
     new_genhistcoll.h_pt = book<TH1F>(particle+"_pt_"+order_str, particle+" p_{T} "+order_str, n_ptbins, minpt, maxpt);
-    new_genhistcoll.h_eta = book<TH1F>(particle+"_eta_"+order_str, particle+" eta "+order_str, 40, -2.5, 2.5);
+    new_genhistcoll.h_eta = book<TH1F>(particle+"_eta_"+order_str, particle+" eta "+order_str, 100, -5.0, 5.0);
     new_genhistcoll.h_phi = book<TH1F>(particle+"_phi_"+order_str, particle+" phi "+order_str, 64, -M_PI, M_PI);
-    new_genhistcoll.h_n = order_num <= 1 ? book<TH1F>(particle+"_n", particle+" number", 40, -2.5, 2.5) : NULL;
+    new_genhistcoll.h_n = order_num <= 1 ? book<TH1F>(particle+"_n", particle+" number", 21, -0.5, 20.5) : NULL;
     new_genhistcoll.h_mass = mass ? book<TH1F>(particle+"_mass_"+order_str, particle+" mass "+order_str, n_massbins, minmass, maxmass) : NULL;
     new_genhistcoll.h_charge = charge ? book<TH1F>(particle+"_charge_"+order_str, particle+" charge "+order_str, 3, -1.5, 1.5) : NULL;
     new_genhistcoll.h_decay = decay ? book<TH1F>(particle+"_decay_"+order_str, particle+" decay "+order_str, 60, -30.5, 30.5) : NULL;
@@ -234,7 +234,7 @@ CustomizableGenHists::CustomizableGenHists(Context & ctx, const string & dirname
     Hists(ctx, dirname), ctx_(ctx), dirname_(dirname), h_part_ht_(ctx.get_handle<double>(h_part_ht))
 {
     // parton ht
-    spec_parton_ht = book<TH1F>("spec_parton_ht", "HT (partons)", 100, 0, 3500);
+    spec_parton_ht = book<TH1F>("spec_parton_ht", "HT (partons)", 80, 0, 4000);
 
     // dR variables
     spec_deltaR_bb_h = book<TH1F>("spec_deltaR_bb_h", "#Delta R_{bb}(Higgs)", 50, 0, 5);

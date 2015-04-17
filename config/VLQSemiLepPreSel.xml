@@ -132,9 +132,50 @@
             
             <!-- the class name of the AnalysisModule subclasses to run: -->
             <Item Name="AnalysisModule" Value="VLQSemiLepPreSel" />
-            
+
+            <Item Name="use_sframe_weight" Value="true" /> 
+
             <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
             <Item Name="TestKey" Value="VLQSemiLepPreSel" />
         </UserConfig>
     </Cycle>
 </JobConfiguration>
+
+<!--
+ "MC_TTJets_20x25" : 25446993 events
+ "MC_WJets_LNu_HT100to200_20x25" : 5262265 events
+ "MC_WJets_LNu_HT200to400_20x25" : 4936077 events
+ "MC_WJets_LNu_HT400to600_20x25" : 4640594 events
+ "MC_WJets_LNu_HT600toInf_20x25" : 4581841 events
+ "MC_ZJets_LL_HT100to200_20x25" : 4054159 events
+ "MC_ZJets_LL_HT200to400_20x25" : 4666496 events
+ "MC_ZJets_LL_HT400to600_20x25" : 4931372 events
+ "MC_ZJets_LL_HT600toInf_20x25" : 4493574 events
+ "QCD_HT250to500" : 2004219 events
+ "QCD_HT500to1000" : 3214312 events
+ "QCD_HT1000ToInf" : 1130720 events
+ "MC_TpJ_TH_M800_20x25" : 99900 events
+ "MC_TpJ_TH_M1200_20x25" : 100000 events
+ "MC_TpTp_M1000_20x25" : 211058 events
+ "MC_BpJ_TW_M800_20x25" : 83604 events
+ "MC_BpJ_TW_M1200_20x25" : 85611 events
+
+
+with match eff:
+TTJets                  : 31568.03
+WJets_LNu_HT100to200    : 24525.83
+WJets_LNu_HT200to400    : 101315.20
+WJets_LNu_HT400to600    : 904599.20
+WJets_LNu_HT600toInf    : 3148381
+ZJets_LL_HT100to200     : 191360.2
+ZJets_LL_HT200to400     : 1001931
+ZJets_LL_HT400to600     : 10222578
+ZJets_LL_HT600toInf     : 30198742
+QCD_HT250to500          : 17.7397
+QCD_HT500to1000         : 571.5934
+QCD_HT1000ToInf         : 6230.021
+
+-->
+
+
+
