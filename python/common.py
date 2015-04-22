@@ -33,6 +33,7 @@ def add_wrp_info(wrps):
 def merge_decay_channel(w):
     return w
 
+
 def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
     """histos must be sorted!!"""
     buf = []
@@ -56,3 +57,13 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
 
 def is_signal(name):
     return not any(t in name for t in ['_M800_', '_M1000_', '_M1200_'])
+
+
+def yield_n_objs(wrps, n=50):
+    i = 0
+    for w in wrps:
+        i += 1
+        if i < n:
+            yield w
+        else:
+            break

@@ -224,16 +224,16 @@ void VLQGenHists::fill(const Event & event){
 
 
     if(abs(mother1_pdgId)== 0 && abs(mother2_pdgId)== 0){
-      particles_noMother->Fill(igenp.pdgId());           
-      particles_noMother_pT->Fill(igenp.pt());  
-      particles_noMother_eta->Fill(igenp.eta());  
-      particles_noMother_phi->Fill(igenp.phi());   
+      particles_noMother->Fill(igenp.pdgId(), weight);
+      particles_noMother_pT->Fill(igenp.pt(), weight);
+      particles_noMother_eta->Fill(igenp.eta(), weight);
+      particles_noMother_phi->Fill(igenp.phi(), weight);
     }
     if(abs(mother1_pdgId)== 0 && abs(mother2_pdgId)== 0 &&  abs(daughter2_pdgId)== 0 &&  abs(daughter1_pdgId)== 0){
-      particles_noMotherNoDaughter->Fill(igenp.pdgId());           
-      particles_noMotherNoDaughter_pT->Fill(igenp.pt());  
-      particles_noMotherNoDaughter_eta->Fill(igenp.eta());  
-      particles_noMotherNoDaughter_phi->Fill(igenp.phi()); 
+      particles_noMotherNoDaughter->Fill(igenp.pdgId(), weight);
+      particles_noMotherNoDaughter_pT->Fill(igenp.pt(), weight);
+      particles_noMotherNoDaughter_eta->Fill(igenp.eta(), weight);
+      particles_noMotherNoDaughter_phi->Fill(igenp.phi(), weight);
       
     } 
   }

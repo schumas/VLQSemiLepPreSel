@@ -34,21 +34,22 @@ public:
             ";ST;events",
             1000, 0, 4000
         )) {}
+
     virtual void fill(const uhh2::Event & event) override {
+        double w = event.weight;
         float lep_pt = event.get(h_primlep).pt();
-        lepPt->Fill(lep_pt);
-        leadingJetPt->Fill(event.jets->at(0).pt());
-        st->Fill(event.get(h_st));
+        lepPt->Fill(lep_pt, w);
+        leadingJetPt->Fill(event.jets->at(0).pt(), w);
+        st->Fill(event.get(h_st), w);
         if (event.electrons->size()
             && fabs(event.electrons->at(0).pt() - lep_pt) < 1e-40) {
-            elePt->Fill(event.electrons->at(0).pt());
+            elePt->Fill(event.electrons->at(0).pt(), w);
         }
         if (event.muons->size()
             && fabs(event.muons->at(0).pt() - lep_pt) < 1e-40) {
-            muoPt->Fill(event.muons->at(0).pt());
+            muoPt->Fill(event.muons->at(0).pt(), w);
         }
     }
-    virtual ~VLQSemiLepPreSelHists() {}
 
     Event::Handle<FlavorParticle> h_primlep;
     Event::Handle<double> h_st;

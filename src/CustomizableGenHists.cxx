@@ -266,7 +266,7 @@ void CustomizableGenHists::fill(const Event & event){
     vector<GenParticle> bs;
 
     if (event.is_valid(h_part_ht_))
-        spec_parton_ht->Fill(event.get(h_part_ht_));
+        spec_parton_ht->Fill(event.get(h_part_ht_), weight);
 
     for (GenParticle const & igenp : *genparticles)
     {

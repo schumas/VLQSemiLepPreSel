@@ -38,6 +38,30 @@ private:
 };  // class FwdJetSwitch
 
 
+class BJetsProducer: public AnalysisModule {
+public:
+    explicit BJetsProducer(Context & ctx,
+                           CSVBTag::wp wp = CSVBTag::WP_LOOSE):
+        hndl(ctx.get_handle<std::vector<Jet>>("b_jets")),
+        tagger(CSVBTag(wp)) {}
+
+    bool process(Event & event){
+        std::vector<Jet> b_jets;
+        for(const Jet & j : *event.jets){
+            if (tagger(j, event)) {
+                b_jets.push_back(j);
+            }
+        }
+        event.set(hndl, b_jets);
+        return true;
+    }
+
+private:
+    Event::Handle<std::vector<Jet>> hndl;
+    CSVBTag tagger;
+};  // class BJetsProducer
+
+
 class NBTagProducer: public AnalysisModule {
 public:
     explicit NBTagProducer(Context & ctx,
