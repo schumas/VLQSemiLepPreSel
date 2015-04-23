@@ -1,3 +1,5 @@
+#pragma once
+
 #include <algorithm>
 
 #include "UHH2/core/include/AnalysisModule.h"
@@ -12,6 +14,7 @@
 using namespace std;
 using namespace uhh2;
 
+namespace {
 
 class FwdJetSwitch: public AnalysisModule {
 public:
@@ -322,3 +325,26 @@ private:
 };
 
 
+// function to grab the best hypothesis
+// note: member HYP.discriminators must be public map<string, float>
+template<typename HYP>
+const HYP * get_best_hypothesis(
+    const vector<HYP> & hyps,
+    const string & label,
+    float & best_discr)
+{
+    const HYP * best = nullptr;
+    float current_best_disc = numeric_limits<float>::infinity();
+    for(const auto & hyp : hyps){
+        if(!hyp.discriminators.count(label)) continue;
+        float disc = hyp.discriminators.find(label)->second;
+        if(disc < current_best_disc){
+            best = &hyp;
+            current_best_disc = disc;
+        }
+    }
+    best_discr = current_best_disc;
+    return best;  // note: might be nullptr
+}
+
+}
