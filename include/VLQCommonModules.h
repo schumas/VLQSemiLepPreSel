@@ -112,6 +112,31 @@ private:
 };  // class NLeadingBTagProducer
 
 
+class HJetsProducer: public AnalysisModule {
+public:
+    explicit HJetsProducer(Context & ctx, const std::string & coll):
+        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll)),
+        hndl_out(ctx.get_handle<std::vector<TopJet>>("h_jets")),
+        tagger(HiggsTag()) {}
+
+    bool process(Event & event){
+        std::vector<TopJet> h_jets;
+        for(const TopJet & j : event.get(hndl_in)){
+            if (tagger(j, event)) {
+                h_jets.push_back(j);
+            }
+        }
+        event.set(hndl_out, h_jets);
+        return true;
+    }
+
+private:
+    Event::Handle<std::vector<TopJet>> hndl_in;
+    Event::Handle<std::vector<TopJet>> hndl_out;
+    TopJetId tagger;
+};  // class HJetsProducer
+
+
 class NHTagProducer: public AnalysisModule {
 public:
     explicit NHTagProducer(Context & ctx, const std::string & coll):
