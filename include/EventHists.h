@@ -25,11 +25,13 @@ class ExtendedEventHists : public EventHists {
 public:
     ExtendedEventHists(uhh2::Context & ctx, const std::string & dirname) :
         EventHists(ctx, dirname), h_btags_(ctx.get_handle<int>("n_btags")),
-        h_toptags_(ctx.get_handle<int>("n_toptags"))
+        h_toptags_(ctx.get_handle<int>("n_toptags")),
+        h_higgstags_(ctx.get_handle<int>("n_higgstags"))
         {
             Weights = book<TH1F>("Weights_own", "weights", 2000,0,200);
             h_n_btags = book<TH1F>("jets_Nbs", "N_{b-tags}", 20, 0, 20);
-            h_n_toptags = book<TH1F>("jets_Ntops", "N_{top jets}", 20, 0, 20);
+            h_n_toptags = book<TH1F>("jets_Ntops", "N_{cms top tags}", 20, 0, 20);
+            h_n_higgstags = book<TH1F>("jets_Nhiggs", "N_{higgs tags}", 20, 0, 20);
 
             h_primlep = ctx.get_handle<FlavorParticle>("PrimaryLepton");
         }
@@ -39,15 +41,17 @@ public:
         double w = event.weight;
         int n_btags = event.get(h_btags_);
         int n_toptags = event.get(h_toptags_);
+        int n_higgstags = event.get(h_higgstags_);        
 
         h_n_btags->Fill(n_btags, w);
         h_n_toptags->Fill(n_toptags, w);
+        h_n_higgstags->Fill(n_higgstags, w);
 
     }
 
 private:
-    TH1F *h_n_btags, *h_n_toptags;
-    uhh2::Event::Handle<int> h_btags_, h_toptags_;
+    TH1F *h_n_btags, *h_n_toptags, *h_n_higgstags;
+    uhh2::Event::Handle<int> h_btags_, h_toptags_, h_higgstags_;
 };
 
 // new el hists class based on the ElectronHists class in the common package but changing the histogram ranges for some of the histograms

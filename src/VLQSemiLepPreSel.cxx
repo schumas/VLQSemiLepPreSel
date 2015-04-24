@@ -82,8 +82,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx):
     v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new HTCalculator(ctx)));
     v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new STCalculator(ctx)));
     v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NBTagProducer(ctx)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NHTagProducer(ctx, "patJetsCa15CHSJetsFilteredPacked")));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new TopTagCalculator(ctx.get_handle<int>("n_toptags"))));
+    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NTaggedTopJetProducer(ctx, TopJetId(HiggsTag()), "n_higgstags", "patJetsCa15CHSJetsFilteredPacked")));
+    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NTaggedTopJetProducer(ctx, TopJetId(CMSTopTag()), "n_toptags")));
 
     v_hists.push_back(std::unique_ptr<Hists>(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre")));
     v_hists.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventHistsPre")));
@@ -101,9 +101,6 @@ bool VLQSemiLepPreSel::process(Event & event) {
     if (!event.jets->size()) {
         return false;
     }
-    if (!(event.muons->size() || event.electrons->size())) {
-        return false;
-    }
 
     // run all event modules
     for (auto & mod : v_pre_modules) {
@@ -112,12 +109,6 @@ bool VLQSemiLepPreSel::process(Event & event) {
 
     // test again + good lepton
     if (!event.jets->size()) {
-        return false;
-    }
-    if (!(event.muons->size() || event.electrons->size())) {
-        return false;
-    }
-    if (!event.is_valid(h_primlep)) {
         return false;
     }
 

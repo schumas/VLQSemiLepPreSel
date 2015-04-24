@@ -115,56 +115,6 @@ private:
 };  // class NLeadingBTagProducer
 
 
-class HJetsProducer: public AnalysisModule {
-public:
-    explicit HJetsProducer(Context & ctx, const std::string & coll):
-        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll)),
-        hndl_out(ctx.get_handle<std::vector<TopJet>>("h_jets")),
-        tagger(HiggsTag()) {}
-
-    bool process(Event & event){
-        std::vector<TopJet> h_jets;
-        for(const TopJet & j : event.get(hndl_in)){
-            if (tagger(j, event)) {
-                h_jets.push_back(j);
-            }
-        }
-        event.set(hndl_out, h_jets);
-        return true;
-    }
-
-private:
-    Event::Handle<std::vector<TopJet>> hndl_in;
-    Event::Handle<std::vector<TopJet>> hndl_out;
-    TopJetId tagger;
-};  // class HJetsProducer
-
-
-class NHTagProducer: public AnalysisModule {
-public:
-    explicit NHTagProducer(Context & ctx, const std::string & coll):
-        hndl(ctx.get_handle<int>("n_higgs_tags")),
-        coll_hndl(ctx.get_handle<std::vector<TopJet>>(coll)),
-        tagger(HiggsTag()) {}
-
-    bool process(Event & event){
-        int ntag = 0;
-        for(const TopJet & j : event.get(coll_hndl)){
-            if (tagger(j, event)) {
-                ++ntag;
-            }
-        }
-        event.set(hndl, ntag);
-        return true;
-    }
-
-private:
-    Event::Handle<int> hndl;
-    Event::Handle<std::vector<TopJet>> coll_hndl;
-    TopJetId tagger;
-};  // class NHTagProducer
-
-
 class STCalculator: public uhh2::AnalysisModule {
 public:
     explicit STCalculator(uhh2::Context & ctx):
@@ -225,31 +175,57 @@ private:
 };  // class JetTagCalculator
 
 
-class TopTagCalculator : public AnalysisModule {
+class TaggedTopJetProducer: public AnalysisModule {
 public:
-    explicit TopTagCalculator(Event::Handle<int> hndl, TopJetId const & id = TopJetId(CMSTopTag()), boost::optional<Event::Handle<std::vector<TopJet> > > const & topjets = boost::none) :
-        tagger_(id), hndl_(hndl), h_topjets_(topjets) {}
+    explicit TaggedTopJetProducer(Context & ctx, TopJetId const & id, const std::string & coll_out, const std::string & coll_in = ""):
+        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll_in)),
+        hndl_out(ctx.get_handle<std::vector<TopJet>>(coll_out)),
+        tagger(id) {}
 
-    virtual bool process(Event & event) {
-        int n_toptags = 0;
-        std::vector<TopJet> const * topjets = (h_topjets_ && event.is_valid(*h_topjets_)) ? &event.get(*h_topjets_) : event.topjets;
-        if (topjets)
-        {
-            for (const TopJet & jet : *topjets)
-            {
-                if (tagger_(jet, event))
-                    n_toptags++;
+    bool process(Event & event){
+        const std::vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
+        std::vector<TopJet> out_jets;
+        for(const TopJet & j : topjets) {
+            if (tagger(j, event)) {
+                out_jets.push_back(j);
             }
         }
-        event.set(hndl_, n_toptags);
+        event.set(hndl_out, out_jets);
         return true;
     }
 
 private:
-    TopJetId tagger_;
-    Event::Handle<int> hndl_;
-    boost::optional<Event::Handle<std::vector<TopJet> > > h_topjets_;
-};  // class TopTagCalculator
+    Event::Handle<std::vector<TopJet>> hndl_in;
+    Event::Handle<std::vector<TopJet>> hndl_out;
+    TopJetId tagger;
+};  // class TaggedTopJetProducer
+
+
+class NTaggedTopJetProducer: public AnalysisModule {
+public:
+    explicit NTaggedTopJetProducer(Context & ctx, TopJetId const & id, const std::string hndl_name, const std::string & coll_in = ""):
+        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll_in)),
+        hndl_out(ctx.get_handle<int>(hndl_name)),
+        tagger(id) {}
+
+    bool process(Event & event){
+        const std::vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
+        int n_topjettags = 0;
+        for(const TopJet & j : topjets) {
+            if (tagger(j, event)) {
+                n_topjettags++;
+            }
+        }
+        event.set(hndl_out, n_topjettags);
+        return true;
+    }
+
+private:
+    Event::Handle<std::vector<TopJet>> hndl_in;
+    Event::Handle<int> hndl_out;
+    TopJetId tagger;
+};  // class NTaggedTopJetProducer
+
 
 
 class GenParticleMotherId

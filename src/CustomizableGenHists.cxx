@@ -150,11 +150,11 @@ void CustomizableGenHists::fill_hists(const T * ipart, const std::vector<GenPart
     GenHistColl & gen_histcoll, double w)
 {
     gen_histcoll.h_pt->Fill(ipart->pt(), w);
-    gen_histcoll.h_eta->Fill(ipart->pt(), w);
-    gen_histcoll.h_phi->Fill(ipart->pt(), w);
+    gen_histcoll.h_eta->Fill(ipart->eta(), w);
+    gen_histcoll.h_phi->Fill(ipart->phi(), w);
     if (gen_histcoll.h_mass) gen_histcoll.h_mass->Fill(ipart->v4().mass(), w);
     if (gen_histcoll.h_charge) gen_histcoll.h_charge->Fill(ipart->charge(), w);
-    if (gen_histcoll.h_charge) gen_histcoll.h_charge->Fill(ipart->charge(), w);
+
     GenParticle const * genpart = typeid(T) == typeid(GenParticle) ? (GenParticle*)ipart : NULL;
     if (gen_histcoll.h_decay && genpart)
     {
@@ -332,12 +332,19 @@ void CustomizableGenHists::fill(const Event & event){
         }
     }
 
+    float dR_closestbs = -1.f;
+
     for (vector<GenParticle>::const_iterator it = bs.begin(); it != bs.end(); ++it)
     {
         GenParticle const * ib = &*it;
         GenParticle const * closestB = closestParticle(*ib, bs);
         if (closestB)
-            spec_deltaR_bb_min->Fill(deltaR(*ib, *closestB), weight);
+        {
+            float dR_bs = deltaR(*ib, *closestB);
+            if (dR_closestbs < 0 || dR_bs < dR_closestbs)
+                dR_closestbs = dR_bs;
+        }
+
         GenParticle const * imother = findMother(*ib, genparticles);
         if (!imother) continue;
         if (abs(imother->pdgId()) == 25)
@@ -356,6 +363,10 @@ void CustomizableGenHists::fill(const Event & event){
             }
         }
     }
+
+    if (dR_closestbs >= 0.f)
+        spec_deltaR_bb_min->Fill(dR_closestbs, weight);
+
 
 
 }
