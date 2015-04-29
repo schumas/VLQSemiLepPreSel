@@ -21,8 +21,8 @@ settings.defaults_Legend.update({
     'reverse': True
 })
 
-settings.canvas_size_x = 600
-settings.canvas_size_y = 500
+settings.canvas_size_x = 550
+settings.canvas_size_y = 400
 settings.root_style.SetPadRightMargin(0.3)
 settings.rootfile_postfixes = ['.root', '.png']
 

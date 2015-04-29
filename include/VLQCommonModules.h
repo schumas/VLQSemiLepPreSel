@@ -115,6 +115,47 @@ private:
 };  // class NLeadingBTagProducer
 
 
+class LeadingJetPtProducer: public AnalysisModule {
+public:
+    explicit LeadingJetPtProducer(Context & ctx):
+        h(ctx.get_handle<float>("leading_jet_pt")) {}
+
+    virtual bool process(Event & e) override {
+        if (e.jets->size() > 0) {
+            e.set(h, e.jets->at(0).pt());
+            return true;
+        } else {
+            e.set(h, 0.);
+            return false;
+        }
+    }
+
+private:
+    Event::Handle<float> h;
+};
+
+
+class LeptonPtProducer: public AnalysisModule {
+public:
+    explicit LeptonPtProducer(Context & ctx):
+        h(ctx.get_handle<float>("primary_lepton_pt")),
+        h_prim_lep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_prim_lep)) {
+            e.set(h, e.get(h_prim_lep).pt());
+        } else {
+            e.set(h, 0.);
+        }
+        return true;
+    }
+
+private:
+    Event::Handle<float> h;
+    Event::Handle<FlavorParticle> h_prim_lep;
+};
+
+
 class STCalculator: public uhh2::AnalysisModule {
 public:
     explicit STCalculator(uhh2::Context & ctx):

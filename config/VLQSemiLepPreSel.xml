@@ -159,22 +159,6 @@
  "MC_TpTp_M1000_20x25" : 211058 events
  "MC_BpJ_TW_M800_20x25" : 83604 events
  "MC_BpJ_TW_M1200_20x25" : 85611 events
-
-
-with match eff:
-TTJets                  : 31568.03
-WJets_LNu_HT100to200    : 24525.83
-WJets_LNu_HT200to400    : 101315.20
-WJets_LNu_HT400to600    : 904599.20
-WJets_LNu_HT600toInf    : 3148381
-ZJets_LL_HT100to200     : 191360.2
-ZJets_LL_HT200to400     : 1001931
-ZJets_LL_HT400to600     : 10222578
-ZJets_LL_HT600toInf     : 30198742
-QCD_HT250to500          : 17.7397
-QCD_HT500to1000         : 571.5934
-QCD_HT1000ToInf         : 6230.021
-
 -->
 
 

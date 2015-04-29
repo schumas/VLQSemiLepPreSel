@@ -19,6 +19,8 @@
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQGenHists.h"
 #include "UHH2/VLQSemiLepPreSel/include/EventHists.h"
+#include "UHH2/VLQSemiLepPreSel/include/SelectionHists.h"
+#include "UHH2/VLQSemiLepPreSel/include/VLQSLPS_selectionItems.h"
 
 
 using namespace std;
@@ -34,19 +36,14 @@ private:
     std::string version;
     // modules for setting up collections and cleaning
     std::vector<std::unique_ptr<AnalysisModule>> v_pre_modules;
-
-    Event::Handle<FlavorParticle> h_primlep;
-    Event::Handle<double> h_st;
+    unique_ptr<AnalysisModule> sel_module;
 
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
 };
 
 
-VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx):
-    h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")),
-    h_st(ctx.get_handle<double>("ST"))
-{
+VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     // If needed, access the configuration of the module here, e.g.:
     // string testvalue = ctx.get("TestKey", "<not set>");
@@ -73,63 +70,61 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx):
             PtEtaCut(20.0, 2.4)
         )
     )));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new JetCorrector(JERFiles::PHYS14_L123_MC)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new JetLeptonCleaner(JERFiles::PHYS14_L123_MC)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new JetCleaner(30.0, 7.0)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new JetPtSorter()));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new PrimaryLepton(ctx)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new PartonHT(ctx.get_handle<double>("parton_ht"))));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new HTCalculator(ctx)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new STCalculator(ctx)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NBTagProducer(ctx)));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NTaggedTopJetProducer(ctx, TopJetId(HiggsTag()), "n_higgstags", "patJetsCa15CHSJetsFilteredPacked")));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new NTaggedTopJetProducer(ctx, TopJetId(CMSTopTag()), "n_toptags")));
+    v_pre_modules.emplace_back(new JetCorrector(JERFiles::PHYS14_L123_MC));
+    v_pre_modules.emplace_back(new JetLeptonCleaner(JERFiles::PHYS14_L123_MC));
+    v_pre_modules.emplace_back(new JetCleaner(30.0, 7.0));
+    v_pre_modules.emplace_back(new JetPtSorter());
+    v_pre_modules.emplace_back(new PrimaryLepton(ctx));
+    v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
+    v_pre_modules.emplace_back(new HTCalculator(ctx));
+    v_pre_modules.emplace_back(new STCalculator(ctx));
+    v_pre_modules.emplace_back(new NBTagProducer(ctx));
+    v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(HiggsTag()), "n_higgstags", "patJetsCa15CHSJetsFilteredPacked"));
+    v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(CMSTopTag()), "n_toptags"));
+    v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
+    v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
 
-    v_hists.push_back(std::unique_ptr<Hists>(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre")));
-    v_hists.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventHistsPre")));
-    v_hists.push_back(std::unique_ptr<Hists>(new VLQGenHists(ctx, "GenHistsPre")));
+    SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
+    sel_module.reset(new SelectionProducer(ctx, sel_helper));
 
-    v_hists_post.push_back(std::unique_ptr<Hists>(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost")));
-    v_hists_post.push_back(std::unique_ptr<Hists>(new HistCollector(ctx, "EventHistsPost")));
-    v_hists_post.push_back(std::unique_ptr<Hists>(new VLQGenHists(ctx, "GenHistsPost")));
+    // 2. setup histograms
+    sel_helper.fill_hists_vector(v_hists, "NoSelection");
+    v_hists.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre"));
+    v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
+    v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
+    v_hists.emplace_back(new Nm1SelHists(ctx, "Nm1Selection", sel_helper));
+    v_hists.emplace_back(new VLQ2HTCutflow(ctx, "Cutflow", sel_helper));
+
+    v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
+    v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
+    v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
 }
 
 
 bool VLQSemiLepPreSel::process(Event & event) {
 
-    // reject event if no jets or lepton
-    if (!event.jets->size()) {
-        return false;
-    }
-
     // run all event modules
     for (auto & mod : v_pre_modules) {
-         mod->process(event);
+
+        mod->process(event);
     }
 
-    // test again + good lepton
-    if (!event.jets->size()) {
-        return false;
-    }
+    // run selection
+    bool all_accepted = sel_module->process(event);
 
     // fill ctrl hists
     for (auto & h : v_hists) {
         h->fill(event);
     }
 
-    // decide
-    bool accept = event.get(h_primlep).pt() >= 50.
-                  && event.jets->at(0).pt() >= 200.
-                  && event.get(h_st) >= 500.;
-
     // fill ctrl hists after selection
-    if (accept) {
+    if (all_accepted) {
         for (auto & h : v_hists_post) {
             h->fill(event);
         }
     }
 
-    return accept;
+    return all_accepted;
 }
 
 UHH2_REGISTER_ANALYSIS_MODULE(VLQSemiLepPreSel)

@@ -36,6 +36,9 @@ public:
         )) {}
 
     virtual void fill(const uhh2::Event & event) override {
+        if (!event.jets->size()) {
+            return;
+        }
         double w = event.weight;
         float lep_pt = event.get(h_primlep).pt();
         lepPt->Fill(lep_pt, w);
