@@ -56,7 +56,7 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
 
 
 def is_signal(name):
-    return not any(t in name for t in ['_M800_', '_M1000_', '_M1200_'])
+    return any(t in name for t in ['_M800_', '_M1000_', '_M1200_'])
 
 
 def yield_n_objs(wrps, n=50):

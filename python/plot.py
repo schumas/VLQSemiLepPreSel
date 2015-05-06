@@ -124,7 +124,7 @@ if __name__ == '__main__':
         name='VLQ_presel_norm_no_signal',
         plotter_factory=plotter_factory,
         combine_files=True,
-        filter_keyfunc=lambda w: common.is_signal(w.file_path)
+        filter_keyfunc=lambda w: not common.is_signal(w.file_path)
     )
 
     tc_inner = varial.tools.ToolChainParallel(
