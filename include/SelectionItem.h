@@ -5,6 +5,7 @@
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/VLQSemiLepPreSel/include/HandleSelection.h"
 #include "UHH2/VLQSemiLepPreSel/include/HandleHist.h"
+#include "UHH2/VLQSemiLepPreSel/include/HandleToBranchWriter.h"
 
 
 using namespace std;
@@ -13,8 +14,9 @@ using namespace uhh2;
 
 class SelectionItem {
 public:
-    virtual Selection * make_selection(Context & ctx) const = 0;
-    virtual Hists * make_hists(Context & ctx, const string & dir) const = 0;
+    virtual Selection       * make_selection(Context & ctx) const = 0;
+    virtual Hists           * make_hists(Context & ctx, const string & dir) const = 0;
+    virtual AnalysisModule  * make_branch_writer(Context & ctx, TTree * tree) const = 0;
     const string & name() const {return name_;}
 
 protected:
@@ -39,6 +41,10 @@ public:
         return new HandleHist<DATATYPE>(ctx, dir, name_, title_.c_str(), n_bins_, x_min_, x_max_);
     }
 
+    virtual AnalysisModule * make_branch_writer(Context & ctx, TTree * tree) const override {
+        return new HandleToBranchWriter<DATATYPE>(ctx, name_, tree);
+    }
+
 private:
     string title_;
     int n_bins_;
@@ -47,6 +53,7 @@ private:
     DATATYPE min_val_;
     DATATYPE max_val_;
 };
+
 
 class SelItemsHelper {
 public:
@@ -97,6 +104,19 @@ public:
         for (const auto & name: item_names) {
             target.emplace_back(get_sel_item(name)->make_selection(ctx));
         }
+    }
+
+    void fill_wrtr_vector(vector<unique_ptr<AnalysisModule>> & target,
+                          TTree * tree) const {
+        for (const auto & name: item_names) {
+            target.emplace_back(get_sel_item(name)->make_branch_writer(ctx, tree));
+        }
+    }
+
+    TreeWriter * make_tree_writer(const string & filename) const {
+        auto * wrtr = new TreeWriter(ctx, filename);
+        fill_wrtr_vector(wrtr->writers(), wrtr->tree());
+        return wrtr;
     }
 
 private:
