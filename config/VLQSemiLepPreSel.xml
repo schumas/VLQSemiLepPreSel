@@ -30,11 +30,32 @@
    <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2-tmp/" PostFix="" TargetLumi="20000" >
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="20000" > -->
 
-        <InputData Lumi="31568.03" NEventsMax="-1" Type="MC" Version="MC_TTJets_20x25" Cacheable="False">
-            &MC_TTJets_20x25;
+        <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
+            &MC_TpJ_TH_M800_20x25;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
+        <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M1200_20x25" Cacheable="False">
+            &MC_TpJ_TH_M1200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="211058" NEventsMax="-1" Type="MC" Version="MC_TpTp_M1000_20x25" Cacheable="False">
+            &MC_TpTp_M1000_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="83604" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M800_20x25" Cacheable="False">
+            &MC_BpJ_TW_M800_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="85611" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M1200_20x25" Cacheable="False">
+            &MC_BpJ_TW_M1200_20x25;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+
         <InputData Lumi="2354.480" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT100to200_20x25" Cacheable="False">
             &MC_WJets_LNu_HT100to200_20x25;
             <InputTree Name="AnalysisTree" />
@@ -90,29 +111,8 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
-
-        <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
-            &MC_TpJ_TH_M800_20x25;
-            <InputTree Name="AnalysisTree" />
-            <OutputTree Name="AnalysisTree" />
-        </InputData>
-        <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M1200_20x25" Cacheable="False">
-            &MC_TpJ_TH_M1200_20x25;
-            <InputTree Name="AnalysisTree" />
-            <OutputTree Name="AnalysisTree" />
-        </InputData>
-        <InputData Lumi="211058" NEventsMax="-1" Type="MC" Version="MC_TpTp_M1000_20x25" Cacheable="False">
-            &MC_TpTp_M1000_20x25;
-            <InputTree Name="AnalysisTree" />
-            <OutputTree Name="AnalysisTree" />
-        </InputData>
-        <InputData Lumi="83604" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M800_20x25" Cacheable="False">
-            &MC_BpJ_TW_M800_20x25;
-            <InputTree Name="AnalysisTree" />
-            <OutputTree Name="AnalysisTree" />
-        </InputData>
-        <InputData Lumi="85611" NEventsMax="-1" Type="MC" Version="MC_BpJ_TW_M1200_20x25" Cacheable="False">
-            &MC_BpJ_TW_M1200_20x25;
+        <InputData Lumi="31568.03" NEventsMax="-1" Type="MC" Version="MC_TTJets_20x25" Cacheable="False">
+            &MC_TTJets_20x25;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
