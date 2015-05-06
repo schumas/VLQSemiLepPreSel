@@ -19,7 +19,7 @@ public:
                         TARGS... args):
         Hists(ctx, dirname),
         hndl(ctx.get_handle<HANDLETYPE>(handlename)) {
-            hist=book<TH1F>(handlename.c_str(), args...);
+            hist = book<TH1F>(handlename.c_str(), args...);
         }
 
     virtual void fill(const Event & e) override {

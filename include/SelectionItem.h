@@ -126,14 +126,18 @@ private:
 };
 
 
-class SelectionProducer: public AnalysisModule {
+class SelectionProducer : public AnalysisModule {
 public:
     explicit SelectionProducer(Context & ctx,
-                             const SelItemsHelper & sel_helper):
+                               const SelItemsHelper & sel_helper):
         h_sel_res(ctx.get_handle<vector<bool>>("sel_accept")),
         h_all_acc(ctx.get_handle<bool>("sel_all_accepted"))
     {
         sel_helper.fill_sel_vector(v_sel);
+    }
+
+    void add_selection(Selection * sel) {
+        v_sel.emplace_back(sel);
     }
 
     virtual bool process(Event & event) override {

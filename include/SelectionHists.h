@@ -19,6 +19,10 @@ public:
         sel_helper.fill_hists_vector(v_hists, dir);
     }
 
+    void add_hists(Hists * hists) {
+        v_hists.emplace_back(hists);
+    }
+
     virtual void fill(const Event & event) override {
         const auto & v_accept = event.get(h_sel_res);
         for (unsigned i=0; i<v_hists.size(); ++i) {
@@ -50,24 +54,29 @@ public:
                   const string & dir,
                   const SelItemsHelper & sel_helper):
         Hists(ctx, dir),
-        h(book<TH1F>("cutflow", "", 1, 0, -1)),
-        names(sel_helper.get_item_names()),
-        h_sel(ctx.get_handle<vector<bool>>("sel_accept"))
+        h_sel(ctx.get_handle<vector<bool>>("sel_accept")),
+        v_names(sel_helper.get_item_names()),
+        h(book<TH1F>("cutflow", "", 1, 0, -1))
     {
         h->SetBit(TH1::kCanRebin);
         h->Fill("input", 1e-7);
-        for (const string & name : names) {
+        for (const string & name : v_names) {
             h->Fill(name.c_str(), 1e-7);
         }
+    }
+
+    void add_step(const string & name) {
+        v_names.push_back(name);
+        h->Fill(name.c_str(), 1e-7);
     }
 
     virtual void fill(const uhh2::Event & e) override {
         float w = e.weight;
         const auto & sel = e.get(h_sel);
         h->Fill("input", w);
-        for (unsigned i = 0; i < names.size(); ++i) {
+        for (unsigned i = 0; i < v_names.size(); ++i) {
             if (sel[i]) {
-                h->Fill(names[i].c_str(), w);
+                h->Fill(v_names[i].c_str(), w);
             } else {
                 break;
             }
@@ -75,7 +84,7 @@ public:
     }
 
 private:
-    TH1F * h;
-    const vector<string> & names;
     Event::Handle<vector<bool>> h_sel;
+    vector<string> v_names;
+    TH1F * h;
 };
