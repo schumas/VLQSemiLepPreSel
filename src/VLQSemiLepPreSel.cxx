@@ -78,7 +78,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
     v_pre_modules.emplace_back(new HTCalculator(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
-    v_pre_modules.emplace_back(new NBTagProducer(ctx));
+    v_pre_modules.emplace_back(new NBTagProducer(ctx, CSVBTag::WP_LOOSE));
     v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(HiggsTag()), "n_higgstags", "patJetsCa15CHSJetsFilteredPacked"));
     v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(CMSTopTag()), "n_toptags"));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));

@@ -44,7 +44,7 @@ private:
 class BJetsProducer: public AnalysisModule {
 public:
     explicit BJetsProducer(Context & ctx,
-                           CSVBTag::wp wp = CSVBTag::WP_LOOSE):
+                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
         hndl(ctx.get_handle<std::vector<Jet>>("b_jets")),
         tagger(CSVBTag(wp)) {}
 
@@ -68,7 +68,7 @@ private:
 class NBTagProducer: public AnalysisModule {
 public:
     explicit NBTagProducer(Context & ctx,
-                           CSVBTag::wp wp = CSVBTag::WP_LOOSE):
+                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
         hndl(ctx.get_handle<int>("n_btags")),
         tagger(CSVBTag(wp)) {}
 
@@ -92,7 +92,7 @@ private:
 class NLeadingBTagProducer: public AnalysisModule {
 public:
     explicit NLeadingBTagProducer(Context & ctx,
-                                  CSVBTag::wp wp = CSVBTag::WP_LOOSE):
+                                  CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
         hndl(ctx.get_handle<int>("n_leading_btags")),
         tagger(CSVBTag(wp)) {}
 

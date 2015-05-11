@@ -14,6 +14,7 @@ static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
     shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    "leading jet p_{T}",        50, 0, 1500       ,100    )),
     shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", "primary lepton p_{T}",     50, 0, 1500       ,50     )),
     shared_ptr<SelectionItem>(new SelDatD("ST",                "ST",                       100, 0, 5000      ,400    )),
+    shared_ptr<SelectionItem>(new SelDatI("n_btags",           "number of loose btags",    11, -.5, 10.5     ,1      )),
 };
 
 
