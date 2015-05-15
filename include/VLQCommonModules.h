@@ -19,11 +19,11 @@ namespace {
 class FwdJetSwitch: public AnalysisModule {
 public:
     explicit FwdJetSwitch(Context & ctx):
-        hndl(ctx.get_handle<std::vector<Jet> >("fwd_jets")) {}
+        hndl(ctx.get_handle<vector<Jet> >("fwd_jets")) {}
 
-    bool process(Event & event){
-        std::vector<Jet> fwd;
-        std::vector<Jet> cnt;
+    bool process(Event & event) override {
+        vector<Jet> fwd;
+        vector<Jet> cnt;
         for(const auto & jet: *event.jets) {
             if (fabs(jet.eta()) > 2.4) {
                 fwd.push_back(jet);
@@ -37,7 +37,7 @@ public:
     }
 
 private:
-    Event::Handle<std::vector<Jet> > hndl;
+    Event::Handle<vector<Jet> > hndl;
 };  // class FwdJetSwitch
 
 
@@ -45,11 +45,11 @@ class BJetsProducer: public AnalysisModule {
 public:
     explicit BJetsProducer(Context & ctx,
                            CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
-        hndl(ctx.get_handle<std::vector<Jet>>("b_jets")),
+        hndl(ctx.get_handle<vector<Jet>>("b_jets")),
         tagger(CSVBTag(wp)) {}
 
-    bool process(Event & event){
-        std::vector<Jet> b_jets;
+    bool process(Event & event) override {
+        vector<Jet> b_jets;
         for(const Jet & j : *event.jets){
             if (tagger(j, event)) {
                 b_jets.push_back(j);
@@ -60,7 +60,7 @@ public:
     }
 
 private:
-    Event::Handle<std::vector<Jet>> hndl;
+    Event::Handle<vector<Jet>> hndl;
     CSVBTag tagger;
 };  // class BJetsProducer
 
@@ -72,7 +72,7 @@ public:
         hndl(ctx.get_handle<int>("n_btags")),
         tagger(CSVBTag(wp)) {}
 
-    bool process(Event & event){
+    bool process(Event & event) override {
         int nbtag = 0;
         for(const Jet & j : *event.jets){
             if (tagger(j, event)) {
@@ -96,7 +96,7 @@ public:
         hndl(ctx.get_handle<int>("n_leading_btags")),
         tagger(CSVBTag(wp)) {}
 
-    bool process(Event & event){
+    bool process(Event & event) override {
         int ntag = 0;
         for(const Jet & j : *event.jets){
             if (tagger(j, event)) {
@@ -201,7 +201,7 @@ public:
         h_st(ctx.get_handle<double>("ST")),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
-    virtual bool process(uhh2::Event & event) override {
+    virtual bool process(Event & event) override {
         if (!event.is_valid(h_primlep)) {
             return false;
         }
@@ -217,16 +217,16 @@ public:
     }
 
 private:
-    uhh2::Event::Handle<double> h_st;
-    uhh2::Event::Handle<FlavorParticle> h_primlep;
+    Event::Handle<double> h_st;
+    Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
 
 
 class JetPtSorter : public AnalysisModule {
 public:
     explicit JetPtSorter() {}
-    virtual bool process(uhh2::Event & event) override {
-        std::vector<Jet> & ev_jets = *event.jets;
+    virtual bool process(Event & event) override {
+        vector<Jet> & ev_jets = *event.jets;
         sort_by_pt(ev_jets);
 
         return true;
@@ -236,10 +236,10 @@ public:
 
 class JetTagCalculator : public AnalysisModule {
 public:
-    explicit JetTagCalculator(Context & ctx, std::string hndl_name, JetId const & id = JetId(CSVBTag(CSVBTag::WP_MEDIUM))) :
+    explicit JetTagCalculator(Context & ctx, string hndl_name, JetId const & id = JetId(CSVBTag(CSVBTag::WP_MEDIUM))) :
         tagger_(id), hndl_(ctx.get_handle<int>(hndl_name)) {}
 
-    virtual bool process(Event & event) {
+    virtual bool process(Event & event) override {
         int n_btags = 0;
         for (const Jet & jet : *event.jets) {
             if (tagger_(jet, event))
@@ -257,14 +257,14 @@ private:
 
 class TaggedTopJetProducer: public AnalysisModule {
 public:
-    explicit TaggedTopJetProducer(Context & ctx, TopJetId const & id, const std::string & coll_out, const std::string & coll_in = ""):
-        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll_in)),
-        hndl_out(ctx.get_handle<std::vector<TopJet>>(coll_out)),
+    explicit TaggedTopJetProducer(Context & ctx, TopJetId const & id, const string & coll_out, const string & coll_in = ""):
+        hndl_in(ctx.get_handle<vector<TopJet>>(coll_in)),
+        hndl_out(ctx.get_handle<vector<TopJet>>(coll_out)),
         tagger(id) {}
 
-    bool process(Event & event){
-        const std::vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
-        std::vector<TopJet> out_jets;
+    bool process(Event & event) override {
+        const vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
+        vector<TopJet> out_jets;
         for(const TopJet & j : topjets) {
             if (tagger(j, event)) {
                 out_jets.push_back(j);
@@ -275,21 +275,21 @@ public:
     }
 
 private:
-    Event::Handle<std::vector<TopJet>> hndl_in;
-    Event::Handle<std::vector<TopJet>> hndl_out;
+    Event::Handle<vector<TopJet>> hndl_in;
+    Event::Handle<vector<TopJet>> hndl_out;
     TopJetId tagger;
 };  // class TaggedTopJetProducer
 
 
 class NTaggedTopJetProducer: public AnalysisModule {
 public:
-    explicit NTaggedTopJetProducer(Context & ctx, TopJetId const & id, const std::string hndl_name, const std::string & coll_in = ""):
-        hndl_in(ctx.get_handle<std::vector<TopJet>>(coll_in)),
+    explicit NTaggedTopJetProducer(Context & ctx, TopJetId const & id, const string hndl_name, const string & coll_in = ""):
+        hndl_in(ctx.get_handle<vector<TopJet>>(coll_in)),
         hndl_out(ctx.get_handle<int>(hndl_name)),
         tagger(id) {}
 
-    bool process(Event & event){
-        const std::vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
+    bool process(Event & event) override {
+        const vector<TopJet> & topjets = event.is_valid(hndl_in) ? event.get(hndl_in) : *event.topjets;
         int n_topjettags = 0;
         for(const TopJet & j : topjets) {
             if (tagger(j, event)) {
@@ -301,7 +301,7 @@ public:
     }
 
 private:
-    Event::Handle<std::vector<TopJet>> hndl_in;
+    Event::Handle<vector<TopJet>> hndl_in;
     Event::Handle<int> hndl_out;
     TopJetId tagger;
 };  // class NTaggedTopJetProducer
@@ -333,12 +333,12 @@ public:
     {
         if (mother_id_ > 0 || veto_mother_id_ > 0)
         {
-            // std::cout << "  Looking for particle with mother " << mother_id_ << " and not from " << veto_mother_id_ << std::endl;
+            // cout << "  Looking for particle with mother " << mother_id_ << " and not from " << veto_mother_id_ << endl;
             bool right_mother = mother_id_ > 0 ? false : true;
             GenParticle const * gen_mother = findMother(genp, event.genparticles);
             while (gen_mother)
             {
-                // std::cout << "   Mother id: " << gen_mother->pdgId() << std::endl;
+                // cout << "   Mother id: " << gen_mother->pdgId() << endl;
                 if (mother_id_ > 0 && abs(gen_mother->pdgId()) == mother_id_)
                 {
                     right_mother = true;
@@ -352,12 +352,12 @@ public:
             }
             if (!right_mother)
             {
-                // std::cout << "  Bad mother, rejected!\n";
+                // cout << "  Bad mother, rejected!\n";
                 return false;
             }
         }
 
-        // std::cout << "  Found right mother!\n";
+        // cout << "  Found right mother!\n";
         return true;
     }
 
@@ -375,18 +375,18 @@ public:
 
     bool operator()(const GenParticle & genp, const Event & event) const
     {
-        if (std::abs(genp.pdgId()) == part_id_)
+        if (abs(genp.pdgId()) == part_id_)
         {
             GenParticle const * daughter1 = genp.daughter(event.genparticles, 1);
             GenParticle const * daughter2 = genp.daughter(event.genparticles, 2);
             if (!(daughter1 && daughter2))
                 return false;
-            if ((std::abs(daughter1->pdgId()) == daughter1_id_ && std::abs(daughter2->pdgId()) == daughter2_id_)
-                || (std::abs(daughter1->pdgId()) == daughter2_id_ && std::abs(daughter2->pdgId()) == daughter1_id_))
+            if ((abs(daughter1->pdgId()) == daughter1_id_ && abs(daughter2->pdgId()) == daughter2_id_)
+                || (abs(daughter1->pdgId()) == daughter2_id_ && abs(daughter2->pdgId()) == daughter1_id_))
                 return true;
         }
 
-        // std::cout << "  Found right mother!\n";
+        // cout << "  Found right mother!\n";
         return false;
     }
 
