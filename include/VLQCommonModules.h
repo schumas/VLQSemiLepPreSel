@@ -156,9 +156,48 @@ private:
 };
 
 
-class STCalculator: public uhh2::AnalysisModule {
+class LargestJetEtaProducer: public AnalysisModule {
 public:
-    explicit STCalculator(uhh2::Context & ctx):
+    explicit LargestJetEtaProducer(Context & ctx,
+                           const string & jets_name = "jets",
+                           const string & fwd_jets_name = ""):
+        h_largest_jet_eta(ctx.get_handle<float>("largest_jet_eta")),
+        h_jets(ctx.get_handle<vector<Jet>>(jets_name)),
+        h_fwd_jets(ctx.get_handle<vector<Jet>>(fwd_jets_name)) {}
+
+    virtual float largest_eta(const vector<Jet> & jets) {
+        float largest_jet_eta = 0.;
+        for (const Jet & j : jets) {
+            float eta = j.eta();
+            if (fabs(largest_jet_eta) < fabs(eta)) {
+                largest_jet_eta = eta;
+            }
+        }
+        return largest_jet_eta;
+    }
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_fwd_jets) && e.get(h_fwd_jets).size()) {
+            e.set(h_largest_jet_eta, largest_eta(e.get(h_fwd_jets)));
+            return true;
+        }
+        if (e.is_valid(h_jets) && e.get(h_jets).size()) {
+            e.set(h_largest_jet_eta, largest_eta(e.get(h_jets)));
+            return true;
+        }
+        return false;
+    }
+
+private:
+    Event::Handle<float>        h_largest_jet_eta;
+    Event::Handle<vector<Jet>>  h_jets;
+    Event::Handle<vector<Jet>>  h_fwd_jets;
+};  // class LargestJetEtaProducer
+
+
+class STCalculator: public AnalysisModule {
+public:
+    explicit STCalculator(Context & ctx):
         h_st(ctx.get_handle<double>("ST")),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
