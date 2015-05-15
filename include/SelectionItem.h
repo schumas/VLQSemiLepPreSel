@@ -17,6 +17,7 @@ public:
     virtual Selection       * make_selection(Context & ctx) const = 0;
     virtual Hists           * make_hists(Context & ctx, const string & dir) const = 0;
     virtual AnalysisModule  * make_branch_writer(Context & ctx, TTree * tree) const = 0;
+    virtual void              declare_for_output(Context & ctx) const = 0;
     const string & name() const {return name_;}
 
 protected:
@@ -43,6 +44,10 @@ public:
 
     virtual AnalysisModule * make_branch_writer(Context & ctx, TTree * tree) const override {
         return new HandleToBranchWriter<DATATYPE>(ctx, name_, tree);
+    }
+
+    virtual void declare_for_output(Context & ctx) const override {
+        ctx.declare_event_output<DATATYPE>(name_);
     }
 
 private:
@@ -117,6 +122,12 @@ public:
         auto * wrtr = new TreeWriter(ctx, filename);
         fill_wrtr_vector(wrtr->writers(), wrtr->tree());
         return wrtr;
+    }
+
+    void declare_items_for_output() const {
+        for (const auto & name: item_names) {
+            get_sel_item(name)->declare_for_output(ctx);
+        }
     }
 
 private:

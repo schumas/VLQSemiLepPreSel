@@ -268,6 +268,20 @@ private:
 };  // class NTaggedTopJetProducer
 
 
+class EventWeightOutputHandle: public AnalysisModule {
+public:
+    explicit EventWeightOutputHandle(Context & ctx):
+        hndl(ctx.declare_event_output<double>("weight")) {}
+
+    bool process(Event & e) override {
+        e.set(hndl, e.weight);
+        return true;
+    }
+
+private:
+    Event::Handle<double> hndl;
+};
+
 
 class GenParticleMotherId
 {
