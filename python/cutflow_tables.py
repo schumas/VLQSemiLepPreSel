@@ -1,45 +1,22 @@
+from math import sqrt
+import subprocess
+import itertools
+import shutil
+import os
 
 import varial.tools
 import varial.util
 
-import itertools
-import re
-import shutil
-from math import sqrt
-
 
 ############################################ fetch histos and table content ###
-cutflow_histos = varial.tools.HistoLoader(
-    name='CutflowHistos',
-    pattern='uhh2.*.root',
-    filter_keyfunc=lambda w: 'cutflow' in w.in_file_path,
-)
-
-
-#class AxisTitles(varial.util.Decorator):
-#    def do_final_cosmetics(self):
-#        self.decoratee.do_final_cosmetics()
-#        self.first_drawn.GetXaxis().SetTitle("cutflow")
-#        if hasattr(self, "bottom_hist"):
-#            self.bottom_hist.GetXaxis().SetTitle("cutflow")
-#        self.first_drawn.GetYaxis().SetTitle("selected events / step")
-
-cutflow_stack_plots = varial.tools.Plotter(
-    'CutflowStack',
-    stack=True,
-    input_result_path='CutflowHistos',
-    save_log_scale=True,
-)
-
-
 class CutflowTableContent(varial.tools.Tool):
     """Generates cutflow table data."""
     can_reuse = False
 
     def __init__(self, name=None):
         super(CutflowTableContent, self).__init__()
-        self.input_mc       = []
-        self.input_data     = []
+        self._input_mc       = []
+        self._input_data     = []
         self.head_line      = []
         self.table_data     = []
         self.table_mc_err   = []
@@ -48,19 +25,19 @@ class CutflowTableContent(varial.tools.Tool):
         self.titles_mc      = []
 
     def get_input_histos(self):
-        wrps = self.lookup_result('CutflowHistos')
+        wrps = self.lookup_result('../CutflowHistos')
         assert wrps
         mcee = itertools.ifilter(lambda w: not w.is_data, wrps)
         mcee = varial.gen.gen_norm_to_data_lumi(mcee)
         data = itertools.ifilter(lambda w: w.is_data, wrps)
-        self.input_mc    = varial.gen.sort(mcee)
-        self.input_data  = varial.gen.sort(data)
+        self._input_mc    = varial.gen.sort(mcee)
+        self._input_data  = varial.gen.sort(data)
 
     def fill_head_line(self):
-        bin_label = self.input_mc[0].histo.GetXaxis().GetBinLabel
+        bin_label = self._input_mc[0].histo.GetXaxis().GetBinLabel
         self.head_line = list(
             bin_label(i + 1)
-            for i in xrange(self.input_mc[0].histo.GetNbinsX())
+            for i in xrange(self._input_mc[0].histo.GetNbinsX())
         )
 
     @staticmethod
@@ -74,13 +51,13 @@ class CutflowTableContent(varial.tools.Tool):
         return list(err_cont(i + 1) for i in xrange(wrp.histo.GetNbinsX()))
 
     def fill_tables(self):
-        for wrp in self.input_data:
+        for wrp in self._input_data:
             self.titles_data.append(wrp.sample)
             self.table_data.append(self._get_value_list(wrp))
-        for wrp in self.input_mc:
+        for wrp in self._input_mc:
             self.titles_mc.append(wrp.sample)
             self.table_mc.append(self._get_value_list(wrp))
-        for wrp in self.input_mc:
+        for wrp in self._input_mc:
             self.table_mc_err.append(self._get_error_list(wrp))
 
     def _make_column_sum(self, table, squared = False):
@@ -105,11 +82,25 @@ class CutflowTableContent(varial.tools.Tool):
         self.titles_data.append("Data Sum")
         self.titles_mc.append("MC Sum")
 
+    def calc_permillage(self):
+        self.head_line.append("1000 X output/input")
+        for row in self.table_data:
+            if not row:
+                continue
+            row.append(1000. * row[-1] / row[0])
+
+        for row, row_err in itertools.izip(self.table_mc, self.table_mc_err):
+            if not (row and row_err):
+                continue
+            row.append(1000. * row[-1] / row[0])
+            row_err.append(0.)  # TODO uncert for binomial
+
     def run(self):
         self.get_input_histos()
         self.fill_head_line()
         self.fill_tables()
         self.fill_sum_rows()
+        self.calc_permillage()
         self.result = self
 
     def mc_title_val_err_iterator(self):
@@ -139,12 +130,12 @@ class CutflowTableTxt(varial.tools.Tool):
         self.sep            = ", "
 
     def configure(self):
-        self.cont = self.lookup_result('CutflowTableContent')
+        self.cont = self.lookup_result('../CutflowTableContent')
 
     def make_header(self):
-        line = self.sep.join(itertools.imap(lambda s: "%17s"%s,
+        line = self.sep.join(itertools.imap(lambda s: "%24s"%s,
                                             self.cont.head_line))
-        line = 17*" " + self.sep + line + " \n"
+        line = 30*" " + self.sep + line + " \n"
         self.table_lines.append(line)
 
     def make_center(self):
@@ -152,15 +143,15 @@ class CutflowTableTxt(varial.tools.Tool):
         for title, vals, errs in self.cont.mc_title_val_err_iterator():
             zipped = ((a, b) for a, b in itertools.izip(vals, errs))
             self.table_lines.append(
-                "%17s" % title
+                "%30s" % title
                 + self.sep
-                + self.sep.join("%8.1f +- %5.1f" % p for p in zipped)
+                + self.sep.join("%13.1f +- %7.1f" % p for p in zipped)
                 + " \n"
             )
         self.table_lines.append("\n")
         for title, vals in self.cont.data_title_value_iterator():
             self.table_lines.append(
-                "%17s" % title
+                "%30s" % title
                 + self.sep
                 + self.sep.join("%17d" % v for v in vals)
             )
@@ -201,26 +192,27 @@ tex_template = [
 class CutflowTableTex(varial.tools.Tool):
     """Reads cutflow histos from pool and creates latex table code."""
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, compile_latex=False):
         super(CutflowTableTex, self).__init__(name)
         self.cont           = None
         self.table_lines    = []
         self.target_dir     = ''
         self.sep            = ' $&$ '
+        self.compile_latex  = compile_latex
 
     def configure(self):
-        self.cont = self.lookup_result('CutflowTableContent')
+        self.cont = self.lookup_result('../CutflowTableContent')
 
     def make_header(self):
         self.table_lines += (
             r"\begin{tabular}{l | "
                 + len(self.cont.head_line)*"r "
                 + "}",
-            17*" "
+            30*" "
                 + " & "
                 + " & ".join(itertools.imap(
-                    lambda s: "%17s" %
-                              varial.analysis.get_pretty_name(s + "_tex"),
+                    lambda s: "%30s" % varial.analysis.get_pretty_name(
+                        s + "_tex").replace("_", r"\_"),
                     self.cont.head_line
                 ))
                 + r" \\",
@@ -231,11 +223,11 @@ class CutflowTableTex(varial.tools.Tool):
     def make_center(self):
         for title, vals, errs in self.cont.mc_title_val_err_iterator():
             self.table_lines += (
-                "%17s" % title.replace("_", r"\_")
+                "%30s" % title.replace("_", r"\_")
                     + " &$ "
                     + self.sep.join("%17.1f" % v for v in vals)
                     + r" $ \\",
-                17*" "
+                30*" "
                     + " &$ "
                     + self.sep.join("\\pm%17.1f" % e for e in errs)
                     + r" $ \\",
@@ -264,15 +256,24 @@ class CutflowTableTex(varial.tools.Tool):
         with open(self.cwd + "cutflow.tex", "w") as f:
             f.writelines(map(lambda l: l + "\n", tex_template))
 
-#        subprocess.call(
-#            ["pdflatex", "cutflow.tex"],
-#            cwd=self.cwd
-#        )
+        if self.compile_latex:
+            ret = subprocess.call(
+                ["pdflatex", "cutflow.tex"],
+                cwd=self.cwd
+            )
+            if ret == 0:
+                # convert to png for webcreator
+                subprocess.call(
+                    ["convert", "cutflow.pdf", "cutflow.png"],
+                    cwd=self.cwd
+                )
+                # make cutflow.info, so the webcreator picks it up
+                self.io.write(varial.wrappers.Wrapper(name='cutflow'))
 
-        wrp = wrappers.Wrapper(name="CutflowTableTex")
+        wrp = varial.wrp.Wrapper(name="CutflowTableTex")
         for i, line in enumerate(self.table_lines):
             setattr(wrp, "line_%2d"%i, line)
-        diskio.write(wrp, self.cwd + "cutflow_table.info")
+        self.result = wrp
 
     def copy_to_target_dir(self):
         if not self.target_dir:
@@ -292,11 +293,34 @@ class CutflowTableTex(varial.tools.Tool):
         self.copy_to_target_dir()
 
 
-cutflow_chain = varial.tools.ToolChain("CutflowTools", [
-    cutflow_histos,
-    cutflow_stack_plots,
-    CutflowTableContent(),
-    CutflowTableTxt(),
-    CutflowTableTex(),
-])
+def mk_cutflow_chain(input_pat, loader_hook):
+    cutflow_histos = varial.tools.HistoLoader(
+        name='CutflowHistos',
+        pattern=input_pat,
+        filter_keyfunc=lambda w: 'Cutflow/' in w.in_file_path,
+        hook_loaded_histos=loader_hook
+    )
+
+    #class AxisTitles(varial.util.Decorator):
+    #    def do_final_cosmetics(self):
+    #        self.decoratee.do_final_cosmetics()
+    #        self.first_drawn.GetXaxis().SetTitle("cutflow")
+    #        if hasattr(self, "bottom_hist"):
+    #            self.bottom_hist.GetXaxis().SetTitle("cutflow")
+    #        self.first_drawn.GetYaxis().SetTitle("selected events / step")
+
+    cutflow_stack_plots = varial.tools.Plotter(
+        'CutflowStack',
+        stack=True,
+        input_result_path='../CutflowHistos',
+        save_log_scale=True,
+    )
+
+    return varial.tools.ToolChain("CutflowTools", [
+        cutflow_histos,
+        cutflow_stack_plots,
+        CutflowTableContent(),
+        CutflowTableTxt(),
+        CutflowTableTex(None, True),
+    ])
 

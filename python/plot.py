@@ -2,16 +2,20 @@
 
 # YOU NEED VARIAL FOR THIS! https://github.com/HeinAtCERN/Varial
 
-import common
-import vlq_settings
-
 import time
-import varial.tools
+
+import cutflow_tables
+import vlq_settings
+import common
+
 import varial.generators as gen
+import varial.tools
 
 
 # varial.settings.debug_mode = True
-dir_input = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/'
+# varial.settings.max_num_processes = 1
+input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
+            'PHYS14-ntuple2-v2/*.root'
 
 
 def apply_match_eff(wrps):
@@ -87,7 +91,8 @@ def loader_hook_norm(wrps):
 def plotter_factory(**kws):
     kws['hook_loaded_histos'] = loader_hook
     kws['save_lin_log_scale'] = True
-    # kws['canvas_decorators'] += [rnd.TitleBox(text='CMS Simulation 20fb^{-1} @ 13TeV')]
+    # kws['canvas_decorators'] += [rnd.TitleBox(
+    #       text='CMS Simulation 20fb^{-1} @ 13TeV')]
     return varial.tools.Plotter(**kws)
 
 
@@ -105,37 +110,32 @@ def plotter_factory_stack(**kws):
 
 
 if __name__ == '__main__':
-    p1 = varial.tools.mk_rootfile_plotter(
-        pattern=dir_input + '*.root',
-        name='VLQ_presel_stack',
-        plotter_factory=plotter_factory_stack,
-        combine_files=True,
-    )
-
-    p2 = varial.tools.mk_rootfile_plotter(
-        pattern=dir_input + '*.root',
-        name='VLQ_presel_norm',
-        plotter_factory=plotter_factory_norm,
-        combine_files=True,
-    )
-
-    p3 = varial.tools.mk_rootfile_plotter(
-        pattern=dir_input + '*.root',
-        name='VLQ_presel_norm_no_signal',
-        plotter_factory=plotter_factory,
-        combine_files=True,
-        filter_keyfunc=lambda w: not common.is_signal(w.file_path)
-    )
-
-    tc_inner = varial.tools.ToolChainParallel(
+    tc = varial.tools.ToolChainParallel(
         'VLQ_presel', [
-            p1.tool_chain[0],
-            p2.tool_chain[0],
-            p3.tool_chain[0]
+            varial.tools.mk_rootfile_plotter(
+                pattern=input_pat,
+                name='VLQ_presel_stack',
+                plotter_factory=plotter_factory_stack,
+                combine_files=True,
+            ).tool_chain[0],
+            varial.tools.mk_rootfile_plotter(
+                pattern=input_pat,
+                name='VLQ_presel_norm',
+                plotter_factory=plotter_factory_norm,
+                combine_files=True,
+            ).tool_chain[0],
+            varial.tools.mk_rootfile_plotter(
+                pattern=input_pat,
+                name='VLQ_presel_norm_no_signal',
+                plotter_factory=plotter_factory,
+                combine_files=True,
+                filter_keyfunc=lambda w: not common.is_signal(w.file_path)
+            ).tool_chain[0],
+            cutflow_tables.mk_cutflow_chain(input_pat, loader_hook),
         ]
     )
     tc = varial.tools.ToolChain(
-        'host_toolchain', [tc_inner]
+        'host_toolchain', [tc]
     )
 
     time.sleep(1)
