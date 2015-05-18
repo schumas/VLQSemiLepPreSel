@@ -297,7 +297,7 @@ def mk_cutflow_chain(input_pat, loader_hook):
     cutflow_histos = varial.tools.HistoLoader(
         name='CutflowHistos',
         pattern=input_pat,
-        filter_keyfunc=lambda w: 'Cutflow/' in w.in_file_path,
+        filter_keyfunc=lambda w: 'cutflow' == w.in_file_path.split('/')[-1],
         hook_loaded_histos=loader_hook
     )
 
