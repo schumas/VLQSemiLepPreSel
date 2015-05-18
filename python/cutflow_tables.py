@@ -14,7 +14,7 @@ class CutflowTableContent(varial.tools.Tool):
     can_reuse = False
 
     def __init__(self, name=None):
-        super(CutflowTableContent, self).__init__()
+        super(CutflowTableContent, self).__init__(name)
         self._input_mc       = []
         self._input_data     = []
         self.head_line      = []
