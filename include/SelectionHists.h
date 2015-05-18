@@ -3,6 +3,7 @@
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/core/include/Event.h"
 #include "TH1F.h"
+#include "TH1D.h"
 
 #include "UHH2/VLQSemiLepPreSel/include/HandleHist.h"
 #include "UHH2/VLQSemiLepPreSel/include/SelectionItem.h"
@@ -56,7 +57,7 @@ public:
         Hists(ctx, dir),
         h_sel(ctx.get_handle<vector<bool>>("sel_accept")),
         v_names(sel_helper.get_item_names()),
-        h(book<TH1F>("cutflow", "", 1, 0, -1))
+        h(book<TH1D>("cutflow", "", 1, 0, -1))
     {
         h->SetBit(TH1::kCanRebin);
         h->Fill("input", 1e-7);
@@ -86,5 +87,5 @@ public:
 private:
     Event::Handle<vector<bool>> h_sel;
     vector<string> v_names;
-    TH1F * h;
+    TH1D * h;
 };
