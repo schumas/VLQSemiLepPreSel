@@ -121,8 +121,9 @@ private:
 
 class LeadingJetPtProducer: public AnalysisModule {
 public:
-    explicit LeadingJetPtProducer(Context & ctx):
-        h(ctx.get_handle<float>("leading_jet_pt")) {}
+    explicit LeadingJetPtProducer(Context & ctx,
+            std::string const & h_name = "leading_jet_pt"):
+        h(ctx.get_handle<float>(h_name)) {}
 
     virtual bool process(Event & e) override {
         if (e.jets->size() > 0) {
@@ -141,8 +142,9 @@ private:
 
 class LeptonPtProducer: public AnalysisModule {
 public:
-    explicit LeptonPtProducer(Context & ctx):
-        h(ctx.get_handle<float>("primary_lepton_pt")),
+    explicit LeptonPtProducer(Context & ctx, 
+                std::string const & h_name = "primary_lepton_pt"):
+        h(ctx.get_handle<float>(h_name)),
         h_prim_lep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
     virtual bool process(Event & e) override {
@@ -527,6 +529,22 @@ public:
 
     virtual bool process(Event & e) override {
         e.set(h, e.electrons->size() + e.muons->size());
+        return true;
+    }
+
+private:
+    Event::Handle<int> h;
+};
+
+
+class NJetsProducer: public AnalysisModule {
+public:
+    explicit NJetsProducer(Context & ctx,
+            std::string const & h_name = "n_jets"):
+        h(ctx.get_handle<int>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        e.set(h, e.jets->size());
         return true;
     }
 
