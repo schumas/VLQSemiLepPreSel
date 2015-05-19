@@ -40,12 +40,13 @@ private:
     Event::Handle<vector<Jet> > hndl;
 };  // class FwdJetSwitch
 
-
+// DEPRECATED: replaced by CollectionProducer class; needs to be tested still!
 class BJetsProducer: public AnalysisModule {
 public:
     explicit BJetsProducer(Context & ctx,
-                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
-        hndl(ctx.get_handle<vector<Jet>>("b_jets")),
+                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
+                           std::string const & h_name = "b_jets"):
+        hndl(ctx.get_handle<vector<Jet>>(h_name)),
         tagger(CSVBTag(wp)) {}
 
     bool process(Event & event) override {
@@ -65,11 +66,13 @@ private:
 };  // class BJetsProducer
 
 
+// DEPRECATED: replaced by CollectionSizeProducer class; needs to be tested still!
 class NBTagProducer: public AnalysisModule {
 public:
     explicit NBTagProducer(Context & ctx,
-                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
-        hndl(ctx.get_handle<int>("n_btags")),
+                           CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
+                           std::string const & h_name = "n_btags"):
+        hndl(ctx.get_handle<int>(h_name)),
         tagger(CSVBTag(wp)) {}
 
     bool process(Event & event) override {
@@ -92,8 +95,9 @@ private:
 class NLeadingBTagProducer: public AnalysisModule {
 public:
     explicit NLeadingBTagProducer(Context & ctx,
-                                  CSVBTag::wp wp = CSVBTag::WP_MEDIUM):
-        hndl(ctx.get_handle<int>("n_leading_btags")),
+                                  CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
+                                  std::string const & h_name = "n_leading_btags"):
+        hndl(ctx.get_handle<int>(h_name)),
         tagger(CSVBTag(wp)) {}
 
     bool process(Event & event) override {
@@ -197,8 +201,8 @@ private:
 
 class STCalculator: public AnalysisModule {
 public:
-    explicit STCalculator(Context & ctx):
-        h_st(ctx.get_handle<double>("ST")),
+    explicit STCalculator(Context & ctx, std::string const & h_name = "ST"):
+        h_st(ctx.get_handle<double>(h_name)),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
     virtual bool process(Event & event) override {
@@ -234,6 +238,7 @@ public:
 };  // class JetPtSorter
 
 
+// DEPRECATED: replaced by CollectionSizeProducer class; needs to be tested still!
 class JetTagCalculator : public AnalysisModule {
 public:
     explicit JetTagCalculator(Context & ctx, string hndl_name, JetId const & id = JetId(CSVBTag(CSVBTag::WP_MEDIUM))) :
@@ -255,6 +260,7 @@ private:
 };  // class JetTagCalculator
 
 
+// DEPRECATED: replaced by CollectionProducer class; needs to be tested still!
 class TaggedTopJetProducer: public AnalysisModule {
 public:
     explicit TaggedTopJetProducer(Context & ctx, TopJetId const & id, const string & coll_out, const string & coll_in = ""):
@@ -281,6 +287,7 @@ private:
 };  // class TaggedTopJetProducer
 
 
+// DEPRECATED: replaced by CollectionSizeProducer class; needs to be tested still!
 class NTaggedTopJetProducer: public AnalysisModule {
 public:
     explicit NTaggedTopJetProducer(Context & ctx, TopJetId const & id, const string hndl_name, const string & coll_in = ""):
@@ -418,3 +425,111 @@ const HYP * get_best_hypothesis(
 }
 
 }
+
+class TriggerAcceptProducer : public AnalysisModule {
+public:
+    explicit TriggerAcceptProducer(Context & ctx,
+                    std::vector<std::string> const & trig_names,
+                    std::string const & h_name = "trigger_accept"):
+        v_trig_names(trig_names),
+        h(ctx.get_handle<int>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        std::vector<Event::TriggerIndex> v_trig_ind;
+        for (std::string const & trig_name : v_trig_names) {
+            v_trig_ind.emplace_back(e.get_trigger_index(trig_name));
+        }
+        // auto ele_trig = e.get_trigger_index("HLT_Ele95_CaloIdVT_GsfTrkIdT_v*");
+        // auto mu_trig = e.get_trigger_index("HLT_Mu40_v*");
+        int passes_any = 0;
+        for (Event::TriggerIndex & trig_ind : v_trig_ind) {
+            if (e.passes_trigger(trig_ind)) {
+                passes_any = 1;
+                break;
+            }
+        }
+        e.set(h, passes_any);
+        return true;
+    }
+
+private:
+    std::vector<std::string> v_trig_names;
+    Event::Handle<int> h;
+};
+
+template <typename TYPE>
+class CollectionProducer: public AnalysisModule {
+public:
+    typedef std::function<bool (const TYPE &, const uhh2::Event &)> TYPEID;
+
+    explicit CollectionProducer(Context & ctx,
+                           TYPEID const & type_id,
+                           std::string const & in_name,
+                           std::string const & out_name):
+        in_hndl(ctx.get_handle<vector<TYPE>>(in_name)),
+        out_hndl(ctx.get_handle<vector<TYPE>>(out_name)),
+        type_id_(type_id) {}
+
+    bool process(Event & event) override {
+        vector<TYPE> out_coll;
+        for(const TYPE & obj : event.get(in_hndl)){
+            if (type_id_(obj, event)) {
+                out_coll.push_back(obj);
+            }
+        }
+        event.set(out_hndl, out_coll);
+        return true;
+    }
+
+private:
+    Event::Handle<vector<TYPE>> in_hndl;
+    Event::Handle<vector<TYPE>> out_hndl;
+    TYPEID type_id_;
+};  // class CollectionProducer
+
+
+
+template <typename TYPE>
+class CollectionSizeProducer: public AnalysisModule {
+public:
+    typedef std::function<bool (const TYPE &, const uhh2::Event &)> TYPEID;
+
+    explicit CollectionSizeProducer(Context & ctx,
+                           TYPEID const & type_id,
+                           std::string const & in_name,
+                           std::string const & out_name):
+        in_hndl(ctx.get_handle<vector<TYPE>>(in_name)),
+        out_hndl(ctx.get_handle<int>(out_name)),
+        type_id_(type_id) {}
+
+    bool process(Event & event) override {
+        int n_obj = 0;
+        for(const TYPE & obj : event.get(in_hndl)){
+            if (type_id_(obj, event)) {
+                n_obj++;
+            }
+        }
+        event.set(out_hndl, n_obj);
+        return true;
+    }
+
+private:
+    Event::Handle<vector<TYPE>> in_hndl;
+    Event::Handle<int> out_hndl;
+    TYPEID type_id_;
+};  // class CollectionSizeProducer
+
+
+class NLeptonsProducer: public AnalysisModule {
+public:
+    explicit NLeptonsProducer(Context & ctx, std::string const & h_name = "n_leptons"):
+        h(ctx.get_handle<int>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        e.set(h, e.electrons->size() + e.muons->size());
+        return true;
+    }
+
+private:
+    Event::Handle<int> h;
+};
