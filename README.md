@@ -1,5 +1,5 @@
 VLQSemiLepPresel
-===================
+================
 
 Vector-Like-Quark analysis code. Preselection for various analyses. Common code specific to VLQ analyses.
 
@@ -9,11 +9,16 @@ The latest pre-selected events reside on dust:
 
 
 Selections
-====================
+==========
 
-The selection requirements are defined in include/VLQSLPS_selectionItems.h 
+The selection requirements are defined in ``include/VLQSLPS_selectionItems.h``. 
 Git tags are used for versioning:
 
-v1: leading ak4Jet pT > 200 GeV, primary lepton pT > 50, ST > 500 GeV
+v1 
+--
+
+- leading ak4Jet pT > 200 GeV 
+- primary lepton pT > 50
+- ST > 500 GeV
 
 
