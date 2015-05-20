@@ -457,68 +457,6 @@ private:
     Event::Handle<int> h;
 };
 
-template <typename TYPE>
-class CollectionProducer: public AnalysisModule {
-public:
-    typedef std::function<bool (const TYPE &, const uhh2::Event &)> TYPEID;
-
-    explicit CollectionProducer(Context & ctx,
-                           TYPEID const & type_id,
-                           std::string const & in_name,
-                           std::string const & out_name):
-        in_hndl(ctx.get_handle<vector<TYPE>>(in_name)),
-        out_hndl(ctx.get_handle<vector<TYPE>>(out_name)),
-        type_id_(type_id) {}
-
-    bool process(Event & event) override {
-        vector<TYPE> out_coll;
-        for(const TYPE & obj : event.get(in_hndl)){
-            if (type_id_(obj, event)) {
-                out_coll.push_back(obj);
-            }
-        }
-        event.set(out_hndl, out_coll);
-        return true;
-    }
-
-private:
-    Event::Handle<vector<TYPE>> in_hndl;
-    Event::Handle<vector<TYPE>> out_hndl;
-    TYPEID type_id_;
-};  // class CollectionProducer
-
-
-
-template <typename TYPE>
-class CollectionSizeProducer: public AnalysisModule {
-public:
-    typedef std::function<bool (const TYPE &, const uhh2::Event &)> TYPEID;
-
-    explicit CollectionSizeProducer(Context & ctx,
-                           TYPEID const & type_id,
-                           std::string const & in_name,
-                           std::string const & out_name):
-        in_hndl(ctx.get_handle<vector<TYPE>>(in_name)),
-        out_hndl(ctx.get_handle<int>(out_name)),
-        type_id_(type_id) {}
-
-    bool process(Event & event) override {
-        int n_obj = 0;
-        for(const TYPE & obj : event.get(in_hndl)){
-            if (type_id_(obj, event)) {
-                n_obj++;
-            }
-        }
-        event.set(out_hndl, n_obj);
-        return true;
-    }
-
-private:
-    Event::Handle<vector<TYPE>> in_hndl;
-    Event::Handle<int> out_hndl;
-    TYPEID type_id_;
-};  // class CollectionSizeProducer
-
 
 class NLeptonsProducer: public AnalysisModule {
 public:
