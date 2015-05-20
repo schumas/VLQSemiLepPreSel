@@ -39,9 +39,9 @@ public:
     virtual void fill(const uhh2::Event & event) override {
         EventHists::fill(event);
         double w = event.weight;
-        int n_btags = event.get(h_btags_);
-        int n_toptags = event.get(h_toptags_);
-        int n_higgstags = event.get(h_higgstags_);        
+        int n_btags = event.is_valid(h_btags_) ? event.get(h_btags_) : 0;
+        int n_toptags = event.is_valid(h_toptags_) ? event.get(h_toptags_) : 0;
+        int n_higgstags = event.is_valid(h_higgstags_) ? event.get(h_higgstags_) : 0;        
 
         h_n_btags->Fill(n_btags, w);
         h_n_toptags->Fill(n_toptags, w);
