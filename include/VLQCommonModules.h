@@ -16,6 +16,52 @@ using namespace uhh2;
 
 namespace {
 
+class LeptonPtProducer: public AnalysisModule {
+public:
+    explicit LeptonPtProducer(Context & ctx,
+                              const string & prim_lep_hndl = "PrimaryLepton",
+                              const string & h_name = "primary_lepton_pt"):
+        h(ctx.get_handle<float>(h_name)),
+        h_prim_lep(ctx.get_handle<FlavorParticle>(prim_lep_hndl)) {}
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_prim_lep)) {
+            e.set(h, e.get(h_prim_lep).pt());
+        } else {
+            e.set(h, 0.);
+        }
+        return true;
+    }
+
+private:
+    Event::Handle<float> h;
+    Event::Handle<FlavorParticle> h_prim_lep;
+};  // LeptonPtProducer
+
+
+class NLeptonsProducer: public AnalysisModule {
+public:
+    explicit NLeptonsProducer(Context & ctx,
+                              string const & h_name = "n_leptons"):
+        h(ctx.get_handle<int>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        e.set(h, e.electrons->size() + e.muons->size());
+        return true;
+    }
+
+private:
+    Event::Handle<int> h;
+};  // NLeptonsProducer
+
+
+
+// DEPRECATED: replaced by CollectionProducer class; needs to be tested still!
+// like this:
+// static bool is_fwd_jet(const Jet & j, const Event &) {return fabs(j.eta()) >= 2.4;}
+// static bool is_cntrl_jet(const Jet & j, const Event &) {return fabs(j.eta()) < 2.4;}
+// CollectionProducer<Jet>(ctx, is_fwd_jet, "jets", "fwd_jets")
+// CollectionProducer<Jet>(ctx, is_cntrl_jet, "jets", "jets")
 class FwdJetSwitch: public AnalysisModule {
 public:
     explicit FwdJetSwitch(Context & ctx):
@@ -40,12 +86,13 @@ private:
     Event::Handle<vector<Jet> > hndl;
 };  // class FwdJetSwitch
 
+
 // DEPRECATED: replaced by CollectionProducer class; needs to be tested still!
 class BJetsProducer: public AnalysisModule {
 public:
     explicit BJetsProducer(Context & ctx,
                            CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
-                           std::string const & h_name = "b_jets"):
+                           string const & h_name = "b_jets"):
         hndl(ctx.get_handle<vector<Jet>>(h_name)),
         tagger(CSVBTag(wp)) {}
 
@@ -71,7 +118,7 @@ class NBTagProducer: public AnalysisModule {
 public:
     explicit NBTagProducer(Context & ctx,
                            CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
-                           std::string const & h_name = "n_btags"):
+                           const string & h_name = "n_btags"):
         hndl(ctx.get_handle<int>(h_name)),
         tagger(CSVBTag(wp)) {}
 
@@ -96,7 +143,7 @@ class NLeadingBTagProducer: public AnalysisModule {
 public:
     explicit NLeadingBTagProducer(Context & ctx,
                                   CSVBTag::wp wp = CSVBTag::WP_MEDIUM,
-                                  std::string const & h_name = "n_leading_btags"):
+                                  const string & h_name = "n_leading_btags"):
         hndl(ctx.get_handle<int>(h_name)),
         tagger(CSVBTag(wp)) {}
 
@@ -121,8 +168,9 @@ private:
 
 class LeadingJetPtProducer: public AnalysisModule {
 public:
-    explicit LeadingJetPtProducer(Context & ctx):
-        h(ctx.get_handle<float>("leading_jet_pt")) {}
+    explicit LeadingJetPtProducer(Context & ctx,
+                                  const string & h_name = "leading_jet_pt"):
+        h(ctx.get_handle<float>(h_name)) {}
 
     virtual bool process(Event & e) override {
         if (e.jets->size() > 0) {
@@ -136,38 +184,37 @@ public:
 
 private:
     Event::Handle<float> h;
-};
+};  // LeadingJetPtProducer
 
 
-class LeptonPtProducer: public AnalysisModule {
+class SubleadingJetPtProducer: public AnalysisModule {
 public:
-    explicit LeptonPtProducer(Context & ctx):
-        h(ctx.get_handle<float>("primary_lepton_pt")),
-        h_prim_lep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
+    explicit SubleadingJetPtProducer(Context & ctx,
+                                     const string & h_name = "subleading_jet_pt"):
+        h(ctx.get_handle<float>(h_name)) {}
 
     virtual bool process(Event & e) override {
-        if (e.is_valid(h_prim_lep)) {
-            e.set(h, e.get(h_prim_lep).pt());
+        if (e.jets->size() > 1) {
+            e.set(h, e.jets->at(1).pt());
+            return true;
         } else {
             e.set(h, 0.);
+            return false;
         }
-        return true;
     }
 
 private:
     Event::Handle<float> h;
-    Event::Handle<FlavorParticle> h_prim_lep;
-};
+};  // SubleadingJetPtProducer
 
 
 class LargestJetEtaProducer: public AnalysisModule {
 public:
     explicit LargestJetEtaProducer(Context & ctx,
-                           const string & jets_name = "jets",
-                           const string & fwd_jets_name = ""):
-        h_largest_jet_eta(ctx.get_handle<float>("largest_jet_eta")),
-        h_jets(ctx.get_handle<vector<Jet>>(jets_name)),
-        h_fwd_jets(ctx.get_handle<vector<Jet>>(fwd_jets_name)) {}
+                                   const string & output_name = "largest_jet_eta",
+                                   const string & jets_name = "jets"):
+        h_largest_jet_eta(ctx.get_handle<float>(output_name)),
+        h_jets(ctx.get_handle<vector<Jet>>(jets_name)) {}
 
     virtual float largest_eta(const vector<Jet> & jets) {
         float largest_jet_eta = 0.;
@@ -181,10 +228,6 @@ public:
     }
 
     virtual bool process(Event & e) override {
-        if (e.is_valid(h_fwd_jets) && e.get(h_fwd_jets).size()) {
-            e.set(h_largest_jet_eta, largest_eta(e.get(h_fwd_jets)));
-            return true;
-        }
         if (e.is_valid(h_jets) && e.get(h_jets).size()) {
             e.set(h_largest_jet_eta, largest_eta(e.get(h_jets)));
             return true;
@@ -195,13 +238,13 @@ public:
 private:
     Event::Handle<float>        h_largest_jet_eta;
     Event::Handle<vector<Jet>>  h_jets;
-    Event::Handle<vector<Jet>>  h_fwd_jets;
 };  // class LargestJetEtaProducer
 
 
 class STCalculator: public AnalysisModule {
 public:
-    explicit STCalculator(Context & ctx, std::string const & h_name = "ST"):
+    explicit STCalculator(Context & ctx,
+                          string const & h_name = "ST"):
         h_st(ctx.get_handle<double>(h_name)),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
@@ -314,10 +357,43 @@ private:
 };  // class NTaggedTopJetProducer
 
 
+class TriggerAcceptProducer : public AnalysisModule {
+public:
+    explicit TriggerAcceptProducer(Context & ctx,
+                                   const vector<string> & trig_names,
+                                   const string & h_name = "trigger_accept"):
+        v_trig_names(trig_names),
+        h(ctx.get_handle<int>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        vector<Event::TriggerIndex> v_trig_ind;
+        for (const auto & trig_name : v_trig_names) {
+            v_trig_ind.emplace_back(e.get_trigger_index(trig_name));
+        }
+        // auto ele_trig = e.get_trigger_index("HLT_Ele95_CaloIdVT_GsfTrkIdT_v*");
+        // auto mu_trig = e.get_trigger_index("HLT_Mu40_v*");
+        int passes_any = 0;
+        for (Event::TriggerIndex & trig_ind : v_trig_ind) {
+            if (e.passes_trigger(trig_ind)) {
+                passes_any = 1;
+                break;
+            }
+        }
+        e.set(h, passes_any);
+        return true;
+    }
+
+private:
+    vector<string> v_trig_names;
+    Event::Handle<int> h;
+};  // TriggerAcceptProducer
+
+
 class EventWeightOutputHandle: public AnalysisModule {
 public:
-    explicit EventWeightOutputHandle(Context & ctx):
-        hndl(ctx.declare_event_output<double>("weight")) {}
+    explicit EventWeightOutputHandle(Context & ctx,
+                                     const string & h_name = "weight"):
+        hndl(ctx.declare_event_output<double>(h_name)) {}
 
     bool process(Event & e) override {
         e.set(hndl, e.weight);
@@ -326,7 +402,7 @@ public:
 
 private:
     Event::Handle<double> hndl;
-};
+};  // EventWeightOutputHandle
 
 
 class GenParticleMotherId
@@ -370,7 +446,7 @@ public:
 
 private:
     int mother_id_, veto_mother_id_;
-};
+};  // GenParticleMotherId
 
 
 class GenParticleDaughterId
@@ -399,7 +475,7 @@ public:
 
 private:
     int part_id_, daughter1_id_, daughter2_id_;
-};
+};  // GenParticleDaughterId
 
 
 // function to grab the best hypothesis
@@ -425,49 +501,3 @@ const HYP * get_best_hypothesis(
 }
 
 }
-
-class TriggerAcceptProducer : public AnalysisModule {
-public:
-    explicit TriggerAcceptProducer(Context & ctx,
-                    std::vector<std::string> const & trig_names,
-                    std::string const & h_name = "trigger_accept"):
-        v_trig_names(trig_names),
-        h(ctx.get_handle<int>(h_name)) {}
-
-    virtual bool process(Event & e) override {
-        std::vector<Event::TriggerIndex> v_trig_ind;
-        for (std::string const & trig_name : v_trig_names) {
-            v_trig_ind.emplace_back(e.get_trigger_index(trig_name));
-        }
-        // auto ele_trig = e.get_trigger_index("HLT_Ele95_CaloIdVT_GsfTrkIdT_v*");
-        // auto mu_trig = e.get_trigger_index("HLT_Mu40_v*");
-        int passes_any = 0;
-        for (Event::TriggerIndex & trig_ind : v_trig_ind) {
-            if (e.passes_trigger(trig_ind)) {
-                passes_any = 1;
-                break;
-            }
-        }
-        e.set(h, passes_any);
-        return true;
-    }
-
-private:
-    std::vector<std::string> v_trig_names;
-    Event::Handle<int> h;
-};
-
-
-class NLeptonsProducer: public AnalysisModule {
-public:
-    explicit NLeptonsProducer(Context & ctx, std::string const & h_name = "n_leptons"):
-        h(ctx.get_handle<int>(h_name)) {}
-
-    virtual bool process(Event & e) override {
-        e.set(h, e.electrons->size() + e.muons->size());
-        return true;
-    }
-
-private:
-    Event::Handle<int> h;
-};
