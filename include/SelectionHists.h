@@ -51,7 +51,7 @@ private:
 
 class VLQ2HTCutflow: public Hists {
 public:
-    VLQ2HTCutflow(Context & ctx,
+    explicit VLQ2HTCutflow(Context & ctx,
                   const string & dir,
                   const SelItemsHelper & sel_helper):
         Hists(ctx, dir),
