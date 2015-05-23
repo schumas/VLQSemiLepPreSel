@@ -38,17 +38,28 @@ class CutflowTableContent(varial.tools.Tool):
         self.head_line = list(
             bin_label(i + 1)
             for i in xrange(self._input_mc[0].histo.GetNbinsX())
+            if bin_label(i + 1)
         )
 
     @staticmethod
     def _get_value_list(wrp):
         bin_cont = wrp.histo.GetBinContent
-        return list(bin_cont(i + 1) for i in xrange(wrp.histo.GetNbinsX()))
+        bin_label = wrp.histo.GetXaxis().GetBinLabel
+        return list(
+            bin_cont(i + 1)
+            for i in xrange(wrp.histo.GetNbinsX())
+            if bin_label(i + 1)
+        )
 
     @staticmethod
     def _get_error_list(wrp):
         err_cont = wrp.histo.GetBinError
-        return list(err_cont(i + 1) for i in xrange(wrp.histo.GetNbinsX()))
+        bin_label = wrp.histo.GetXaxis().GetBinLabel
+        return list(
+            err_cont(i + 1)
+            for i in xrange(wrp.histo.GetNbinsX())
+            if bin_label(i + 1)
+        )
 
     def fill_tables(self):
         for wrp in self._input_data:
