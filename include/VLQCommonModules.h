@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
@@ -15,6 +16,28 @@ using namespace std;
 using namespace uhh2;
 
 namespace {
+
+template<typename T>
+class AbsValueProducer: public AnalysisModule {
+public:
+    AbsValueProducer(Context & ctx,
+                     const string & h_name):
+        h_in(ctx.get_handle<T>(h_name)),
+        h_out(ctx.get_handle<T>("abs_" + h_name)) {}
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_in)) {
+            // will only compile for int, float...
+            e.set(h_out, abs(e.get(h_in)));
+            return true;
+        }
+        return false;
+    }
+
+private:
+    Event::Handle<T> h_in;
+    Event::Handle<T> h_out;
+};
 
 class LeptonPtProducer: public AnalysisModule {
 public:
