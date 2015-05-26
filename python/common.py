@@ -29,29 +29,36 @@ def add_wrp_info(wrps):
     )
 
 
-@varial.history.track_history
-def merge_decay_channel(w):
-    return w
-
-
 def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
     """histos must be sorted!!"""
+
+    @varial.history.track_history
+    def merge_decay_channel(w):
+        return w
+
+    def do_merging(buf):
+        res = varial.operations.sum(buf)
+        res.sample = next(res.sample[:-len(p)]
+                          for p in postfixes
+                          if res.sample.endswith(p))
+        res.legend = next(res.legend[:-len(p)]
+                          for p in postfixes
+                          if res.legend.endswith(p))
+        res.file_path = ''
+        del buf[:]
+        return merge_decay_channel(res)
+
     buf = []
     for w in wrps:
         if any(w.sample.endswith(p) for p in postfixes):
             buf.append(w)
             if len(buf) == len(postfixes):
-                res = varial.operations.sum(buf)
-                res.sample = next(res.sample[:-len(p)]
-                                  for p in postfixes
-                                  if res.sample.endswith(p))
-                res.legend = next(res.legend[:-len(p)]
-                                  for p in postfixes
-                                  if res.legend.endswith(p))
-                res.file_path = ''
-                buf = []
-                yield merge_decay_channel(res)
+                yield do_merging(buf)
         else:
+            if buf:
+                print 'WARNING In merge_decay_channels: buffer not empty. ' \
+                      'Flushing remaining items:' + buf
+                yield do_merging(buf)
             yield w
 
 
