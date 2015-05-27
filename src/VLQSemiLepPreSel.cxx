@@ -14,6 +14,7 @@
 #include "UHH2/common/include/TTbarReconstruction.h"
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
+#include "UHH2/common/include/CollectionProducer.h"
 
 #include "UHH2/VLQSemiLepPreSel/include/VLQCommonModules.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
@@ -44,19 +45,11 @@ private:
 
 
 VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
-
-    // If needed, access the configuration of the module here, e.g.:
-    // string testvalue = ctx.get("TestKey", "<not set>");
-    // cout << "TestKey in the configuration was: " << testvalue << endl;
     version = ctx.get("dataset_version", "");
-    
-    // If running in SFrame, the keys "dataset_version", "dataset_type" and "dataset_lumi"
-    // are set to the according values in the xml file. For CMSSW, these are
-    // not set automatically, but can be set in the python config file.
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
     }
-    
+
     // 1. setup modules to prepare the event.
     v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new ElectronCleaner(
         AndId<Electron>(
@@ -70,6 +63,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
             PtEtaCut(20.0, 2.4)
         )
     )));
+
     v_pre_modules.emplace_back(new JetCorrector(JERFiles::PHYS14_L123_MC));
     v_pre_modules.emplace_back(new JetLeptonCleaner(JERFiles::PHYS14_L123_MC));
     v_pre_modules.emplace_back(new JetCleaner(30.0, 7.0));
@@ -78,9 +72,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
     v_pre_modules.emplace_back(new HTCalculator(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
-    v_pre_modules.emplace_back(new NBTagProducer(ctx, CSVBTag::WP_LOOSE));
-    v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(HiggsTag()), "n_higgstags", "patJetsCa15CHSJetsFilteredPacked"));
-    v_pre_modules.emplace_back(new NTaggedTopJetProducer(ctx, TopJetId(CMSTopTag()), "n_toptags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, CSVBTag(CSVBTag::WP_LOOSE), "jets", "n_btags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, CSVBTag(CSVBTag::WP_LOOSE), "jets", "n_btags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(HiggsTag()), "patJetsCa15CHSJetsFilteredPacked", "n_higgstags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(CMSTopTag()), "topjets", "n_toptags"));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
 
@@ -103,11 +98,11 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
 
     // append 2D cut
-    // unsigned pos_2d_cut = 1;
-    // sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.3, 20.));
-    // nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
-    // cf_hists->insert_step(pos_2d_cut, "2D cut");
-    // v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
+    unsigned pos_2d_cut = 4;
+    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.4, 20.));
+    nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
+    cf_hists->insert_step(pos_2d_cut, "2D cut");
+    v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
 }
 
 

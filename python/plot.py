@@ -71,7 +71,7 @@ def loader_hook(wrps):
     #wrps = apply_match_eff(wrps)
     wrps = common.add_wrp_info(wrps)
     wrps = merge_samples(wrps)
-    wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
+    # wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
     wrps = common.label_axes(wrps)
     wrps = gen.gen_make_th2_projections(wrps)
     #wrps = gen.gen_make_eff_graphs(wrps)
