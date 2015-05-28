@@ -26,9 +26,9 @@
     <Library Name="libSUHH2VLQToHiggsAndLepton"/>
     <Package Name="SUHH2VLQToHiggsAndLepton.par" />
 
-   <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="20000" > -->
-   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2-tmp/" PostFix="" TargetLumi="20000" >
-   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="20000" > -->
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="5000" > -->
+   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2-tmp/" PostFix="" TargetLumi="5000" >
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="5000" > -->
 
         <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
             &MC_TpJ_TH_M800_20x25;
