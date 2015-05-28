@@ -1,5 +1,9 @@
 #pragma once
 
+#include <map>
+#include <memory>
+#include <set>
+
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Hists.h"
@@ -14,6 +18,7 @@ using namespace uhh2;
 
 class SelectionItem {
 public:
+    SelectionItem(const string & name) : name_(name) {}
     virtual Selection       * make_selection(Context & ctx) const = 0;
     virtual Hists           * make_hists(Context & ctx, const string & dir) const = 0;
     virtual AnalysisModule  * make_branch_writer(Context & ctx, TTree * tree) const = 0;
@@ -21,17 +26,19 @@ public:
     const string & name() const {return name_;}
 
 protected:
-    string name_;
+    const string name_;
 };
 
 
 template<typename DATATYPE>
 class SelectionItemData : public SelectionItem {
 public:
-    SelectionItemData(string name, string title, int n_bins, float x_min, float x_max,
+    SelectionItemData(const string & name, const string & title,
+                      int n_bins, float x_min, float x_max,
                       DATATYPE min_val=-99999.0, DATATYPE max_val=99999.0):
-        title_(title), n_bins_(n_bins), x_min_(x_min), x_max_(x_max),
-        min_val_(min_val), max_val_(max_val) {name_ = name;}
+        SelectionItem(name), title_(title),
+        n_bins_(n_bins), x_min_(x_min), x_max_(x_max),
+        min_val_(min_val), max_val_(max_val) {}
 
     virtual Selection * make_selection(Context & ctx) const override {
         return new HandleSelection<DATATYPE>(ctx, name_, min_val_, max_val_);
@@ -68,7 +75,17 @@ public:
         items(sel_items),
         ctx(context),
         item_names(names.size() ? names : all_item_names())
-    {}
+    {
+        set<string> name_set;
+        for (const auto & it : items) {
+            string n = it->name();
+            if (name_set.count(n)) {
+                throw runtime_error(
+                    "SelectionItem available more then once: " + n);
+            }
+            name_set.insert(n);
+        }
+    }
 
     const vector<string> & get_item_names() const {
         return item_names;
@@ -147,8 +164,8 @@ public:
         sel_helper.fill_sel_vector(v_sel);
     }
 
-    void add_selection(Selection * sel) {
-        v_sel.emplace_back(sel);
+    void insert_selection(unsigned pos, Selection * sel) {
+        v_sel.insert(v_sel.begin() + pos, move(unique_ptr<Selection>(sel)));
     }
 
     virtual bool process(Event & event) override {

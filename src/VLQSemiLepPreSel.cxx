@@ -36,7 +36,7 @@ private:
     std::string version;
     // modules for setting up collections and cleaning
     std::vector<std::unique_ptr<AnalysisModule>> v_pre_modules;
-    unique_ptr<AnalysisModule> sel_module;
+    unique_ptr<SelectionProducer> sel_module;
 
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
@@ -88,16 +88,26 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
 
     // 2. setup histograms
-    sel_helper.fill_hists_vector(v_hists, "NoSelection");
+    auto * nm1_hists = new Nm1SelHists(ctx, "Nm1Selection", sel_helper);
+    auto * cf_hists = new VLQ2HTCutflow(ctx, "Cutflow", sel_helper);
+
     v_hists.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre"));
     v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
     v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
-    v_hists.emplace_back(new Nm1SelHists(ctx, "Nm1Selection", sel_helper));
-    v_hists.emplace_back(new VLQ2HTCutflow(ctx, "Cutflow", sel_helper));
+    v_hists.emplace_back(nm1_hists);
+    v_hists.emplace_back(cf_hists);
+    sel_helper.fill_hists_vector(v_hists, "NoSelection");
 
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
     v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
     v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
+
+    // append 2D cut
+    // unsigned pos_2d_cut = 1;
+    // sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.3, 20.));
+    // nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
+    // cf_hists->insert_step(pos_2d_cut, "2D cut");
+    // v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
 }
 
 
@@ -105,7 +115,6 @@ bool VLQSemiLepPreSel::process(Event & event) {
 
     // run all event modules
     for (auto & mod : v_pre_modules) {
-
         mod->process(event);
     }
 

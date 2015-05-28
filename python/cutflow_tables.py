@@ -2,7 +2,6 @@ from math import sqrt
 import subprocess
 import itertools
 import shutil
-import os
 
 import varial.tools
 import varial.util
@@ -14,7 +13,7 @@ class CutflowTableContent(varial.tools.Tool):
     can_reuse = False
 
     def __init__(self, name=None):
-        super(CutflowTableContent, self).__init__()
+        super(CutflowTableContent, self).__init__(name)
         self._input_mc       = []
         self._input_data     = []
         self.head_line      = []
@@ -38,17 +37,28 @@ class CutflowTableContent(varial.tools.Tool):
         self.head_line = list(
             bin_label(i + 1)
             for i in xrange(self._input_mc[0].histo.GetNbinsX())
+            if bin_label(i + 1)
         )
 
     @staticmethod
     def _get_value_list(wrp):
         bin_cont = wrp.histo.GetBinContent
-        return list(bin_cont(i + 1) for i in xrange(wrp.histo.GetNbinsX()))
+        bin_label = wrp.histo.GetXaxis().GetBinLabel
+        return list(
+            bin_cont(i + 1)
+            for i in xrange(wrp.histo.GetNbinsX())
+            if bin_label(i + 1)
+        )
 
     @staticmethod
     def _get_error_list(wrp):
         err_cont = wrp.histo.GetBinError
-        return list(err_cont(i + 1) for i in xrange(wrp.histo.GetNbinsX()))
+        bin_label = wrp.histo.GetXaxis().GetBinLabel
+        return list(
+            err_cont(i + 1)
+            for i in xrange(wrp.histo.GetNbinsX())
+            if bin_label(i + 1)
+        )
 
     def fill_tables(self):
         for wrp in self._input_data:
@@ -293,12 +303,27 @@ class CutflowTableTex(varial.tools.Tool):
         self.copy_to_target_dir()
 
 
+def gen_rebin_cutflow(wrps):
+    last_bin = None
+    for w in wrps:
+        w = varial.op.trim(w)
+        if not last_bin:
+            for i in xrange(w.histo.GetNbinsX(), 0, -1):
+                if w.histo.GetBinContent(i) == w.histo.GetBinContent(i - 1):
+                    continue
+                last_bin = i
+                break
+
+        yield varial.op.trim(w, False, right=last_bin)
+
+
+
 def mk_cutflow_chain(input_pat, loader_hook):
     cutflow_histos = varial.tools.HistoLoader(
         name='CutflowHistos',
         pattern=input_pat,
         filter_keyfunc=lambda w: 'cutflow' == w.in_file_path.split('/')[-1],
-        hook_loaded_histos=loader_hook
+        hook_loaded_histos=lambda w: gen_rebin_cutflow(loader_hook(w))
     )
 
     #class AxisTitles(varial.util.Decorator):
@@ -314,6 +339,7 @@ def mk_cutflow_chain(input_pat, loader_hook):
         stack=True,
         input_result_path='../CutflowHistos',
         save_log_scale=True,
+        canvas_decorators=[varial.rendering.Legend]
     )
 
     return varial.tools.ToolChain("CutflowTools", [

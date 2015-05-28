@@ -1,5 +1,8 @@
 #pragma once
 
+#include <assert.h>
+#include <memory>
+
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/core/include/Event.h"
 #include "TH1F.h"
@@ -7,6 +10,10 @@
 
 #include "UHH2/VLQSemiLepPreSel/include/HandleHist.h"
 #include "UHH2/VLQSemiLepPreSel/include/SelectionItem.h"
+
+
+using namespace std;
+using namespace uhh2;
 
 
 class Nm1SelHists: public Hists {
@@ -20,12 +27,13 @@ public:
         sel_helper.fill_hists_vector(v_hists, dir);
     }
 
-    void add_hists(Hists * hists) {
-        v_hists.emplace_back(hists);
+    void insert_hists(unsigned pos, Hists * hists) {
+        v_hists.insert(v_hists.begin() + pos, move(unique_ptr<Hists>(hists)));
     }
 
     virtual void fill(const Event & event) override {
         const auto & v_accept = event.get(h_sel_res);
+        assert(v_accept.size() == v_hists.size());
         for (unsigned i=0; i<v_hists.size(); ++i) {
             bool accept_nm1 = true;
             for (unsigned j=0; j<v_accept.size(); ++j) {
@@ -51,29 +59,27 @@ private:
 
 class VLQ2HTCutflow: public Hists {
 public:
-    VLQ2HTCutflow(Context & ctx,
+    explicit VLQ2HTCutflow(Context & ctx,
                   const string & dir,
                   const SelItemsHelper & sel_helper):
         Hists(ctx, dir),
         h_sel(ctx.get_handle<vector<bool>>("sel_accept")),
         v_names(sel_helper.get_item_names()),
-        h(book<TH1D>("cutflow", "", 1, 0, -1))
-    {
-        h->SetBit(TH1::kCanRebin);
-        h->Fill("input", 1e-7);
-        for (const string & name : v_names) {
-            h->Fill(name.c_str(), 1e-7);
-        }
-    }
+        h(book<TH1D>("cutflow", "", 1, 0, -1)),
+        init_done(false) {}
 
-    void add_step(const string & name) {
-        v_names.push_back(name);
-        h->Fill(name.c_str(), 1e-7);
+    void insert_step(unsigned pos, const string & name) {
+        assert(!init_done);  // no changing names after init
+        v_names.insert(v_names.begin() + pos, name);
     }
 
     virtual void fill(const uhh2::Event & e) override {
-        float w = e.weight;
+        if (!init_done) {
+            initialize_histo();
+        }
+        const float w = e.weight;
         const auto & sel = e.get(h_sel);
+        assert(sel.size() == v_names.size());
         h->Fill("input", w);
         for (unsigned i = 0; i < v_names.size(); ++i) {
             if (sel[i]) {
@@ -85,7 +91,17 @@ public:
     }
 
 private:
+    void initialize_histo() {
+        h->SetBit(TH1::kCanRebin);
+        h->Fill("input", 1e-7);
+        for (const string & name : v_names) {
+            h->Fill(name.c_str(), 1e-7);
+        }
+        init_done = true;
+    }
+
     Event::Handle<vector<bool>> h_sel;
     vector<string> v_names;
     TH1D * h;
+    bool init_done;
 };

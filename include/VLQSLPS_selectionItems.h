@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include "TH2F.h"
+
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/VLQSemiLepPreSel/include/SelectionItem.h"
 
