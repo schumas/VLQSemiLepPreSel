@@ -18,7 +18,18 @@ v1
 --
 
 - leading ak4Jet pT > 200 GeV 
-- primary lepton pT > 50
+- primary lepton pT > 50 GeV
 - ST > 500 GeV
+
+
+v2
+--
+
+- leading ak4Jet pT > 100 GeV 
+- primary lepton pT > 50 GeV
+- ST > 500 GeV
+- number of loose csvv2 btags (ak4Jets) >= 1
+- 2D-Cut (dR(l, j) > 0.2 OR dpt(l, j) > 10.)
+
 
 
