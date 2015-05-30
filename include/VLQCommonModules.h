@@ -284,6 +284,35 @@ private:
 };  // TriggerAcceptProducer
 
 
+class TwoDCutProducer: public AnalysisModule {
+public:
+    explicit TwoDCutProducer(Context & ctx,
+                             const string & primlep_name = "PrimaryLepton",
+                             const string & dr_name = "TwoDCut_dR",
+                             const string & pt_name = "TwoDCut_ptrel"):
+        h_dr(ctx.get_handle<float>(dr_name)),
+        h_pt(ctx.get_handle<float>(pt_name)),
+        h_prim_lep(ctx.get_handle<FlavorParticle>(primlep_name)) {}
+
+    bool process(Event & e) override {
+        if (e.is_valid(h_prim_lep)) {
+            auto prim_lep = e.get(h_prim_lep);
+            float dr, pt;
+            std::tie(dr, pt) = drmin_pTrel(prim_lep, *e.jets);
+            e.set(h_dr, dr);
+            e.set(h_pt, pt);
+            return true;
+        }
+        return false;
+    }
+
+private:
+    Event::Handle<float> h_dr;
+    Event::Handle<float> h_pt;
+    Event::Handle<FlavorParticle> h_prim_lep;
+};  // TwoDCutProducer
+
+
 class EventWeightOutputHandle: public AnalysisModule {
 public:
     explicit EventWeightOutputHandle(Context & ctx,

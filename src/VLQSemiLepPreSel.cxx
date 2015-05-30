@@ -78,6 +78,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(CMSTopTag()), "topjets", "n_toptags"));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
+    v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
 
     SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
@@ -99,7 +100,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     // append 2D cut
     unsigned pos_2d_cut = 4;
-    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.4, 20.));
+    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.2, 10.));
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));

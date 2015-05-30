@@ -20,27 +20,30 @@ static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
 };
 
 
+namespace {
+
 class TwoDCutSel: public Selection {
 public:
     explicit TwoDCutSel(Context & ctx,
                         float min_dr,
-                        float min_ptrel):
-        h_prim_lep(ctx.get_handle<FlavorParticle>("PrimaryLepton")),
+                        float min_ptrel,
+                        const string & dr_name = "TwoDCut_dr",
+                        const string & pt_name = "TwoDCut_ptrel"):
+        h_dr(ctx.get_handle<float>(dr_name)),
+        h_pt(ctx.get_handle<float>(pt_name)),
         min_dr_(min_dr),
         min_ptrel_(min_ptrel) {}
 
     virtual bool passes(const Event & e) override {
-        if (!e.is_valid(h_prim_lep)) {
+        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
             return false;
         }
-        auto prim_lep = e.get(h_prim_lep);
-        float dr, pt;
-        std::tie(dr, pt) = drmin_pTrel(prim_lep, *e.jets);
-        return (dr > min_dr_) || (pt > min_ptrel_);
+        return (e.get(h_dr) > min_dr_) || (e.get(h_pt) > min_ptrel_);
     }
 
 private:
-    Event::Handle<FlavorParticle> h_prim_lep;
+    Event::Handle<float> h_dr;
+    Event::Handle<float> h_pt;
     float min_dr_;
     float min_ptrel_;
 };
@@ -49,24 +52,27 @@ private:
 class TwoDCutHist: public Hists {
 public:
     explicit TwoDCutHist(Context & ctx,
-                         const string & dirname):
+                         const string & dirname,
+                         const string & dr_name = "TwoDCut_dr",
+                         const string & pt_name = "TwoDCut_ptrel"):
         Hists(ctx, dirname),
-        h_prim_lep(ctx.get_handle<FlavorParticle>("PrimaryLepton")),
+        h_dr(ctx.get_handle<float>(dr_name)),
+        h_pt(ctx.get_handle<float>(pt_name)),
         hist(book<TH2F>("TwoDCut",
                         ";min #DeltaR(lep., jet);min p_{T,rel}(lep., jet)",
-                        100, 0., 5., 100, 0., 500.)) {}
+                        200, 0., 1., 200, 0., 500.)) {}
 
     virtual void fill(const Event & e) override {
-        if (!e.is_valid(h_prim_lep)) {
+        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
             return;
         }
-        auto prim_lep = e.get(h_prim_lep);
-        float dr, pt;
-        std::tie(dr, pt) = drmin_pTrel(prim_lep, *e.jets);
-        hist->Fill(dr, pt, e.weight);
+        hist->Fill(e.get(h_dr), e.get(h_pt), e.weight);
     }
 
 private:
-    Event::Handle<FlavorParticle> h_prim_lep;
+    Event::Handle<float> h_dr;
+    Event::Handle<float> h_pt;
     TH2F * hist;
 };
+
+}
