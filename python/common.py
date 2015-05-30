@@ -23,7 +23,6 @@ def add_wrp_info(wrps):
     return varial.generators.gen_add_wrp_info(
         wrps,
         sample=lambda w: w.file_path.split('.')[-2],
-        analyzer=lambda w: w.in_file_path.split('/')[0],
         legend=lambda w: w.sample,
         is_signal=lambda w: any(s in w.sample for s in signal_indicators),
     )
@@ -37,7 +36,7 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
         return w
 
     def do_merging(buf):
-        res = varial.operations.sum(buf)
+        res = varial.operations.merge(buf)
         res.sample = next(res.sample[:-len(p)]
                           for p in postfixes
                           if res.sample.endswith(p))
