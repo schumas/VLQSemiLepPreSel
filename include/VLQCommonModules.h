@@ -288,7 +288,7 @@ class TwoDCutProducer: public AnalysisModule {
 public:
     explicit TwoDCutProducer(Context & ctx,
                              const string & primlep_name = "PrimaryLepton",
-                             const string & dr_name = "TwoDCut_dR",
+                             const string & dr_name = "TwoDCut_dr",
                              const string & pt_name = "TwoDCut_ptrel"):
         h_dr(ctx.get_handle<float>(dr_name)),
         h_pt(ctx.get_handle<float>(pt_name)),

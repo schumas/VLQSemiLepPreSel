@@ -72,10 +72,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
     v_pre_modules.emplace_back(new HTCalculator(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsCa15CHSJetsFilteredPacked", "n_higgstags", TopJetId(HiggsTag())));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, JetId(CSVBTag(CSVBTag::WP_LOOSE)), "jets", "n_btags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, JetId(CSVBTag(CSVBTag::WP_LOOSE)), "jets", "n_btags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(HiggsTag()), "patJetsCa15CHSJetsFilteredPacked", "n_higgstags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(CMSTopTag()), "topjets", "n_toptags"));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));

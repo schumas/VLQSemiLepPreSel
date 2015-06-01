@@ -317,7 +317,6 @@ def gen_rebin_cutflow(wrps):
         yield varial.op.trim(w, False, right=last_bin)
 
 
-
 def mk_cutflow_chain(input_pat, loader_hook):
     cutflow_histos = varial.tools.HistoLoader(
         name='CutflowHistos',
