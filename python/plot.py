@@ -117,25 +117,22 @@ if __name__ == '__main__':
                 name='VLQ_presel_stack',
                 plotter_factory=plotter_factory_stack,
                 combine_files=True,
-            ).tool_chain[0],
+            ),
             varial.tools.mk_rootfile_plotter(
                 pattern=input_pat,
                 name='VLQ_presel_norm',
                 plotter_factory=plotter_factory_norm,
                 combine_files=True,
-            ).tool_chain[0],
+            ),
             varial.tools.mk_rootfile_plotter(
                 pattern=input_pat,
                 name='VLQ_presel_norm_no_signal',
                 plotter_factory=plotter_factory,
                 combine_files=True,
                 filter_keyfunc=lambda w: not common.is_signal(w.file_path)
-            ).tool_chain[0],
+            ),
             cutflow_tables.mk_cutflow_chain(input_pat, loader_hook),
         ]
-    )
-    tc = varial.tools.ToolChain(
-        'host_toolchain', [tc]
     )
 
     time.sleep(1)
@@ -145,7 +142,7 @@ if __name__ == '__main__':
     #cProfile.runctx('p1.run()',globals(),locals(),'prof_varial_plotting.txt')
     #print 'done profiling'
 
-    tc.run()
+    varial.tools.ToolRunner(tc)
     varial.tools.WebCreator().run()
     print 'done.'
 

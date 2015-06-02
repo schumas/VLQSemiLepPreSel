@@ -1,3 +1,7 @@
+import ROOT
+ROOT.gROOT.SetBatch()
+ROOT.gROOT.ProcessLine('gErrorIgnoreLevel = kError;')
+
 from varial import settings
 
 
@@ -26,5 +30,5 @@ settings.canvas_size_y = 400
 settings.root_style.SetPadRightMargin(0.3)
 settings.rootfile_postfixes = ['.root', '.png']
 
-settings.max_open_root_files = 100
-settings.max_num_processes = 20
+#settings.max_open_root_files = 100
+#settings.max_num_processes = 20
