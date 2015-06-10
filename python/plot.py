@@ -18,33 +18,6 @@ input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
             'PHYS14-ntuple2-v2/*.root'
 
 
-def apply_match_eff(wrps):
-    factors = {
-        # QCD
-        '_HT250to500': 0.1685,
-        '_HT500to1000': 0.2103,
-        '_HT1000ToInf': 0.2358,
-
-        # WJets
-        '_LNu_HT100to200_20x25': 0.096,
-        '_LNu_HT200to400_20x25': 0.084,
-        '_LNu_HT400to600_20x25': 0.075,
-        '_LNu_HT600toInf_20x25': 0.063,
-
-        # ZJets
-        '_LL_HT100to200_20x25': 0.099,
-        '_LL_HT200to400_20x25': 0.081,
-        '_LL_HT400to600_20x25': 0.067,
-        '_LL_HT600toInf_20x25': 0.062,
-    }
-    for w in wrps:
-        for k in factors:
-            if k in w.file_path:
-                w.lumi /= factors[k]
-        w = varial.op.norm_to_lumi(w)
-        yield w
-
-
 def merge_samples(wrps):
     wrps = common.merge_decay_channels(wrps, (
         '_LNu_HT100to200_20x25',
@@ -68,8 +41,8 @@ def merge_samples(wrps):
 
 def loader_hook(wrps):
     #wrps = common.yield_n_objs(wrps, 20)
-    #wrps = apply_match_eff(wrps)
     wrps = common.add_wrp_info(wrps)
+    wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
     # wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
     wrps = common.label_axes(wrps)

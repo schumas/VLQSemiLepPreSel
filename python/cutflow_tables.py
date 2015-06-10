@@ -306,6 +306,11 @@ class CutflowTableTex(varial.tools.Tool):
 def gen_rebin_cutflow(wrps):
     last_bin = None
     for w in wrps:
+
+        if w.obj.Integral() < 0.1:
+            yield w
+            continue
+
         w = varial.op.trim(w)
         if not last_bin:
             for i in xrange(w.histo.GetNbinsX(), 0, -1):
