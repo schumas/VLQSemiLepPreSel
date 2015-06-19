@@ -50,8 +50,6 @@ public:
     virtual bool process(Event & e) override {
         if (e.is_valid(h_prim_lep)) {
             e.set(h, e.get(h_prim_lep).pt());
-        } else {
-            e.set(h, 0.);
         }
         return true;
     }
