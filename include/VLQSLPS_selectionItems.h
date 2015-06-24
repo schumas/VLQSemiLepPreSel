@@ -12,6 +12,10 @@ typedef SelectionItemData<float>    SelDatF;
 typedef SelectionItemData<double>   SelDatD;
 
 
+static const float DR_2D_CUT_PRESEL = 2.5;
+static const float DPT_2D_CUT_PRESEL = 40.0;
+
+
 static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
     shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    "leading jet p_{T}",        50, 0, 1500       ,100    )),
     shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", "primary lepton p_{T}",     50, 0, 1500       ,50     )),
