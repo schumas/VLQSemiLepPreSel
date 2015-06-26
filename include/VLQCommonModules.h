@@ -239,7 +239,7 @@ private:
     Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
 
-
+// DEPRECATED, use PtSorter below instead
 class JetPtSorter : public AnalysisModule {
 public:
     explicit JetPtSorter() {}
@@ -250,6 +250,27 @@ public:
         return true;
     }
 };  // class JetPtSorter
+
+
+template<typename T>
+class PtSorter : public AnalysisModule {
+public:
+    explicit PtSorter(Context & ctx,
+                        const string & h_coll):
+        h_coll_(ctx.get_handle<vector<T>>(h_coll)) {}
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_coll_)) {
+            vector<T> & coll = event.get(h_coll_);
+            sort_by_pt(coll);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<T>> h_coll_;
+};  // class PtSorter
 
 
 class TriggerAcceptProducer : public AnalysisModule {
