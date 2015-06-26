@@ -100,7 +100,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     // append 2D cut
     unsigned pos_2d_cut = 4;
-    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, 0.2, 10.));
+    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, DR_2D_CUT_PRESEL, DPT_2D_CUT_PRESEL));
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));

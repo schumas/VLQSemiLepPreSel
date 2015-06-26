@@ -118,9 +118,3 @@ if __name__ == '__main__':
     varial.tools.Runner(tc)
     varial.tools.WebCreator().run()
     print 'done.'
-
-
-
-
-
-
