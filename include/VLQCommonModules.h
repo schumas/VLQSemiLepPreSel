@@ -421,6 +421,35 @@ private:
 };  // GenParticleDaughterId
 
 
+template<typename T>
+class LeadingPartMassProducer : public AnalysisModule {
+public:
+    explicit LeadingPartMassProducer(Context & ctx,
+                        const string & h_in,
+                        const string & h_out):
+        h_in_(ctx.get_handle<vector<T>>(h_in)),
+        h_out_(ctx.get_handle<float>(h_out)) {}
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_in_)) {
+            vector<T> & coll = event.get(h_in_);
+            if (coll.size()) {
+                event.set(h_out_, coll[0].v4().M());
+            } else {
+                event.set(h_out_, -1.);
+            }
+
+            return true;
+        } else {
+            event.set(h_out_, -1.);
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<T>> h_in_;
+    Event::Handle<float> h_out_;
+};
+
+
 // function to grab the best hypothesis
 // note: member HYP.discriminators must be public map<string, float>
 template<typename HYP>
