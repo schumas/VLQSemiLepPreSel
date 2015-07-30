@@ -504,17 +504,14 @@ public:
     MinDeltaRId(Context & ctx,
                 const string & h_comp_coll,
                 double min_dr = 1.0,
-                bool only_leading = false) :
-        h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),
-        min_dr_(min_dr)
-        {}
+                bool only_leading = false) :h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),min_dr_(min_dr),only_leading_(only_leading) {}
 
     bool operator()(const Particle & part, const Event & event) const
     {
         // TODO: make assert statement that part (or rather, TYPE1) really inherits from Particle!
         if (event.is_valid(h_comp_coll_)){
             const vector<TYPE> & comp_coll = event.get(h_comp_coll_);
-            if (only_leading){
+            if (only_leading_){
                 if (comp_coll.size()){
                     const TYPE & ld_part = comp_coll[0];
                     if (deltaR(part, ld_part) < min_dr_)
@@ -538,6 +535,7 @@ public:
 private:
     Event::Handle<vector<TYPE>> h_comp_coll_;
     double min_dr_;
+    bool only_leading_;
 };  // MinDeltaRId
 
 }
