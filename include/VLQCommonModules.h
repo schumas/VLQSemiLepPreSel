@@ -5,6 +5,8 @@
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
+#include "UHH2/core/include/Selection.h"
+
 
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/TopJetIds.h"
@@ -262,7 +264,7 @@ private:
     Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
 
-
+// DEPRECATED, use PtSorter below instead
 class JetPtSorter : public AnalysisModule {
 public:
     explicit JetPtSorter() {}
@@ -273,6 +275,27 @@ public:
         return true;
     }
 };  // class JetPtSorter
+
+
+template<typename T>
+class PtSorter : public AnalysisModule {
+public:
+    explicit PtSorter(Context & ctx,
+                        const string & h_coll):
+        h_coll_(ctx.get_handle<vector<T>>(h_coll)) {}
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_coll_)) {
+            vector<T> & coll = event.get(h_coll_);
+            sort_by_pt(coll);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<T>> h_coll_;
+};  // class PtSorter
 
 
 class TriggerAcceptProducer : public AnalysisModule {
@@ -425,6 +448,35 @@ private:
 };  // GenParticleDaughterId
 
 
+template<typename T>
+class LeadingPartMassProducer : public AnalysisModule {
+public:
+    explicit LeadingPartMassProducer(Context & ctx,
+                        const string & h_in,
+                        const string & h_out):
+        h_in_(ctx.get_handle<vector<T>>(h_in)),
+        h_out_(ctx.get_handle<float>(h_out)) {}
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_in_)) {
+            vector<T> & coll = event.get(h_in_);
+            if (coll.size()) {
+                event.set(h_out_, coll[0].v4().M());
+            } else {
+                event.set(h_out_, -1.);
+            }
+
+            return true;
+        } else {
+            event.set(h_out_, -1.);
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<T>> h_in_;
+    Event::Handle<float> h_out_;
+};
+
+
 // function to grab the best hypothesis
 // note: member HYP.discriminators must be public map<string, float>
 template<typename HYP>
@@ -446,5 +498,69 @@ const HYP * get_best_hypothesis(
     best_discr = current_best_disc;
     return best;  // note: might be nullptr
 }
+
+
+class VectorAndSelection: public Selection {
+public:
+    explicit VectorAndSelection(const vector<Selection*> &sel_vec) {
+        for (const auto & sel : sel_vec) {
+            sel_vec_.emplace_back(sel);
+        }
+    }
+
+    bool passes(const Event & e) override {
+        for (const auto & sel : sel_vec_) {
+            if (!sel->passes(e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+private:
+    vector<unique_ptr<Selection>> sel_vec_;
+};
+
+
+template<typename TYPE>
+class MinDeltaRId
+{
+public:
+    MinDeltaRId(Context & ctx,
+                const string & h_comp_coll,
+                double min_dr = 1.0,
+                bool only_leading = false) :h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),min_dr_(min_dr),only_leading_(only_leading) {}
+
+    bool operator()(const Particle & part, const Event & event) const
+    {
+        // TODO: make assert statement that part (or rather, TYPE1) really inherits from Particle!
+        if (event.is_valid(h_comp_coll_)){
+            const vector<TYPE> & comp_coll = event.get(h_comp_coll_);
+            if (only_leading_){
+                if (comp_coll.size()){
+                    const TYPE & ld_part = comp_coll[0];
+                    if (deltaR(part, ld_part) < min_dr_)
+                        return false;
+                }
+                return true;
+            } else {
+                const TYPE * closest_part = closestParticle<TYPE>(part, comp_coll);
+                if (closest_part){
+                    if (deltaR(part, *closest_part) < min_dr_)
+                        return false;
+                }
+                return true;
+            }
+        }
+
+        std::cout << "WARNING: in MinDeltaRId: handle to h_comp_coll_ is not valid!\n";
+        return true;
+    }
+
+private:
+    Event::Handle<vector<TYPE>> h_comp_coll_;
+    double min_dr_;
+    bool only_leading_;
+};  // MinDeltaRId
 
 }

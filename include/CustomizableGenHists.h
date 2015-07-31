@@ -56,7 +56,6 @@ private:
 
     std::vector<GenHistColl> all_hists_;
 
-	TH1F *tp_decay, *h_decay, *t_decay, *b_decay, *w_decay, *z_decay;
 	TH1F *spec_parton_ht, *spec_deltaR_bb_h, *spec_deltaR_bb_min, *spec_max_deltaR_topprod;
 	TH2F *spec_top_pt_vs_max_dR;
 };

@@ -6,11 +6,10 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Hists.h"
 
-#include "UHH2/common/include/CleaningModules.h"
+#include "UHH2/common/include/CommonModules.h"
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/MuonIds.h"
 #include "UHH2/common/include/JetIds.h"
-#include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/TTbarReconstruction.h"
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
@@ -49,33 +48,22 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
     }
-
-    // 1. setup modules to prepare the event.
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new ElectronCleaner(
-        AndId<Electron>(
-            ElectronID_PHYS14_25ns_medium_noIso,
-            PtEtaCut(20.0, 2.4)
-        )
-    )));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new MuonCleaner(
-        AndId<Muon>(
-            MuonIDTight(),
-            PtEtaCut(20.0, 2.4)
-        )
-    )));
-
-    v_pre_modules.emplace_back(new JetCorrector(JERFiles::PHYS14_L123_MC));
-    v_pre_modules.emplace_back(new JetLeptonCleaner(JERFiles::PHYS14_L123_MC));
-    v_pre_modules.emplace_back(new JetCleaner(30.0, 7.0));
-    v_pre_modules.emplace_back(new JetPtSorter());
+    //use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
+    CommonModules* commonOjectCleaning = new CommonModules();
+    commonOjectCleaning->set_jet_id(PtEtaCut(30.0,7.0));
+    commonOjectCleaning->set_electron_id(AndId<Electron>(ElectronID_PHYS14_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
+    commonOjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.4)));
+    commonOjectCleaning->switch_jetlepcleaner(true);
+    commonOjectCleaning->switch_jetPtSorter(true);
+    commonOjectCleaning->init(ctx);
+    v_pre_modules.emplace_back(commonOjectCleaning);
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
-    v_pre_modules.emplace_back(new HTCalculator(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, JetId(CSVBTag(CSVBTag::WP_LOOSE)), "jets", "n_btags"));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, JetId(CSVBTag(CSVBTag::WP_LOOSE)), "jets", "n_btags"));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(HiggsTag()), "patJetsCa15CHSJetsFilteredPacked", "n_higgstags"));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, TopJetId(CMSTopTag()), "topjets", "n_toptags"));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsCa15CHSJetsFilteredPacked", "n_higgstags", TopJetId(HiggsTag())));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
