@@ -84,6 +84,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
 
     // 2. setup histograms
+    // TODO make signal samples also with gen-selector for leptonic final state
     auto * nm1_hists = new Nm1SelHists(ctx, "Nm1Selection", sel_helper);
     auto * cf_hists = new VLQ2HTCutflow(ctx, "Cutflow", sel_helper);
 

@@ -39,6 +39,31 @@ private:
     Event::Handle<T> h_out;
 };
 
+template<typename T>
+class DiffValueProducer: public AnalysisModule {
+public:
+    DiffValueProducer(Context & ctx,
+                     const string & h_name1,
+                     const string & h_name2):
+        h_in1(ctx.get_handle<T>(h_name1)),
+        h_in2(ctx.get_handle<T>(h_name2)),
+        h_out(ctx.get_handle<T>("diff_" + h_name1 + '_' + h_name2)) {}
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_in1) && e.is_valid(h_in2)) {
+            // will only compile for int, float...
+            e.set(h_out, e.get(h_in1) - e.get(h_in2));
+            return true;
+        }
+        return false;
+    }
+
+private:
+    Event::Handle<T> h_in1;
+    Event::Handle<T> h_in2;
+    Event::Handle<T> h_out;
+};
+
 class LeptonPtProducer: public AnalysisModule {
 public:
     explicit LeptonPtProducer(Context & ctx,
