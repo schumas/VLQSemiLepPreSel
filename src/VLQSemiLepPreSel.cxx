@@ -48,7 +48,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
     }
-    //use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
+
+    // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonOjectCleaning = new CommonModules();
     commonOjectCleaning->set_jet_id(PtEtaCut(30.0,7.0));
     commonOjectCleaning->set_electron_id(AndId<Electron>(ElectronID_PHYS14_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
@@ -57,12 +58,13 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonOjectCleaning->switch_jetPtSorter(true);
     commonOjectCleaning->init(ctx);
     v_pre_modules.emplace_back(commonOjectCleaning);
+
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
     v_pre_modules.emplace_back(new STCalculator(ctx));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsCa15CHSJetsFilteredPacked", "n_higgstags", TopJetId(HiggsTag())));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
@@ -72,7 +74,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
 
     // 2. setup histograms
-    // TODO make signal samples also with gen-selector for leptonic final state
     auto * nm1_hists = new Nm1SelHists(ctx, "Nm1Selection", sel_helper);
     auto * cf_hists = new VLQ2HTCutflow(ctx, "Cutflow", sel_helper);
 
@@ -93,6 +94,14 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
+
+    // TODO make signal samples also with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
+    // TODO - preselection: use huge OR trigger here
+    // TODO - preselection: adjust lepton pt cut to lowest trigger (should go into every trigger leg and test??)
+    // TODO - preselection: make sure primary lepton does not display 0. anymore
+    // TODO - preselection: make a hack to only plot decay modes with a lepton.
+    // TODO - GenHists: decay modes!!!! of fwd parton
+    // TODO - all plots: UNITS!!! "/ GeV" everywhere where needed.
 }
 
 
