@@ -69,6 +69,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
+    v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS, "trigger_accept"));
 
     SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
@@ -95,13 +96,9 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
 
-    // TODO make signal samples also with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
-    // TODO - preselection: use huge OR trigger here
+    // TODO make extra signal samples with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
     // TODO - preselection: adjust lepton pt cut to lowest trigger (should go into every trigger leg and test??)
-    // TODO - preselection: make sure primary lepton does not display 0. anymore
-    // TODO - preselection: make a hack to only plot decay modes with a lepton.
-    // TODO - GenHists: decay modes!!!! of fwd parton
-    // TODO - all plots: UNITS!!! "/ GeV" everywhere where needed.
+    // TODO - GenHists: decay modes!!!! of fwd parton (ask Dominik)
 }
 
 

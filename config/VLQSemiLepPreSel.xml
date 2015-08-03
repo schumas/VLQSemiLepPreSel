@@ -2,6 +2,8 @@
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
 [
 <!ENTITY MC_TTbar                       SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_TTbar.xml">
+<!ENTITY QCD_Pt300to470                 SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_QCD_Pt300to470.xml">
+
 <!ENTITY MC_WJets_LNu_HT100to200_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT100to200_20x25.xml">
 <!ENTITY MC_WJets_LNu_HT200to400_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT200to400_20x25.xml">
 <!ENTITY MC_WJets_LNu_HT400to600_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT400to600_20x25.xml">
@@ -26,8 +28,8 @@
     <Library Name="libSUHH2VLQToHiggsAndLepton"/>
     <Package Name="SUHH2VLQToHiggsAndLepton.par" />
 
-   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="5000" >
-   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="5000" > -->
+   <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="5000" > -->
+   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="5000" >
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="5000" > -->
    <!--
         <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
@@ -112,7 +114,13 @@
             <OutputTree Name="AnalysisTree" />
         </InputData>
    -->
-        <InputData Lumi="31568.03" NEventsMax="-1" Type="MC" Version="MC_TTbar" Cacheable="False">
+
+        <InputData Lumi="1." NEventsMax="100000" Type="MC" Version="QCD_Pt300to470" Cacheable="False">
+            &QCD_Pt300to470;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="1." NEventsMax="100000" Type="MC" Version="MC_TTbar" Cacheable="False">
             &MC_TTbar;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />

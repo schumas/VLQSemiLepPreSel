@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <cmath>
 
+#include "TH2.h"
+
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Selection.h"
-
+#include "UHH2/core/include/Hists.h"
 
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/TopJetIds.h"
@@ -562,5 +564,59 @@ private:
     double min_dr_;
     bool only_leading_;
 };  // MinDeltaRId
+
+
+class TwoDCutSel: public Selection {
+public:
+    explicit TwoDCutSel(Context & ctx,
+                        float min_dr,
+                        float min_ptrel,
+                        const string & dr_name = "TwoDCut_dr",
+                        const string & pt_name = "TwoDCut_ptrel"):
+        h_dr(ctx.get_handle<float>(dr_name)),
+        h_pt(ctx.get_handle<float>(pt_name)),
+        min_dr_(min_dr),
+        min_ptrel_(min_ptrel) {}
+
+    virtual bool passes(const Event & e) override {
+        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
+            return false;
+        }
+        return (e.get(h_dr) > min_dr_) || (e.get(h_pt) > min_ptrel_);
+    }
+
+private:
+    Event::Handle<float> h_dr;
+    Event::Handle<float> h_pt;
+    float min_dr_;
+    float min_ptrel_;
+};
+
+
+class TwoDCutHist: public Hists {
+public:
+    explicit TwoDCutHist(Context & ctx,
+                         const string & dirname,
+                         const string & dr_name = "TwoDCut_dr",
+                         const string & pt_name = "TwoDCut_ptrel"):
+        Hists(ctx, dirname),
+        h_dr(ctx.get_handle<float>(dr_name)),
+        h_pt(ctx.get_handle<float>(pt_name)),
+        hist(book<TH2F>("TwoDCut",
+                        ";min #DeltaR(lep., jet);min p_{T,rel}(lep., jet)",
+                        200, 0., 1., 200, 0., 500.)) {}
+
+    virtual void fill(const Event & e) override {
+        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
+            return;
+        }
+        hist->Fill(e.get(h_dr), e.get(h_pt), e.weight);
+    }
+
+private:
+    Event::Handle<float> h_dr;
+    Event::Handle<float> h_pt;
+    TH2F * hist;
+};
 
 }
