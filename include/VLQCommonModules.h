@@ -482,6 +482,54 @@ private:
 };
 
 
+template<typename TYPE>
+class PartPtProducer: public AnalysisModule {
+public:
+    explicit PartPtProducer(Context & ctx,
+                            const string & h_in,
+                            const string & h_out,
+                            int part_num = -1):
+        h_in_(ctx.get_handle<vector<TYPE>>(h_in)),
+        h_out_(ctx.get_handle<float>(h_out)),
+        part_num_(part_num) {}
+
+    virtual bool process(Event & e) override {
+        if (e.is_valid(h_in_)){
+            const vector<TYPE> & coll = e.get(h_in_);
+            if (part_num_ < 0) {
+                if (coll.size() > 0) {
+                    e.set(h_out_, coll.back().pt());
+                    return true;
+                } else {
+                    e.set(h_out_, -1.);
+                    return false;
+                }
+            } else if (part_num_ > 0){
+                if (int(coll.size()) >= part_num_) {
+                    e.set(h_out_, coll[part_num_-1].pt());
+                    return true;
+                } else {
+                    e.set(h_out_, -1.);
+                    return false;
+                }
+            } else {
+                std::cout << "In PartPtProducer: to calculate pt of the pt leading particle, give 1 as argument!\n";
+                assert(false);
+            }
+        }
+
+        e.set(h_out_, -1.);
+        return false;
+
+    }
+
+private:
+    Event::Handle<vector<TYPE>> h_in_;
+    Event::Handle<float> h_out_;
+    int part_num_;
+};  // PartPtProducer
+
+
 // function to grab the best hypothesis
 // note: member HYP.discriminators must be public map<string, float>
 template<typename HYP>
@@ -528,45 +576,74 @@ private:
 
 
 template<typename TYPE>
-class MinDeltaRId
+class MinMaxDeltaRId
 {
 public:
-    MinDeltaRId(Context & ctx,
+    MinMaxDeltaRId(Context & ctx,
                 const string & h_comp_coll,
-                double min_dr = 1.0,
-                bool only_leading = false) :h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),min_dr_(min_dr),only_leading_(only_leading) {}
+                float min_dr = 1.0,
+                bool only_leading = false,
+                bool use_min = true) :
+        h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),
+        min_dr_(min_dr),
+        only_leading_(only_leading),
+        use_min_(use_min),
+        use_handle_(false)
+        {}
+
+    MinMaxDeltaRId(Context & ctx,
+                const string & h_comp_coll,
+                const string & h_min_dr,
+                bool only_leading = false,
+                bool use_min = true) :
+        h_comp_coll_(ctx.get_handle<vector<TYPE>>(h_comp_coll)),
+        h_min_dr_(ctx.get_handle<float>(h_min_dr)),
+        only_leading_(only_leading),
+        use_min_(use_min),
+        use_handle_(true)
+        {}
 
     bool operator()(const Particle & part, const Event & event) const
     {
         // TODO: make assert statement that part (or rather, TYPE1) really inherits from Particle!
         if (event.is_valid(h_comp_coll_)){
+            float dyn_mindr = 1.0;
+            if (use_handle_) {
+                if (event.is_valid(h_min_dr_))
+                    dyn_mindr = event.get(h_min_dr_);
+            } else {
+                dyn_mindr = min_dr_;
+            }
             const vector<TYPE> & comp_coll = event.get(h_comp_coll_);
             if (only_leading_){
                 if (comp_coll.size()){
                     const TYPE & ld_part = comp_coll[0];
-                    if (deltaR(part, ld_part) < min_dr_)
+                    if (use_min_ ? deltaR(part, ld_part) <= dyn_mindr : deltaR(part, ld_part) > dyn_mindr)
                         return false;
                 }
                 return true;
             } else {
                 const TYPE * closest_part = closestParticle<TYPE>(part, comp_coll);
                 if (closest_part){
-                    if (deltaR(part, *closest_part) < min_dr_)
+                    if (use_min_ ? deltaR(part, *closest_part) <= dyn_mindr : deltaR(part, *closest_part) > dyn_mindr)
                         return false;
                 }
                 return true;
             }
         }
 
-        std::cout << "WARNING: in MinDeltaRId: handle to h_comp_coll_ is not valid!\n";
+        std::cout << "WARNING: in MinMaxDeltaRId: handle to h_comp_coll_ is not valid!\n";
         return true;
     }
 
 private:
     Event::Handle<vector<TYPE>> h_comp_coll_;
-    double min_dr_;
+    Event::Handle<float> h_min_dr_;
+    float min_dr_;
     bool only_leading_;
-};  // MinDeltaRId
+    bool use_min_;
+    bool use_handle_;
+};  // MinMaxDeltaRId
 
 
 class TwoDCutSel: public Selection {
@@ -623,3 +700,28 @@ private:
 };
 
 }
+
+
+class GenParticlePdgIdId
+{
+public:
+    GenParticlePdgIdId(const std::vector<int> & pdgids) :
+        pdgids_(pdgids)
+        {}
+
+    bool operator()(const GenParticle & genp, const Event & event) const
+    {
+        for (int id : pdgids_) {
+            if (genp.pdgId() == id)
+            {
+                return true;
+            }
+        }
+
+        // cout << "  Found right mother!\n";
+        return false;
+    }
+
+private:
+    std::vector<int> pdgids_;
+};
