@@ -380,47 +380,50 @@ private:
 };  // EventWeightOutputHandle
 
 
+/**
+  * veto_mother_id is stronger then mother_id and will always be checked for
+  * all mothers.
+  */
 class GenParticleMotherId
 {
 public:
     GenParticleMotherId(int mother_id = 0, int veto_mother_id = 0) :
+        mother_id_({mother_id}), veto_mother_id_({veto_mother_id})
+        {}
+
+    GenParticleMotherId(const vector<int> & mother_id = {0},
+                        const vector<int> & veto_mother_id = {0}) :
         mother_id_(mother_id), veto_mother_id_(veto_mother_id)
         {}
 
     bool operator()(const GenParticle & genp, const Event & event) const
     {
-        if (mother_id_ > 0 || veto_mother_id_ > 0)
-        {
-            // cout << "  Looking for particle with mother " << mother_id_ << " and not from " << veto_mother_id_ << endl;
-            bool right_mother = mother_id_ > 0 ? false : true;
-            GenParticle const * gen_mother = findMother(genp, event.genparticles);
-            while (gen_mother)
-            {
-                // cout << "   Mother id: " << gen_mother->pdgId() << endl;
-                if (mother_id_ > 0 && abs(gen_mother->pdgId()) == mother_id_)
-                {
-                    right_mother = true;
-                }
-                else if (veto_mother_id_ > 0 && abs(gen_mother->pdgId()) == veto_mother_id_)
-                {
-                    right_mother = false;
-                    break;
-                }
-                gen_mother = findMother(*gen_mother, event.genparticles);
-            }
-            if (!right_mother)
-            {
-                // cout << "  Bad mother, rejected!\n";
-                return false;
-            }
+        if (mother_id_.size() == 1 && mother_id_[0] == 0
+            && veto_mother_id_.size() == 1 && veto_mother_id_[0] == 0) {
+            return true;
         }
 
-        // cout << "  Found right mother!\n";
-        return true;
+        bool right_mother = mother_id_.size() == 1 && mother_id_[0] == 0;
+        GenParticle const * gen_mother = findMother(genp, event.genparticles);
+        while (gen_mother)
+        {
+            for (int mom_id : mother_id_) {
+                if (mom_id > 0 && abs(gen_mother->pdgId()) == mom_id) {
+                    right_mother = true;
+                }
+            }
+            for (int veto_id : veto_mother_id_) {
+                if (veto_id > 0 && abs(gen_mother->pdgId()) == veto_id) {
+                    return false;
+                }
+            }
+            gen_mother = findMother(*gen_mother, event.genparticles);
+        }
+        return right_mother;
     }
 
 private:
-    int mother_id_, veto_mother_id_;
+    vector<int> mother_id_, veto_mother_id_;
 };  // GenParticleMotherId
 
 
@@ -453,6 +456,52 @@ private:
 };  // GenParticleDaughterId
 
 
+class GenParticlePdgIdId
+{
+public:
+    GenParticlePdgIdId(const std::vector<int> & pdgids) :
+        pdgids_(pdgids) {}
+
+    bool operator()(const GenParticle & genp, const Event &) const
+    {
+        for (int id : pdgids_) {
+            if (genp.pdgId() == id)  // ATTENTION: NO ABS! NEED TO SPECIFY ALL
+            {
+                return true;
+            }
+        }
+
+        // cout << "  Found right mother!\n";
+        return false;
+    }
+
+private:
+    std::vector<int> pdgids_;
+};  // GenParticlePdgIdId
+
+
+class LeptonicDecayVLQ : public AnalysisModule {
+public:
+    explicit LeptonicDecayVLQ() :
+        id_(AndId<GenParticle>(
+            GenParticlePdgIdId({11, -11, 13, -13}),
+            GenParticleMotherId({6000006, 6000007, 6000008})
+        )) {}
+
+    virtual bool process(Event & event) override {
+        for (auto & gp : *event.genparticles) {
+            if (id_(gp, event)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+private:
+    GenParticleId id_;
+};
+
+
 template<typename T>
 class LeadingPartMassProducer : public AnalysisModule {
 public:
@@ -461,6 +510,7 @@ public:
                         const string & h_out):
         h_in_(ctx.get_handle<vector<T>>(h_in)),
         h_out_(ctx.get_handle<float>(h_out)) {}
+
     virtual bool process(Event & event) override {
         if (event.is_valid(h_in_)) {
             vector<T> & coll = event.get(h_in_);
@@ -700,28 +750,3 @@ private:
 };
 
 }
-
-
-class GenParticlePdgIdId
-{
-public:
-    GenParticlePdgIdId(const std::vector<int> & pdgids) :
-        pdgids_(pdgids)
-        {}
-
-    bool operator()(const GenParticle & genp, const Event & event) const
-    {
-        for (int id : pdgids_) {
-            if (genp.pdgId() == id)
-            {
-                return true;
-            }
-        }
-
-        // cout << "  Found right mother!\n";
-        return false;
-    }
-
-private:
-    std::vector<int> pdgids_;
-};

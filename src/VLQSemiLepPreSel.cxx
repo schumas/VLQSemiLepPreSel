@@ -37,6 +37,7 @@ private:
     // modules for setting up collections and cleaning
     std::vector<std::unique_ptr<AnalysisModule>> v_pre_modules;
     unique_ptr<SelectionProducer> sel_module;
+    unique_ptr<AnalysisModule> leptonic_decay_checker;
 
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
@@ -97,12 +98,19 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
 
-    // TODO make extra signal samples with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
-    // TODO - preselection: adjust lepton pt cut to lowest trigger (should go into every trigger leg and test??)
+    if (version.substr(version.size() - 4, 100) == "_lepDecay") {
+        leptonic_decay_checker.reset(new LeptonicDecayVLQ());
+    }
 }
 
 
 bool VLQSemiLepPreSel::process(Event & event) {
+
+    // only for signal in leptonic decay mode
+    if (leptonic_decay_checker.get()
+        && !leptonic_decay_checker->process(event)) {
+        return false;
+    }
 
     // run all event modules
     for (auto & mod : v_pre_modules) {
