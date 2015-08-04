@@ -35,8 +35,8 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
             gen_hists->add_genhistcoll(25, 1, true, true, true, true);
             gen_hists->add_genhistcoll(25, 2, true, true, true, true);
             gen_hists->add_genhistcoll(0, 0);
-            gen_hists->add_genhistcoll(0, 1);
-            gen_hists->add_genhistcoll(0, 2);
+            // gen_hists->add_genhistcoll(0, 1);
+            // gen_hists->add_genhistcoll(0, 2);
             gen_hists->add_genhistcoll(11, 1, false, true, false, false, GenParticleId(GenParticleMotherId(6)), "_from_top");
             gen_hists->add_genhistcoll(11, 2, false, true, false, false, GenParticleId(GenParticleMotherId(6)), "_from_top");
             gen_hists->add_genhistcoll(13, 1, false, true, false, false, GenParticleId(GenParticleMotherId(6)), "_from_top");
