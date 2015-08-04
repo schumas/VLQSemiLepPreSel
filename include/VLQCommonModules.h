@@ -697,3 +697,28 @@ private:
 };
 
 }
+
+
+class GenParticlePdgIdId
+{
+public:
+    GenParticlePdgIdId(const std::vector<int> & pdgids) :
+        pdgids_(pdgids)
+        {}
+
+    bool operator()(const GenParticle & genp, const Event & event) const
+    {
+        for (int id : pdgids_) {
+            if (genp.pdgId() == id)
+            {
+                return true;
+            }
+        }
+
+        // cout << "  Found right mother!\n";
+        return false;
+    }
+
+private:
+    std::vector<int> pdgids_;
+};
