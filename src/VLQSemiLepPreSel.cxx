@@ -72,6 +72,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS, "trigger_accept"));
 
     SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
+    // sel_helper.write_cuts_to_texfile();
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
 
     // 2. setup histograms
@@ -80,14 +81,14 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     v_hists.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre"));
     v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
-    v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
+    // v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
     v_hists.emplace_back(nm1_hists);
     v_hists.emplace_back(cf_hists);
     sel_helper.fill_hists_vector(v_hists, "NoSelection");
 
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
     v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
-    v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
+    // v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
 
     // append 2D cut
     unsigned pos_2d_cut = 4;
@@ -98,7 +99,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     // TODO make extra signal samples with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
     // TODO - preselection: adjust lepton pt cut to lowest trigger (should go into every trigger leg and test??)
-    // TODO - GenHists: decay modes!!!! of fwd parton (ask Dominik)
 }
 
 
