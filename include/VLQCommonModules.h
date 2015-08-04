@@ -242,7 +242,9 @@ private:
 class STCalculator: public AnalysisModule {
 public:
     explicit STCalculator(Context & ctx,
-                          string const & h_name = "ST"):
+                          string const & h_name = "ST",
+                          float min_jet_pt = 0.):
+        min_jet_pt_(min_jet_pt),
         h_st(ctx.get_handle<double>(h_name)),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
@@ -253,7 +255,7 @@ public:
         float st = event.get(h_primlep).pt();
         st += event.met->pt();
         for (const auto & j : *event.jets) {
-            if (fabs(j.eta()) < 2.4) {
+            if (fabs(j.eta()) < 2.4 && j.pt() > min_jet_pt_) {
                 st += j.pt();
             }
         }
@@ -262,6 +264,7 @@ public:
     }
 
 private:
+    float min_jet_pt_;
     Event::Handle<double> h_st;
     Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
