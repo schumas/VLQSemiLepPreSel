@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
 [
-<!ENTITY MC_WJets_LNu_HT100to200_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT100to200_20x25.xml">
-<!ENTITY MC_WJets_LNu_HT200to400_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT200to400_20x25.xml">
-<!ENTITY MC_WJets_LNu_HT400to600_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT400to600_20x25.xml">
-<!ENTITY MC_WJets_LNu_HT600toInf_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_WJets_LNu_HT600toInf_20x25.xml">
-<!ENTITY MC_ZJets_LL_HT100to200_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT100to200_20x25.xml">
-<!ENTITY MC_ZJets_LL_HT200to400_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT200to400_20x25.xml">
-<!ENTITY MC_ZJets_LL_HT400to600_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT400to600_20x25.xml">
-<!ENTITY MC_ZJets_LL_HT600toInf_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_ZJets_LL_HT600toInf_20x25.xml">
-<!ENTITY MC_TTJets_20x25                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TTJets_20x25.xml">
-<!ENTITY MC_TpJ_TH_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpJ_TH_M800_20x25.xml">
-<!ENTITY MC_TpJ_TH_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpJ_TH_M1200_20x25.xml">
-<!ENTITY MC_TpTp_M1000_20x25            SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_TpTp_M1000_20x25.xml">
-<!ENTITY MC_BpJ_TW_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_BpJ_TW_M800_20x25.xml">
-<!ENTITY MC_BpJ_TW_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_BpJ_TW_M1200_20x25.xml">
-<!ENTITY QCD_HT250to500                 SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT250To500_20x25_ext1.xml">
-<!ENTITY QCD_HT500to1000                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT500To1000_20x25_ext1.xml">
-<!ENTITY QCD_HT1000ToInf                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_2_1_patch1/src/UHH2/common/datasets/MC_QCD_HT1000ToInf_20x25_ext1.xml">
+<!ENTITY MC_TTbar                       SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_TTbar.xml">
+<!ENTITY QCD_Pt300to470                 SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_QCD_Pt300to470.xml">
+
+<!ENTITY MC_WJets_LNu_HT100to200_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT100to200_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT200to400_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT200to400_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT400to600_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT400to600_20x25.xml">
+<!ENTITY MC_WJets_LNu_HT600toInf_20x25  SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_WJets_LNu_HT600toInf_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT100to200_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_ZJets_LL_HT100to200_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT200to400_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_ZJets_LL_HT200to400_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT400to600_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_ZJets_LL_HT400to600_20x25.xml">
+<!ENTITY MC_ZJets_LL_HT600toInf_20x25   SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_ZJets_LL_HT600toInf_20x25.xml">
+<!ENTITY MC_TpJ_TH_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_TpJ_TH_M800_20x25.xml">
+<!ENTITY MC_TpJ_TH_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_TpJ_TH_M1200_20x25.xml">
+<!ENTITY MC_TpTp_M1000_20x25            SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_TpTp_M1000_20x25.xml">
+<!ENTITY MC_BpJ_TW_M800_20x25           SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_BpJ_TW_M800_20x25.xml">
+<!ENTITY MC_BpJ_TW_M1200_20x25          SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_BpJ_TW_M1200_20x25.xml">
+<!ENTITY QCD_HT250to500                 SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_QCD_HT250To500_20x25_ext1.xml">
+<!ENTITY QCD_HT500to1000                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_QCD_HT500To1000_20x25_ext1.xml">
+<!ENTITY QCD_HT1000ToInf                SYSTEM "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_7/src/UHH2/common/datasets/MC_QCD_HT1000ToInf_20x25_ext1.xml">
 ]
 >
 
@@ -27,9 +29,9 @@
     <Package Name="SUHH2VLQToHiggsAndLepton.par" />
 
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="5000" > -->
-   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2-tmp/" PostFix="" TargetLumi="5000" >
+   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="5000" >
    <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="5000" > -->
-
+   <!--
         <InputData Lumi="99900" NEventsMax="-1" Type="MC" Version="MC_TpJ_TH_M800_20x25" Cacheable="False">
             &MC_TpJ_TH_M800_20x25;
             <InputTree Name="AnalysisTree" />
@@ -55,7 +57,7 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
-
+   --> <!--
         <InputData Lumi="2354.480" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT100to200_20x25" Cacheable="False">
             &MC_WJets_LNu_HT100to200_20x25;
             <InputTree Name="AnalysisTree" />
@@ -111,8 +113,15 @@
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
-        <InputData Lumi="31568.03" NEventsMax="-1" Type="MC" Version="MC_TTJets_20x25" Cacheable="False">
-            &MC_TTJets_20x25;
+   -->
+
+        <InputData Lumi="1." NEventsMax="100000" Type="MC" Version="QCD_Pt300to470" Cacheable="False">
+            &QCD_Pt300to470;
+            <InputTree Name="AnalysisTree" />
+            <OutputTree Name="AnalysisTree" />
+        </InputData>
+        <InputData Lumi="1." NEventsMax="100000" Type="MC" Version="MC_TTbar" Cacheable="False">
+            &MC_TTbar;
             <InputTree Name="AnalysisTree" />
             <OutputTree Name="AnalysisTree" />
         </InputData>
@@ -120,46 +129,26 @@
         <UserConfig>
             <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
             <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
-            <Item Name="ElectronCollection" Value="slimmedElectrons" />
-            <Item Name="MuonCollection" Value="slimmedMuons" />
+            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
             <Item Name="TauCollection" Value="slimmedTaus" />
-            <Item Name="JetCollection" Value="patJetsAk4PFCHS" />
+            <Item Name="JetCollection" Value="slimmedJets" />
             <Item Name="GenJetCollection" Value="slimmedGenJets" />
-            <Item Name="TopJetCollection" Value="patJetsCmsTopTagCHSPacked" />
+            <Item Name="TopJetCollection" Value="slimmedJetsAK8_CMSTopTag" />
             <Item Name="METName" Value="slimmedMETs" />
             <Item Name="GenParticleCollection" Value="GenParticles" />
-            <Item Name="additionalBranches" Value="ca8GenJets ca15GenJets ca8GenJetsPruned ca15GenJetsFiltered cmsTopTagGen hepTopTagGen triggerNames triggerResults patJetsAk8PFCHS patJetsCa15CHSJets patJetsCa8CHSJets patJetsHepTopTagCHSPacked patJetsCmsTopTagCHSPacked patJetsCa8CHSJetsPrunedPacked patJetsCa15CHSJetsFilteredPacked" />
+            <Item Name="additionalBranches" Value="slimmedGenJetsAK8 ak8GenJets ca15GenJets ak8GenJetsSoftDrop slimmedMETsPuppi triggerNames triggerResults slimmedJetsPuppi patJetsAk8CHSJetsSoftDropPacked_daughters patJetsCa15CHSJetsFilteredPacked_daughters patJetsHepTopTagCHSPacked_daughters" />
             
             <!-- the class name of the AnalysisModule subclasses to run: -->
             <Item Name="AnalysisModule" Value="VLQSemiLepPreSel" />
 
-            <Item Name="use_sframe_weight" Value="true" /> 
+            <Item Name="use_sframe_weight" Value="true" />
+
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/mameyer/TTDMDM/preselection_RunII/uhh2.AnalysisModuleRunner.Data.Data.root"/>
+            <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/mameyer/TTDMDM/preselection_RunII/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
 
             <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
             <Item Name="TestKey" Value="VLQSemiLepPreSel" />
         </UserConfig>
     </Cycle>
 </JobConfiguration>
-
-<!--
- "MC_TTJets_20x25" : 25446993 events
- "MC_WJets_LNu_HT100to200_20x25" : 5262265 events
- "MC_WJets_LNu_HT200to400_20x25" : 4936077 events
- "MC_WJets_LNu_HT400to600_20x25" : 4640594 events
- "MC_WJets_LNu_HT600toInf_20x25" : 4581841 events
- "MC_ZJets_LL_HT100to200_20x25" : 4054159 events
- "MC_ZJets_LL_HT200to400_20x25" : 4666496 events
- "MC_ZJets_LL_HT400to600_20x25" : 4931372 events
- "MC_ZJets_LL_HT600toInf_20x25" : 4493574 events
- "QCD_HT250to500" : 2004219 events
- "QCD_HT500to1000" : 3214312 events
- "QCD_HT1000ToInf" : 1130720 events
- "MC_TpJ_TH_M800_20x25" : 99900 events
- "MC_TpJ_TH_M1200_20x25" : 100000 events
- "MC_TpTp_M1000_20x25" : 211058 events
- "MC_BpJ_TW_M800_20x25" : 83604 events
- "MC_BpJ_TW_M1200_20x25" : 85611 events
--->
-
-
-

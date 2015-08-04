@@ -21,9 +21,9 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
     ev_hists(new ExtendedEventHists(ctx, dirname+"/EventHists")),
     jet_hists(new ExtendedJetHists(ctx, dirname+"/JetHists")),
     cmstopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/CMSTopJetHists", btag_id, 4)),
-    heptopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/HEPTopJetHists", btag_id, 4, "patJetsHepTopTagCHSPacked")),
-    ca8prunedtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/CA8PrunedTopJetHists", btag_id, 4, "patJetsCa8CHSJetsPrunedPacked")),
-    ca15filteredtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/CA15FilteredTopJetHists", btag_id, 4, "patJetsCa15CHSJetsFilteredPacked")),
+    heptopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/HEPTopJetHists", btag_id, 4, "patJetsHepTopTagCHSPacked_daughters")),
+    ca8prunedtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/Ak8SoftDropTopJetHists", btag_id, 4, "patJetsAk8CHSJetsSoftDropPacked_daughters")),
+    ca15filteredtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/CA15FilteredTopJetHists", btag_id, 4, "patJetsCa15CHSJetsFilteredPacked_daughters")),
     gen_hists(gen_plots ? new CustomizableGenHists(ctx, dirname+"/GenHists", "parton_ht") : NULL)
     {
         if (gen_hists)

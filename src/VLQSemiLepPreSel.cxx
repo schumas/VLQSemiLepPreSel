@@ -6,11 +6,10 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Hists.h"
 
-#include "UHH2/common/include/CleaningModules.h"
+#include "UHH2/common/include/CommonModules.h"
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/MuonIds.h"
 #include "UHH2/common/include/JetIds.h"
-#include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/TTbarReconstruction.h"
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
@@ -50,35 +49,27 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         cout << " " << kv.first << " = " << kv.second << endl;
     }
 
-    // 1. setup modules to prepare the event.
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new ElectronCleaner(
-        AndId<Electron>(
-            ElectronID_PHYS14_25ns_medium_noIso,
-            PtEtaCut(20.0, 2.4)
-        )
-    )));
-    v_pre_modules.push_back(std::unique_ptr<AnalysisModule>(new MuonCleaner(
-        AndId<Muon>(
-            MuonIDTight(),
-            PtEtaCut(20.0, 2.4)
-        )
-    )));
+    // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
+    CommonModules* commonOjectCleaning = new CommonModules();
+    commonOjectCleaning->set_jet_id(PtEtaCut(30.0,7.0));
+    commonOjectCleaning->set_electron_id(AndId<Electron>(ElectronID_PHYS14_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
+    commonOjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.4)));
+    commonOjectCleaning->switch_jetlepcleaner(true);
+    commonOjectCleaning->switch_jetPtSorter(true);
+    commonOjectCleaning->init(ctx);
+    v_pre_modules.emplace_back(commonOjectCleaning);
 
-    v_pre_modules.emplace_back(new JetCorrector(JERFiles::PHYS14_L123_MC));
-    v_pre_modules.emplace_back(new JetLeptonCleaner(JERFiles::PHYS14_L123_MC));
-    v_pre_modules.emplace_back(new JetCleaner(30.0, 7.0));
-    v_pre_modules.emplace_back(new JetPtSorter());
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
     v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
-    v_pre_modules.emplace_back(new HTCalculator(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsCa15CHSJetsFilteredPacked", "n_higgstags", TopJetId(HiggsTag())));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
+    v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS, "trigger_accept"));
 
     SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
@@ -104,6 +95,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
+
+    // TODO make extra signal samples with gen-selector for leptonic final state: use Dom's tool: lepton with T' or B' in mother chain.
+    // TODO - preselection: adjust lepton pt cut to lowest trigger (should go into every trigger leg and test??)
+    // TODO - GenHists: decay modes!!!! of fwd parton (ask Dominik)
 }
 
 

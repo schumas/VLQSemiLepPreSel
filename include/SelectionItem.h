@@ -3,6 +3,8 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <fstream>
+#include <sstream>
 
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
@@ -24,6 +26,8 @@ public:
     virtual AnalysisModule  * make_branch_writer(Context & ctx, TTree * tree) const = 0;
     virtual void              declare_for_output(Context & ctx) const = 0;
     const string & name() const {return name_;}
+    virtual float cutvalue_min() const = 0;
+    virtual float cutvalue_max() const = 0;
 
 protected:
     const string name_;
@@ -55,6 +59,14 @@ public:
 
     virtual void declare_for_output(Context & ctx) const override {
         ctx.declare_event_output<DATATYPE>(name_);
+    }
+
+    virtual float cutvalue_min() const override {
+        return min_val_;
+    }
+
+    virtual float cutvalue_max() const override {
+        return max_val_;
     }
 
 private:
@@ -145,6 +157,27 @@ public:
         for (const auto & name: item_names) {
             get_sel_item(name)->declare_for_output(ctx);
         }
+    }
+
+    void write_cuts_to_texfile(const string & filename = "cuts.tex") const {
+        ofstream ofs(filename);
+        for (const auto & it : items) {
+            float min = it->cutvalue_min();
+            float max = it->cutvalue_max();
+            ofs << it->name() << " & ";
+            if (min > -99998.) {
+                ofs << min << " & ";
+            } else {
+                ofs << "--- & ";
+            }
+            if (max < 99998.) {
+                ofs << max;
+            } else {
+                ofs << "---";
+            }
+            ofs << " \\\\ \n";
+        }
+        ofs.close();
     }
 
 private:

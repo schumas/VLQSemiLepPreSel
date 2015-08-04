@@ -17,66 +17,25 @@ static const float DPT_2D_CUT_PRESEL = 40.0;
 
 
 static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
-    shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    "leading jet p_{T}",        50, 0, 1500       ,100    )),
-    shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", "primary lepton p_{T}",     50, 0, 1500       ,50     )),
-    shared_ptr<SelectionItem>(new SelDatD("ST",                "ST",                       100, 0, 5000      ,400    )),
-    shared_ptr<SelectionItem>(new SelDatI("n_btags",           "number of loose btags",    11, -.5, 10.5     ,1      )),
+    shared_ptr<SelectionItem>(new SelDatI("trigger_accept",    "trigger accept",                    2, -.5, 1.5       ,1      )),
+    shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    "leading jet p_{T} / 20 GeV",        75, 0, 1500       ,100    )),
+    shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", "primary lepton p_{T} / 20 GeV",     75, 0, 1500       ,25     )),
+    shared_ptr<SelectionItem>(new SelDatD("ST",                "ST / 50 GeV",                       100, 0, 5000      ,400    )),
+    shared_ptr<SelectionItem>(new SelDatI("n_btags",           "number of loose btags",             11, -.5, 10.5     ,1      )),
 };
 
 
-namespace {
+static const vector<std::string> PRESEL_TRIGGER_PATHS {
+    "HLT_Ele45_CaloIdVT_GsfTrkIdT_PFJet200_PFJet50_v*",
+    "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*",
+    "HLT_Ele32_eta2p1_WP75_Gsf_v*",
 
-class TwoDCutSel: public Selection {
-public:
-    explicit TwoDCutSel(Context & ctx,
-                        float min_dr,
-                        float min_ptrel,
-                        const string & dr_name = "TwoDCut_dr",
-                        const string & pt_name = "TwoDCut_ptrel"):
-        h_dr(ctx.get_handle<float>(dr_name)),
-        h_pt(ctx.get_handle<float>(pt_name)),
-        min_dr_(min_dr),
-        min_ptrel_(min_ptrel) {}
+    "HLT_Mu40_eta2p1_PFJet200_PFJet50_v*",
+    "HLT_Mu45_eta2p1_v*",
+    "HLT_Mu50_v*",
+    "HLT_IsoMu24_eta2p1_v*",
+    "HLT_IsoMu27_v*",
 
-    virtual bool passes(const Event & e) override {
-        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
-            return false;
-        }
-        return (e.get(h_dr) > min_dr_) || (e.get(h_pt) > min_ptrel_);
-    }
-
-private:
-    Event::Handle<float> h_dr;
-    Event::Handle<float> h_pt;
-    float min_dr_;
-    float min_ptrel_;
+    "HLT_PFHT800Emu_v*",
 };
 
-
-class TwoDCutHist: public Hists {
-public:
-    explicit TwoDCutHist(Context & ctx,
-                         const string & dirname,
-                         const string & dr_name = "TwoDCut_dr",
-                         const string & pt_name = "TwoDCut_ptrel"):
-        Hists(ctx, dirname),
-        h_dr(ctx.get_handle<float>(dr_name)),
-        h_pt(ctx.get_handle<float>(pt_name)),
-        hist(book<TH2F>("TwoDCut",
-                        ";min #DeltaR(lep., jet);min p_{T,rel}(lep., jet)",
-                        200, 0., 1., 200, 0., 500.)) {}
-
-    virtual void fill(const Event & e) override {
-        if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
-            return;
-        }
-        hist->Fill(e.get(h_dr), e.get(h_pt), e.weight);
-    }
-
-private:
-    Event::Handle<float> h_dr;
-    Event::Handle<float> h_pt;
-    TH2F * hist;
-};
-
-}

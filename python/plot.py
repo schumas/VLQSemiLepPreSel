@@ -14,8 +14,9 @@ import varial.tools
 
 # varial.settings.debug_mode = True
 # varial.settings.max_num_processes = 1
-input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
-            'PHYS14-ntuple2-v2/*.root'
+# input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
+#             'PHYS14-ntuple2-v2/*.root'
+input_pat = '*.root'
 
 
 def merge_samples(wrps):
