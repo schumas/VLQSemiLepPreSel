@@ -14,6 +14,7 @@
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
 #include "UHH2/common/include/CollectionProducer.h"
+#include "UHH2/common/include/LumiSelection.h"
 
 #include "UHH2/VLQSemiLepPreSel/include/VLQCommonModules.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
@@ -34,10 +35,12 @@ public:
 
 private:
     std::string version;
+    std::string type;
     // modules for setting up collections and cleaning
     std::vector<std::unique_ptr<AnalysisModule>> v_pre_modules;
     unique_ptr<SelectionProducer> sel_module;
     unique_ptr<AnalysisModule> leptonic_decay_checker;
+    unique_ptr<Selection> lumi_selector;
 
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
@@ -46,6 +49,7 @@ private:
 
 VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     version = ctx.get("dataset_version", "");
+    type = ctx.get("dataset_type", "");
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
     }
@@ -61,7 +65,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(commonOjectCleaning);
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
-    v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
     v_pre_modules.emplace_back(new STCalculator(ctx));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
@@ -72,6 +75,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS, "trigger_accept"));
 
+    if (type == "MC") {
+        v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
+    }
+
     SelItemsHelper sel_helper(SEL_ITEMS_PRESEL, ctx);
     // sel_helper.write_cuts_to_texfile();
     sel_module.reset(new SelectionProducer(ctx, sel_helper));
@@ -81,15 +88,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     auto * cf_hists = new VLQ2HTCutflow(ctx, "Cutflow", sel_helper);
 
     v_hists.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre"));
-    v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
-    // v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
     v_hists.emplace_back(nm1_hists);
     v_hists.emplace_back(cf_hists);
     sel_helper.fill_hists_vector(v_hists, "NoSelection");
-
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
-    v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
-    // v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
 
     // append 2D cut
     unsigned pos_2d_cut = 4;
@@ -97,6 +99,21 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
     v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
+
+    // histograms with generator info
+    if (type == "MC") {
+        // v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
+        // v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
+        v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
+        v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
+    } else {
+        v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre", false));
+        v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", false));
+    }
+
+    if (type == "DATA") {
+        lumi_selector.reset(new LumiSelection(ctx));
+    }
 
     if (version.substr(version.size() - 4, 100) == "_lepDecay") {
         leptonic_decay_checker.reset(new LeptonicDecayVLQ());
@@ -106,9 +123,15 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
 bool VLQSemiLepPreSel::process(Event & event) {
 
-    // only for signal in leptonic decay mode
+    // signal: check for leptonic decay mode
     if (leptonic_decay_checker.get()
         && !leptonic_decay_checker->process(event)) {
+        return false;
+    }
+
+    // data: check lumi selection
+    if (lumi_selector.get()
+        && !lumi_selector->passes(event)) {
         return false;
     }
 

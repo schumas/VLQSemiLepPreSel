@@ -14,23 +14,36 @@ class CutflowTableContent(varial.tools.Tool):
 
     def __init__(self, name=None):
         super(CutflowTableContent, self).__init__(name)
-        self._input_mc       = []
-        self._input_data     = []
         self.head_line      = []
-        self.table_data     = []
-        self.table_mc_err   = []
-        self.table_mc       = []
+
+        self._input_data    = []
         self.titles_data    = []
+        self.table_data     = []
+
+        self._input_mc      = []
         self.titles_mc      = []
+        self.table_mc       = []
+        self.table_mc_err   = []
+
+        self._input_sig     = []
+        self.titles_sig     = []
+        self.table_sig      = []
+        self.table_sig_err  = []
 
     def get_input_histos(self):
         wrps = self.lookup_result('../CutflowHistos')
         assert wrps
-        mcee = itertools.ifilter(lambda w: not w.is_data, wrps)
+
+        mcee = itertools.ifilter(lambda w: w.is_background, wrps)
         mcee = varial.gen.gen_norm_to_data_lumi(mcee)
+        self._input_mc = varial.gen.sort(mcee)
+
+        sig = itertools.ifilter(lambda w: w.is_signal, wrps)
+        sig = varial.gen.gen_norm_to_data_lumi(sig)
+        self._input_sig = varial.gen.sort(sig)
+
         data = itertools.ifilter(lambda w: w.is_data, wrps)
-        self._input_mc    = varial.gen.sort(mcee)
-        self._input_data  = varial.gen.sort(data)
+        self._input_data = varial.gen.sort(data)
 
     def fill_head_line(self):
         bin_label = self._input_mc[0].histo.GetXaxis().GetBinLabel
@@ -64,15 +77,23 @@ class CutflowTableContent(varial.tools.Tool):
         for wrp in self._input_data:
             self.titles_data.append(wrp.sample)
             self.table_data.append(self._get_value_list(wrp))
+
         for wrp in self._input_mc:
             self.titles_mc.append(wrp.sample)
             self.table_mc.append(self._get_value_list(wrp))
         for wrp in self._input_mc:
             self.table_mc_err.append(self._get_error_list(wrp))
 
-    def _make_column_sum(self, table, squared = False):
+        for wrp in self._input_sig:
+            self.titles_sig.append(wrp.sample)
+            self.table_sig.append(self._get_value_list(wrp))
+        for wrp in self._input_sig:
+            self.table_sig_err.append(self._get_error_list(wrp))
+
+    @staticmethod
+    def _make_column_sum(table, squared = False):
         def gen_sum(A, B):
-            return list(a + b for a,b in itertools.izip(A, B))
+            return list(a + b for a, b in itertools.izip(A, B))
         def gen_sum_sq(A, B):
             return map(sqrt, ((a*a) + (b*b) for a, b in itertools.izip(A, B)))
         row = []
@@ -86,11 +107,13 @@ class CutflowTableContent(varial.tools.Tool):
         return row
 
     def fill_sum_rows(self):
-        self.table_data.append(self._make_column_sum(self.table_data))
+        if len(self._input_data) > 1:
+            self.titles_data.append("Data Sum")
+            self.table_data.append(self._make_column_sum(self.table_data))
+
+        self.titles_mc.append("MC Sum")
         self.table_mc.append(self._make_column_sum(self.table_mc))
         self.table_mc_err.append(self._make_column_sum(self.table_mc_err, True))
-        self.titles_data.append("Data Sum")
-        self.titles_mc.append("MC Sum")
 
     def calc_permillage(self):
         self.head_line.append("1000 X output/input")
@@ -121,6 +144,14 @@ class CutflowTableContent(varial.tools.Tool):
         ):
             yield title, vals, errs
 
+    def sig_title_val_err_iterator(self):
+        for title, vals, errs in itertools.izip(
+            self.titles_sig,
+            self.table_sig,
+            self.table_sig_err,
+        ):
+            yield title, vals, errs
+
     def data_title_value_iterator(self):
         for title, vals in itertools.izip(
             self.titles_data,
@@ -148,9 +179,8 @@ class CutflowTableTxt(varial.tools.Tool):
         line = 30*" " + self.sep + line + " \n"
         self.table_lines.append(line)
 
-    def make_center(self):
-        self.table_lines.append("\n")
-        for title, vals, errs in self.cont.mc_title_val_err_iterator():
+    def _add_mc_stuff(self, iterator):
+        for title, vals, errs in iterator:
             zipped = ((a, b) for a, b in itertools.izip(vals, errs))
             self.table_lines.append(
                 "%30s" % title
@@ -158,6 +188,12 @@ class CutflowTableTxt(varial.tools.Tool):
                 + self.sep.join("%13.1f +- %7.1f" % p for p in zipped)
                 + " \n"
             )
+
+    def make_center(self):
+        self.table_lines.append("\n")
+        self._add_mc_stuff(self.cont.sig_title_val_err_iterator())
+        self.table_lines.append("\n")
+        self._add_mc_stuff(self.cont.mc_title_val_err_iterator())
         self.table_lines.append("\n")
         for title, vals in self.cont.data_title_value_iterator():
             self.table_lines.append(
@@ -230,8 +266,8 @@ class CutflowTableTex(varial.tools.Tool):
             r"\hline",
         )
 
-    def make_center(self):
-        for title, vals, errs in self.cont.mc_title_val_err_iterator():
+    def _add_mc_stuff(self, iterator):
+        for title, vals, errs in iterator:
             self.table_lines += (
                 "%30s" % title.replace("_", r"\_")
                     + " &$ "
@@ -242,6 +278,11 @@ class CutflowTableTex(varial.tools.Tool):
                     + self.sep.join("\\pm%17.1f" % e for e in errs)
                     + r" $ \\",
             )
+
+    def make_center(self):
+        self._add_mc_stuff(self.cont.sig_title_val_err_iterator())
+        self.table_lines.append(r"\hline")
+        self._add_mc_stuff(self.cont.mc_title_val_err_iterator())
         self.table_lines.insert(-2, r"\hline")
         self.table_lines.append(r"\hline")
         for title, vals in self.cont.data_title_value_iterator():

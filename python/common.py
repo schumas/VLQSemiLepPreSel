@@ -25,6 +25,7 @@ def add_wrp_info(wrps):
         sample=lambda w: w.file_path.split('.')[-2],
         legend=lambda w: w.sample,
         is_signal=lambda w: any(s in w.sample for s in signal_indicators),
+        is_data=lambda w: 'Run20' in w.sample,
     )
 
 

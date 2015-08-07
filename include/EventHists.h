@@ -228,7 +228,6 @@ protected:
     JetId b_tag_;
     tag_variables_hists alljets_tagvars;
     std::vector<tag_variables_hists> single_tagvars;
-
 };
 
 

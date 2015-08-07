@@ -14,30 +14,36 @@ import varial.tools
 
 # varial.settings.debug_mode = True
 # varial.settings.max_num_processes = 1
-# input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
-#             'PHYS14-ntuple2-v2/*.root'
-input_pat = '*.root'
+input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
+            'Run2-ntuple-tmp/*.root'
+# input_pat = '*.root'
 
 
 def merge_samples(wrps):
     wrps = common.merge_decay_channels(wrps, (
-        '_LNu_HT100to200_20x25',
-        '_LNu_HT200to400_20x25',
-        '_LNu_HT400to600_20x25',
-        '_LNu_HT600toInf_20x25',
+        '_Pt470to600',
+        '_Pt2400to3200',
+        '_Pt600to800',
+        '_Pt800to1000',
+        '_Pt120to170',
+        '_Pt30to50',
+        '_Pt1400to1800',
+        '_Pt170to300',
+        '_Pt1800to2400',
+        '_Pt80to120',
+        '_Pt300to470',
+        '_Pt50to80',
+        '_Pt3200toInf',
+        '_Pt1000to1400',
+        '_Pt15to30',
     ))
     wrps = common.merge_decay_channels(wrps, (
-        '_LL_HT100to200_20x25',
-        '_LL_HT200to400_20x25',
-        '_LL_HT400to600_20x25',
-        '_LL_HT600toInf_20x25',
-    ))
-    wrps = common.merge_decay_channels(wrps, (
-        '_HT250to500',
-        '_HT500to1000',
-        '_HT1000ToInf',
+        'M50toInf',
+        'M10to50',
     ))
     return wrps
+
+
 
 
 def loader_hook(wrps):
