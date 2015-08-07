@@ -2,7 +2,9 @@
 
 # YOU NEED VARIAL FOR THIS! https://github.com/HeinAtCERN/Varial
 
+import glob
 import time
+from os.path import basename
 
 import cutflow_tables
 import vlq_settings
@@ -17,6 +19,14 @@ import varial.tools
 input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
             'Run2-ntuple-tmp/*.root'
 # input_pat = '*.root'
+
+if True:
+    input_pat = glob.glob(input_pat)
+    input_pat = filter(
+        lambda s: (not basename(s).startswith('Tp')) or '_lepDecay' in s,
+        input_pat
+    )
+
 
 
 def merge_samples(wrps):
@@ -41,9 +51,16 @@ def merge_samples(wrps):
         'M50toInf',
         'M10to50',
     ))
+    wrps = common.merge_decay_channels(wrps, (
+        '_tChannel',
+        '_WAntitop',
+        '_WTop',
+    ))
+    wrps = common.merge_decay_channels(wrps, (
+        '_Ele',
+        '_Mu',
+    ))
     return wrps
-
-
 
 
 def loader_hook(wrps):

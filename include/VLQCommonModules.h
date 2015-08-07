@@ -47,8 +47,8 @@ template<typename T>
 class DiffValueProducer: public AnalysisModule {
 public:
     DiffValueProducer(Context & ctx,
-                     const string & h_name1,
-                     const string & h_name2):
+                      const string & h_name1,
+                      const string & h_name2):
         h_in1(ctx.get_handle<T>(h_name1)),
         h_in2(ctx.get_handle<T>(h_name2)),
         h_out(ctx.get_handle<T>("diff_" + h_name1 + '_' + h_name2)) {}
@@ -103,38 +103,6 @@ public:
 private:
     Event::Handle<int> h;
 };  // NLeptonsProducer
-
-
-
-// DEPRECATED: replaced by CollectionProducer class; needs to be tested still!
-// like this:
-// static bool is_fwd_jet(const Jet & j, const Event &) {return fabs(j.eta()) >= 2.4;}
-// static bool is_cntrl_jet(const Jet & j, const Event &) {return fabs(j.eta()) < 2.4;}
-// CollectionProducer<Jet>(ctx, is_fwd_jet, "jets", "fwd_jets")
-// CollectionProducer<Jet>(ctx, is_cntrl_jet, "jets", "jets")
-class FwdJetSwitch: public AnalysisModule {
-public:
-    explicit FwdJetSwitch(Context & ctx):
-        hndl(ctx.get_handle<vector<Jet> >("fwd_jets")) {}
-
-    bool process(Event & event) override {
-        vector<Jet> fwd;
-        vector<Jet> cnt;
-        for(const auto & jet: *event.jets) {
-            if (fabs(jet.eta()) > 2.4) {
-                fwd.push_back(jet);
-            } else {
-                cnt.push_back(jet);
-            }
-        }
-        event.set(hndl, fwd);
-        swap(*event.jets, cnt);
-        return true;
-    }
-
-private:
-    Event::Handle<vector<Jet> > hndl;
-};  // class FwdJetSwitch
 
 
 class NLeadingBTagProducer: public AnalysisModule {
@@ -311,26 +279,47 @@ public:
         v_trig_names(trig_names),
         h(ctx.get_handle<int>(h_name)) {}
 
+    explicit TriggerAcceptProducer(Context & ctx,
+                                   const vector<string> & trig_names,
+                                   const vector<string> & trig_veto_names,
+                                   const string & h_name = "trigger_accept"):
+        v_trig_names(trig_names),
+        v_trig_veto_names(trig_veto_names),
+        h(ctx.get_handle<int>(h_name)) {}
+
     virtual bool process(Event & e) override {
+        // process vetos first
+        if (v_trig_veto_names.size()) {
+            vector<Event::TriggerIndex> v_trig_veto_ind;
+            for (const auto & trig_name : v_trig_veto_names) {
+                v_trig_veto_ind.emplace_back(e.get_trigger_index(trig_name));
+            }
+            for (Event::TriggerIndex & trig_ind : v_trig_veto_ind) {
+                if (e.passes_trigger(trig_ind)) {
+                    e.set(h, 0);
+                    return false;
+                }
+            }
+        }
+
+        // check for normal triggers
         vector<Event::TriggerIndex> v_trig_ind;
         for (const auto & trig_name : v_trig_names) {
             v_trig_ind.emplace_back(e.get_trigger_index(trig_name));
         }
-        // auto ele_trig = e.get_trigger_index("HLT_Ele95_CaloIdVT_GsfTrkIdT_v*");
-        // auto mu_trig = e.get_trigger_index("HLT_Mu40_v*");
-        int passes_any = 0;
         for (Event::TriggerIndex & trig_ind : v_trig_ind) {
             if (e.passes_trigger(trig_ind)) {
-                passes_any = 1;
-                break;
+                e.set(h, 1);
+                return true;
             }
         }
-        e.set(h, passes_any);
-        return true;
+
+        return false;
     }
 
 private:
     vector<string> v_trig_names;
+    vector<string> v_trig_veto_names;
     Event::Handle<int> h;
 };  // TriggerAcceptProducer
 

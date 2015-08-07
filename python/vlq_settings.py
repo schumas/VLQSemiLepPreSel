@@ -6,14 +6,14 @@ from varial import settings
 
 
 settings.box_text_size = 0.03
-#settings.colors = {
-#    'TTJets': 632,
-#    'WJets': 878,
-#    'ZJets': 596,
-#    'TpJ_TH_M800_Tlep': 870,
-#    'TpJ_TH_M800_NonTlep': 434,
-#}
-
+settings.colors = {
+    'MC_TTbar': 632,
+    'MC_WJets': 596,
+    'MC_ZJets': 870,
+    'MC_T': 434,
+}
+# 840, 902, 797, 800, 891, 401, 800,
+# 838, 420, 403, 893, 881, 804, 599, 615, 831, 403, 593, 872
 
 settings.defaults_Legend.update({
     'x_pos': 0.85,
