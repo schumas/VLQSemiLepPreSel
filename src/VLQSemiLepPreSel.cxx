@@ -14,7 +14,6 @@
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
 #include "UHH2/common/include/CollectionProducer.h"
-#include "UHH2/common/include/LumiSelection.h"
 
 #include "UHH2/VLQSemiLepPreSel/include/VLQCommonModules.h"
 #include "UHH2/VLQSemiLepPreSel/include/VLQSemiLepPreSelHists.h"
@@ -40,7 +39,7 @@ private:
     std::vector<std::unique_ptr<AnalysisModule>> v_pre_modules;
     unique_ptr<SelectionProducer> sel_module;
     unique_ptr<AnalysisModule> leptonic_decay_checker;
-    unique_ptr<Selection> lumi_selector;
+    unique_ptr<AnalysisModule> common_modules_with_lumi_sel;
 
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
@@ -62,11 +61,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonOjectCleaning->switch_jetlepcleaner(true);
     commonOjectCleaning->switch_jetPtSorter(true);
     commonOjectCleaning->init(ctx);
-    v_pre_modules.emplace_back(commonOjectCleaning);
+    common_modules_with_lumi_sel.reset(commonOjectCleaning);
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
@@ -117,13 +115,11 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", false));
     }
 
-    if (type == "DATA") {
-        lumi_selector.reset(new LumiSelection(ctx));
-    }
-
     if (version.substr(version.size() - 4, 100) == "_lepDecay") {
         leptonic_decay_checker.reset(new LeptonicDecayVLQ());
     }
+
+    // TODO: check Thomas mail: noise filters, etc.
 }
 
 
@@ -135,9 +131,8 @@ bool VLQSemiLepPreSel::process(Event & event) {
         return false;
     }
 
-    // data: check lumi selection
-    if (lumi_selector.get()
-        && !lumi_selector->passes(event)) {
+    // common modules & check lumi selection on data
+    if (!common_modules_with_lumi_sel->process(event)) {
         return false;
     }
 

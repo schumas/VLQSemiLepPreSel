@@ -16,7 +16,7 @@ def label_axes(wrps):
         yield w
 
 
-signal_indicators = ['_M800_', '_M1000_', '_M1200_']
+signal_indicators = ['_TH_']
 
 
 def add_wrp_info(wrps):
@@ -63,7 +63,7 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
 
 
 def is_signal(name):
-    return any(t in name for t in ['_M800_', '_M1000_', '_M1200_'])
+    return any(t in name for t in signal_indicators)
 
 
 def yield_n_objs(wrps, n=50):

@@ -7,12 +7,13 @@ from varial import settings
 
 settings.box_text_size = 0.03
 settings.colors = {
-    'MC_TTbar': 632,
-    'MC_WJets': 596,
-    'MC_ZJets': 870,
-    'MC_T': 434,
+    'TTbar': 632,
+    'WJets': 596,
+    'ZJets': 840,
+    'SingleT': 434,
+    'QCD': 870,
 }
-# 840, 902, 797, 800, 891, 401, 800,
+# , 902, 797, 800, 891, 401, 800,
 # 838, 420, 403, 893, 881, 804, 599, 615, 831, 403, 593, 872
 
 settings.defaults_Legend.update({

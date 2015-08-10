@@ -17,16 +17,16 @@ import varial.tools
 # varial.settings.debug_mode = True
 # varial.settings.max_num_processes = 1
 input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
-            'Run2-ntuple-tmp/*.root'
+            'Run2-ntuple/*.root'
 # input_pat = '*.root'
 
-if True:
-    input_pat = glob.glob(input_pat)
-    input_pat = filter(
-        lambda s: (not basename(s).startswith('Tp')) or '_lepDecay' in s,
-        input_pat
-    )
 
+# don't plot all signal samples
+input_pat = glob.glob(input_pat)
+input_pat = filter(
+    lambda s: '_TH_' not in s or '_lepDecay' in s,
+    input_pat
+)
 
 
 def merge_samples(wrps):
@@ -64,7 +64,7 @@ def merge_samples(wrps):
 
 
 def loader_hook(wrps):
-    #wrps = common.yield_n_objs(wrps, 20)
+    # wrps = common.yield_n_objs(wrps, 20)
     wrps = common.add_wrp_info(wrps)
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
