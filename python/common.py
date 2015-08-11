@@ -56,8 +56,11 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
                 yield do_merging(buf)
         else:
             if buf:
-                print 'WARNING In merge_decay_channels: buffer not empty. ' \
-                      'Flushing remaining items:' + str(buf)
+                print 'WARNING In merge_decay_channels: buffer not empty.\n' \
+                      'postfixes:\n' + str(postfixes) + '\n' \
+                      'Flushing remaining items:\n' + '\n'.join(
+                    '%s, %s' % (w.sample, w.in_file_path) for w in buf
+                )
                 yield do_merging(buf)
             yield w
 

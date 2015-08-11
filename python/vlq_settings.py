@@ -8,12 +8,12 @@ from varial import settings
 settings.box_text_size = 0.03
 settings.colors = {
     'TTbar': 632,
-    'WJets': 596,
+    'WJets': 902,
     'ZJets': 840,
     'SingleT': 434,
     'QCD': 870,
 }
-# , 902, 797, 800, 891, 401, 800,
+# 596, , 797, 800, 891, 401, 800,
 # 838, 420, 403, 893, 881, 804, 599, 615, 831, 403, 593, 872
 
 settings.defaults_Legend.update({

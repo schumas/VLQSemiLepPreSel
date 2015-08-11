@@ -12,6 +12,8 @@ import common
 
 import varial.generators as gen
 import varial.tools
+import varial.plotter
+import varial.history
 
 
 # varial.settings.debug_mode = True
@@ -24,9 +26,22 @@ input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
 # don't plot all signal samples
 input_pat = glob.glob(input_pat)
 input_pat = filter(
-    lambda s: '_TH_' not in s or '_lepDecay' in s,
+    lambda s: ('_TH_' not in s and 'TpTp_' not in s) or '_lepDecay' in s,
     input_pat
 )
+
+
+def fix_mc_norm(wrps):
+
+    @varial.history.track_history
+    def fix_norm(w):
+        w.lumi *= .5
+        return w
+
+    for w in wrps:
+        if not w.is_data:
+            w = fix_norm(w)
+        yield w
 
 
 def merge_samples(wrps):
@@ -66,6 +81,7 @@ def merge_samples(wrps):
 def loader_hook(wrps):
     # wrps = common.yield_n_objs(wrps, 20)
     wrps = common.add_wrp_info(wrps)
+    wrps = fix_mc_norm(wrps)   ############################ TODO !!!!
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
     # wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
@@ -124,7 +140,7 @@ if __name__ == '__main__':
             varial.tools.mk_rootfile_plotter(
                 pattern=input_pat,
                 name='VLQ_presel_norm_no_signal',
-                plotter_factory=plotter_factory,
+                plotter_factory=plotter_factory_norm,
                 combine_files=True,
                 filter_keyfunc=lambda w: not common.is_signal(w.file_path)
             ),
