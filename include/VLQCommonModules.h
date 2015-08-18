@@ -521,6 +521,46 @@ private:
 };
 
 
+class LeadingTopjetMassProducer : public AnalysisModule {
+public:
+    explicit LeadingTopjetMassProducer(Context & ctx,
+                        const string & h_in,
+                        const string & h_out):
+        h_in_(ctx.get_handle<vector<TopJet>>(h_in)),
+        h_name_(h_in),
+        h_out_(ctx.get_handle<float>(h_out)) {}
+
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_in_)) {
+            vector<TopJet> & coll = event.get(h_in_);
+            if (coll.size()) {
+                if (coll[0].subjets().size()){
+                    LorentzVector sum_subjets;
+                    for (Jet const & subjet : coll[0].subjets())
+                        sum_subjets += subjet.v4();
+                    // std::cout << "Masses (v4().M()/sum_subjets.M()/prunedmass()) TopJet of collection "
+                    //     << h_name_ << ": " << coll[0].v4().M() << " / " << sum_subjets.M() << " / "
+                    //     << coll[0].prunedmass() << std::endl; 
+                    event.set(h_out_, sum_subjets.M());
+                } else {
+                    event.set(h_out_, -1.);    
+                }
+            } else {
+                event.set(h_out_, -1.);
+            }
+            return true;
+        } else {
+            event.set(h_out_, -1.);
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<TopJet>> h_in_;
+    string h_name_;
+    Event::Handle<float> h_out_;
+};
+
+
 template<typename TYPE>
 class PartPtProducer: public AnalysisModule {
 public:
