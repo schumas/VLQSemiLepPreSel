@@ -32,4 +32,19 @@ v2
 - 2D-Cut (dR(l, j) > 0.2 OR dpt(l, j) > 10.)
 
 
+v3
+--
 
+- leading ak4Jet pT > 100 GeV 
+- primary lepton pT > 25 GeV
+- ST > 400 GeV
+- number of loose csvv2 btags (ak4Jets) >= 1
+- 2D-Cut (dR(l, j) > 0.25 OR dpt(l, j) > 40.)
+- any of these triggers fired (OR combination):
+  - "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*"
+  - "HLT_Ele32_eta2p1_WP75_Gsf_v*"
+  - "HLT_Mu45_eta2p1_v*"
+  - "HLT_Mu50_v*"
+  - "HLT_IsoMu24_eta2p1_v*"
+  - "HLT_IsoMu27_v*"
+  - "HLT_PFHT800_v*"
