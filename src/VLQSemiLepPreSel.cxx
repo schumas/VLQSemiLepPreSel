@@ -54,14 +54,14 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     }
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
-    CommonModules* commonOjectCleaning = new CommonModules();
-    commonOjectCleaning->set_jet_id(PtEtaCut(30.0,7.0));
-    commonOjectCleaning->set_electron_id(AndId<Electron>(ElectronID_PHYS14_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
-    commonOjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.4)));
-    commonOjectCleaning->switch_jetlepcleaner(true);
-    commonOjectCleaning->switch_jetPtSorter(true);
-    commonOjectCleaning->init(ctx);
-    common_modules_with_lumi_sel.reset(commonOjectCleaning);
+    CommonModules* commonObjectCleaning = new CommonModules();
+    commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)));
+    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_50ns_medium_noIso,PtEtaCut(20.0, 2.4)));
+    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.4)));
+    commonObjectCleaning->switch_jetlepcleaner(true);
+    commonObjectCleaning->switch_jetPtSorter(true);
+    commonObjectCleaning->init(ctx);
+    common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx));
     v_pre_modules.emplace_back(new STCalculator(ctx));

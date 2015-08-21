@@ -35,6 +35,11 @@ v2
 v3
 --
 
+- IDs: 
+  - ElectronID_Spring15_50ns_medium_noIso, PtEtaCut(20.0, 2.4)
+  - MuonIDTight, PtEtaCut(20.0, 2.4)
+  - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)
+
 - leading ak4Jet pT > 100 GeV 
 - primary lepton pT > 25 GeV
 - ST > 400 GeV
