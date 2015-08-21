@@ -17,7 +17,7 @@ import varial.history
 
 
 # varial.settings.debug_mode = True
-# varial.settings.max_num_processes = 1
+varial.settings.max_num_processes = 10
 input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
             'Run2-ntuple/*.root'
 # input_pat = '*.root'
@@ -74,6 +74,7 @@ def merge_samples(wrps):
     wrps = common.merge_decay_channels(wrps, (
         '_Ele',
         '_Mu',
+        '_Had',
     ))
     return wrps
 
@@ -81,7 +82,6 @@ def merge_samples(wrps):
 def loader_hook(wrps):
     # wrps = common.yield_n_objs(wrps, 20)
     wrps = common.add_wrp_info(wrps)
-    wrps = fix_mc_norm(wrps)   ############################ TODO !!!!
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
     # wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
@@ -158,3 +158,9 @@ if __name__ == '__main__':
     varial.tools.Runner(tc)
     varial.tools.WebCreator().run()
     print 'done.'
+
+
+
+
+
+

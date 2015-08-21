@@ -16,7 +16,7 @@ def label_axes(wrps):
         yield w
 
 
-signal_indicators = ['_TH_']
+signal_indicators = ['_TH_', 'TpTp_',]
 
 
 def add_wrp_info(wrps):
