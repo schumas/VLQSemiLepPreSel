@@ -521,6 +521,30 @@ private:
 };
 
 
+class LeadingTopjetLorentzVectorProducer : public AnalysisModule {
+public:
+    explicit LeadingTopjetLorentzVectorProducer(Context & ctx,
+                        const string & h_in,
+                        const string & h_out):
+        h_in_(ctx.get_handle<vector<TopJet>>(h_in)),
+        h_out_(ctx.get_handle<LorentzVector>(h_out)) {}
+
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_in_)) {
+            vector<TopJet> & coll = event.get(h_in_);
+            if (coll.size()) {
+                event.set(h_out_, coll[0].v4());
+            }
+            return true;
+        }
+        return false;
+    }
+private:
+    Event::Handle<vector<TopJet>> h_in_;
+    Event::Handle<LorentzVector> h_out_;
+};
+
+
 class LeadingTopjetMassProducer : public AnalysisModule {
 public:
     explicit LeadingTopjetMassProducer(Context & ctx,

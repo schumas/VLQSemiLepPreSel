@@ -5,6 +5,8 @@ ROOT.gROOT.ProcessLine('gErrorIgnoreLevel = kError;')
 
 import varial
 import varial.history
+import varial.tools
+from varial.extensions.limits import ThetaLimits
 
 
 def label_axes(wrps):
@@ -77,3 +79,49 @@ def yield_n_objs(wrps, n=50):
             yield w
         else:
             break
+
+
+
+
+
+class TpTpThetaLimits(ThetaLimits):
+    def __init__(self, brs=None, *args ,**kws):
+        super(TpTpThetaLimits, self).__init__(*args, **kws)
+        self.brs = brs
+
+    def run(self):
+        super(TpTpThetaLimits, self).run()
+        self.result = varial.wrappers.Wrapper(
+            name=self.result.name,
+            _res_exp=self.result._res_exp,
+            _res_obs=self.result._res_obs,
+            brs=self.brs
+        )
+
+
+class TriangleLimitPlots(varial.tools.Tool):
+    def __init__(self, name=None):
+        super(TriangleLimitPlots, self).__init__(name)
+
+
+    def run(self):
+        # parent = varial.analysis.lookup_tool('../.')
+        # varial.analysis.print_tool_tree()
+        parents = os.listdir(self.cwd+'/..')
+        # print parents
+        theta_tools = list(k for k in parents if k.startswith("ThetaLimit"))
+        # print theta_tools
+        wrps = list(self.lookup_result('../' + k) for k in theta_tools)
+        filename = os.path.join(varial.analysis.cwd, self.name + ".root")
+        f = ROOT.TFile.Open(filename, "RECREATE")
+        f.cd()
+        tri_hist = ROOT.TH2F("triangular_limits", ";br to th;br to tz", 10, 0., 1., 10, 0., 1.)
+        for w in wrps:
+            br_th = float(w.brs['th'])
+            br_tz = float(w.brs['tz'])
+            # limit_f = float(w.res_exp.y[0])
+            tri_hist.Fill(br_th, br_tz, w.res_exp.y[0])
+        tri_hist.Write()
+        f.Close()
+
+

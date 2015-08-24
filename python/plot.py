@@ -130,18 +130,21 @@ if __name__ == '__main__':
                 name='VLQ_presel_stack',
                 plotter_factory=plotter_factory_stack,
                 combine_files=True,
+                auto_legend=False,
             ),
             varial.tools.mk_rootfile_plotter(
                 pattern=input_pat,
                 name='VLQ_presel_norm',
                 plotter_factory=plotter_factory_norm,
                 combine_files=True,
+                auto_legend=False,
             ),
             varial.tools.mk_rootfile_plotter(
                 pattern=input_pat,
                 name='VLQ_presel_norm_no_signal',
                 plotter_factory=plotter_factory_norm,
                 combine_files=True,
+                auto_legend=False,
                 filter_keyfunc=lambda w: not common.is_signal(w.file_path)
             ),
             cutflow_tables.mk_cutflow_chain(input_pat, loader_hook),
