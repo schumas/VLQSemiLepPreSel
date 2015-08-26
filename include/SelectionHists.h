@@ -57,6 +57,54 @@ private:
 };
 
 
+class SelectedSelHists: public Hists {
+public:
+    explicit SelectedSelHists(Context & ctx,
+                         const string & dir,
+                         const SelItemsHelper & sel_helper,
+                         const vector<string> & selections):
+        Hists(ctx, dir),
+        h_sel_res(ctx.get_handle<vector<bool>>("sel_accept")),
+        v_all_items(sel_helper.all_item_names()),
+        v_selections(selections)
+    {
+        sel_helper.fill_hists_vector(v_hists, dir);
+    }
+
+    void insert_hists(unsigned pos, Hists * hists) {
+        v_hists.insert(v_hists.begin() + pos, move(unique_ptr<Hists>(hists)));
+    }
+
+    virtual void fill(const Event & event) override {
+        const auto & v_accept = event.get(h_sel_res);
+        assert(v_accept.size() == v_hists.size() && v_accept.size() == v_all_items.size());
+        for (unsigned i=0; i<v_hists.size(); ++i) {
+            bool accept_sels = true;
+            for (unsigned j=0; j<v_accept.size(); ++j) {
+                // if (i==j) {
+                //     continue;
+                // }
+                for (const string & sel : v_selections) {
+                    if (sel == v_all_items[j] && !v_accept[j]) {
+                        accept_sels = false;
+                        break;    
+                    }
+                }
+            }
+            if (accept_sels) {
+                v_hists[i]->fill(event);
+            }
+        }
+    }
+
+private:
+    Event::Handle<vector<bool>> h_sel_res;
+    vector<unique_ptr<Hists>> v_hists;
+    const vector<string> & v_all_items;
+    const vector<string> v_selections;
+};
+
+
 class VLQ2HTCutflow: public Hists {
 public:
     explicit VLQ2HTCutflow(Context & ctx,
