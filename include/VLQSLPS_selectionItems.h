@@ -12,7 +12,7 @@ typedef SelectionItemData<float>    SelDatF;
 typedef SelectionItemData<double>   SelDatD;
 
 
-static const float DR_2D_CUT_PRESEL = 0.25;
+static const float DR_2D_CUT_PRESEL = 0.4;
 static const float DPT_2D_CUT_PRESEL = 40.0;
 
 
