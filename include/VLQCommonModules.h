@@ -211,8 +211,8 @@ class STCalculator: public AnalysisModule {
 public:
     explicit STCalculator(Context & ctx,
                           string const & h_name = "ST",
-                          float min_jet_pt = 0.):
-        min_jet_pt_(min_jet_pt),
+                          boost::optional<JetId> const & jet_id = boost::none):
+        jet_id_(jet_id),
         h_st(ctx.get_handle<double>(h_name)),
         h_primlep(ctx.get_handle<FlavorParticle>("PrimaryLepton")) {}
 
@@ -223,7 +223,11 @@ public:
         float st = event.get(h_primlep).pt();
         st += event.met->pt();
         for (const auto & j : *event.jets) {
-            if (fabs(j.eta()) < 2.4 && j.pt() > min_jet_pt_) {
+            if (jet_id_){
+                if ((*jet_id_)(j, event)) {
+                    st += j.pt();
+                }
+            } else {
                 st += j.pt();
             }
         }
@@ -232,7 +236,7 @@ public:
     }
 
 private:
-    float min_jet_pt_;
+    boost::optional<JetId> jet_id_;
     Event::Handle<double> h_st;
     Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
