@@ -62,17 +62,20 @@ public:
     explicit SelectedSelHists(Context & ctx,
                          const string & dir,
                          const SelItemsHelper & sel_helper,
-                         const vector<string> & selections):
+                         const vector<string> & selections,
+                         const vector<string> & veto_selections = {}):
         Hists(ctx, dir),
         h_sel_res(ctx.get_handle<vector<bool>>("sel_accept")),
         v_all_items(sel_helper.all_item_names()),
-        v_selections(selections)
+        v_selections(selections),
+        v_veto_selections(veto_selections)
     {
         sel_helper.fill_hists_vector(v_hists, dir);
     }
 
-    void insert_hists(unsigned pos, Hists * hists) {
+    void insert_hist_and_sel(unsigned pos, Hists * hists, const string & sel) {
         v_hists.insert(v_hists.begin() + pos, move(unique_ptr<Hists>(hists)));
+        v_all_items.insert(v_all_items.begin() + pos, sel);
     }
 
     virtual void fill(const Event & event) override {
@@ -90,6 +93,12 @@ public:
                         break;    
                     }
                 }
+                for (const string & sel : v_veto_selections) {
+                    if (sel != v_all_items[j] && !v_accept[j]) {
+                        accept_sels = false;
+                        break;    
+                    }
+                }
             }
             if (accept_sels) {
                 v_hists[i]->fill(event);
@@ -100,8 +109,9 @@ public:
 private:
     Event::Handle<vector<bool>> h_sel_res;
     vector<unique_ptr<Hists>> v_hists;
-    const vector<string> & v_all_items;
+    vector<string> v_all_items;
     const vector<string> v_selections;
+    const vector<string> v_veto_selections;
 };
 
 
