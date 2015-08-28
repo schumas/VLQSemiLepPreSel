@@ -17,7 +17,7 @@ import varial.history
 
 
 # varial.settings.debug_mode = True
-varial.settings.max_num_processes = 10
+# varial.settings.max_num_processes = 10
 input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
             'Run2-ntuple/*.root'
 # input_pat = '*.root'
@@ -51,16 +51,16 @@ def merge_samples(wrps):
         '_Pt600to800',
         '_Pt800to1000',
         '_Pt120to170',
-        '_Pt30to50',
         '_Pt1400to1800',
         '_Pt170to300',
         '_Pt1800to2400',
         '_Pt80to120',
         '_Pt300to470',
-        '_Pt50to80',
         '_Pt3200toInf',
         '_Pt1000to1400',
-        '_Pt15to30',
+     #   '_Pt15to30',
+      #  '_Pt30to50',
+       # '_Pt50to80',
     ))
     wrps = common.merge_decay_channels(wrps, (
         'M50toInf',
@@ -84,7 +84,11 @@ def loader_hook(wrps):
     wrps = common.add_wrp_info(wrps)
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
-    # wrps = (w for w in wrps if w.histo.Integral() > 1e-5)
+
+    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'ST', gen.op.rebin, bin_bounds=range(0, 1550, 50))
+    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'leading_jet_pt', gen.op.rebin, bin_bounds=range(0, 760, 20))
+    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'primary_lepton_pt', gen.op.rebin, bin_bounds=range(0, 520, 20))
+
     wrps = common.label_axes(wrps)
     wrps = gen.gen_make_th2_projections(wrps)
     #wrps = gen.gen_make_eff_graphs(wrps)
