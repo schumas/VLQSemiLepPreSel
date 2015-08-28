@@ -77,7 +77,7 @@ public:
         h_prim_lep(ctx.get_handle<FlavorParticle>(prim_lep_hndl)) {}
 
     virtual bool process(Event & e) override {
-        if (e.is_valid(h_prim_lep)) {
+        if (e.is_valid(h_prim_lep) && e.get(h_prim_lep).pt() > 0.001) {
             e.set(h, e.get(h_prim_lep).pt());
         }
         return true;
