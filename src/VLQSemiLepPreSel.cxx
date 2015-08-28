@@ -63,7 +63,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
-    v_pre_modules.emplace_back(new PrimaryLepton(ctx));
+    v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 50., 115.));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(40., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
@@ -93,27 +93,21 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     auto * nm1_hists = new Nm1SelHists(ctx, "Nm1Selection", sel_helper);
     auto * cf_hists = new VLQ2HTCutflow(ctx, "Cutflow", sel_helper);
 
-    v_hists.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPre"));
     v_hists.emplace_back(nm1_hists);
     v_hists.emplace_back(cf_hists);
-    sel_helper.fill_hists_vector(v_hists, "NoSelection");
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
 
     // append 2D cut
-    unsigned pos_2d_cut = 4;
+    unsigned pos_2d_cut = SEL_ITEMS_PRESEL.size() - 1;
     sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, DR_2D_CUT_PRESEL, DPT_2D_CUT_PRESEL));
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");
-    v_hists.insert(v_hists.begin() + pos_2d_cut, move(unique_ptr<Hists>(new TwoDCutHist(ctx, "NoSelection"))));
 
-    // histograms with generator info
+    // general histograms
     if (type == "MC") {
-        // v_hists.emplace_back(new VLQGenHists(ctx, "GenHistsPre"));
-        // v_hists_post.emplace_back(new VLQGenHists(ctx, "GenHistsPost"));
-        v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
+        //v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
         v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
     } else {
-        v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre", false));
         v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", false));
     }
 

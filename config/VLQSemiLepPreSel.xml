@@ -67,12 +67,39 @@
     <Library Name="libSUHH2VLQToHiggsAndLepton"/>
     <Package Name="SUHH2VLQToHiggsAndLepton.par" />
 
-   <!-- <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="42.477" >
-   -->
-   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="42.477">
+  <!--
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="42.477" >
+  -->
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="42.477">
+  <!-- 
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="42.477" >
+  -->
 
-   <!-- <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/PHYS14-ntuple2-v2/" PostFix="" TargetLumi="42.477" >
-   -->
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-->
+
+    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Mu" Cacheable="True">
+        &Data_SingleMuPD;
+        <InputTree Name="AnalysisTree" />
+        <OutputTree Name="AnalysisTree" />
+    </InputData>
+
+    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Ele" Cacheable="True">
+        &Data_SingleElePD;
+        <InputTree Name="AnalysisTree" />
+        <OutputTree Name="AnalysisTree" />
+    </InputData>
+
+    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Had" Cacheable="True">
+        &Data_JetHTPD;
+        <InputTree Name="AnalysisTree" />
+        <OutputTree Name="AnalysisTree" />
+    </InputData>
+
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -199,7 +226,6 @@ signal samples: T' to TH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
 
--->
 
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700" Cacheable="True">
     &MC_TpB_TH_LH_M0700;
@@ -272,12 +298,13 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+-->
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 signal samples for plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
+
 
 <InputData Lumi="98572" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="True">
     &MC_TpB_TH_LH_M0700;
@@ -302,7 +329,7 @@ signal samples for plotting
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
-<!--
+
 <InputData Lumi="798600" NEventsMax="-1" Type="MC" Version="TpTp_M-700_lepDecay" Cacheable="True">
     &MC_TprimeTprime_M-700;
     <InputTree Name="AnalysisTree" />
@@ -315,7 +342,6 @@ signal samples for plotting
     <OutputTree Name="AnalysisTree" />
 </InputData>
 -->
-
 <!--
 <InputData Lumi="99800" NEventsMax="-1" Type="MC" Version="Bpb_TW_1200_LH_lepDecay" Cacheable="False">
   &Bpb_TW_1200_LH;
@@ -330,34 +356,12 @@ signal samples for plotting
 </InputData>
 -->
 
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-data
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Mu" Cacheable="True">
-        &Data_SingleMuPD;
-        <InputTree Name="AnalysisTree" />
-        <OutputTree Name="AnalysisTree" />
-    </InputData>
-
-    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Ele" Cacheable="True">
-        &Data_SingleElePD;
-        <InputTree Name="AnalysisTree" />
-        <OutputTree Name="AnalysisTree" />
-    </InputData>
-
-    <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Had" Cacheable="True">
-        &Data_JetHTPD;
-        <InputTree Name="AnalysisTree" />
-        <OutputTree Name="AnalysisTree" />
-    </InputData>
--->
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 backgrounds
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 <InputData Lumi="0.00268666002688567" NEventsMax="-1" Type="MC" Version="QCD_Pt15to30" Cacheable="True">
     &MC_QCD_Pt15to30;
@@ -376,7 +380,7 @@ backgrounds
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
-
+-->
 <InputData Lumi="1.25429262306654" NEventsMax="-1" Type="MC" Version="QCD_Pt80to120" Cacheable="True">
     &MC_QCD_Pt80to120;
     <InputTree Name="AnalysisTree" />
@@ -490,10 +494,9 @@ backgrounds
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
+
 
 <!-- -->
-
         <UserConfig>
             <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
             <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
@@ -515,9 +518,13 @@ backgrounds
             <Item Name="lumihists_lumi_per_bin" Value="0.2"/>
 
             <Item Name="use_sframe_weight" Value="false" />
-
-            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/reimersa/LQToTopMu/Run2/MCPUReweight/uhh2.AnalysisModuleRunner.DATA.DATA.root" />
+<!--
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/reimersa/LQToTopMu/Run2/MCPUReweight/uhh2.AnalysisModuleRunner.DATA.DATA.root"/>
             <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/mameyer/TTDMDM/preselection_RunII/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
+
+  -->
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.Data.Data.root" />
+            <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
 
             <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
             <Item Name="TestKey" Value="VLQSemiLepPreSel" />
