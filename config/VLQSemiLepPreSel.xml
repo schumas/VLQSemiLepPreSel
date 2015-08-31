@@ -80,7 +80,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
+
 
     <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Mu" Cacheable="True">
         &Data_SingleMuPD;
@@ -99,7 +99,7 @@ data
         <InputTree Name="AnalysisTree" />
         <OutputTree Name="AnalysisTree" />
     </InputData>
-
+-->
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -145,6 +145,13 @@ signal samples: T' to BW
 signal samples: T' T' to TH XY
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+<InputData Lumi="832800" NEventsMax="-1" Type="MC" Version="TpTp_M-1200" Cacheable="True">
+    &MC_TprimeTprime_M-1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+-->
+
 
 <InputData Lumi="822800" NEventsMax="-1" Type="MC" Version="TpTp_M-1000" Cacheable="True">
     &MC_TprimeTprime_M-1000;
@@ -152,14 +159,8 @@ signal samples: T' T' to TH XY
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="344000" NEventsMax="-1" Type="MC" Version="TpTp_M-1100" Cacheable="True">
+<InputData Lumi="821600" NEventsMax="-1" Type="MC" Version="TpTp_M-1100" Cacheable="True">
     &MC_TprimeTprime_M-1100;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="832800" NEventsMax="-1" Type="MC" Version="TpTp_M-1200" Cacheable="True">
-    &MC_TprimeTprime_M-1200;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
@@ -170,31 +171,31 @@ signal samples: T' T' to TH XY
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="822800" NEventsMax="-1" Type="MC" Version="TpTp_M-1400" Cacheable="True">
+<InputData Lumi="832800" NEventsMax="-1" Type="MC" Version="TpTp_M-1400" Cacheable="True">
     &MC_TprimeTprime_M-1400;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="272400" NEventsMax="-1" Type="MC" Version="TpTp_M-1500" Cacheable="True">
+<InputData Lumi="812200" NEventsMax="-1" Type="MC" Version="TpTp_M-1500" Cacheable="True">
     &MC_TprimeTprime_M-1500;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="505200" NEventsMax="-1" Type="MC" Version="TpTp_M-1600" Cacheable="True">
+<InputData Lumi="804000" NEventsMax="-1" Type="MC" Version="TpTp_M-1600" Cacheable="True">
     &MC_TprimeTprime_M-1600;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="391600" NEventsMax="-1" Type="MC" Version="TpTp_M-1700" Cacheable="True">
+<InputData Lumi="832400" NEventsMax="-1" Type="MC" Version="TpTp_M-1700" Cacheable="True">
     &MC_TprimeTprime_M-1700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="227000" NEventsMax="-1" Type="MC" Version="TpTp_M-1800" Cacheable="True">
+<InputData Lumi="832800" NEventsMax="-1" Type="MC" Version="TpTp_M-1800" Cacheable="True">
     &MC_TprimeTprime_M-1800;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -217,7 +218,6 @@ signal samples: T' T' to TH XY
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
 
 
 <!--
@@ -225,6 +225,7 @@ signal samples: T' T' to TH XY
 signal samples: T' to TH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
+-->
 
 
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700" Cacheable="True">
@@ -298,12 +299,12 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 signal samples for plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-->
 
 
 <InputData Lumi="98572" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="True">
@@ -312,19 +313,19 @@ signal samples for plotting
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="95400" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M1700_lepDecay" Cacheable="True">
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M1700_lepDecay" Cacheable="True">
     &MC_TpB_TH_LH_M1700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="98572" NEventsMax="-1" Type="MC" Version="TpB_TH_RH_M0700_lepDecay" Cacheable="True">
+<InputData Lumi="99800" NEventsMax="-1" Type="MC" Version="TpB_TH_RH_M0700_lepDecay" Cacheable="True">
     &MC_TpB_TH_RH_M0700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="95400" NEventsMax="-1" Type="MC" Version="TpB_TH_RH_M1700_lepDecay" Cacheable="True">
+<InputData Lumi="99200" NEventsMax="-1" Type="MC" Version="TpB_TH_RH_M1700_lepDecay" Cacheable="True">
     &MC_TpB_TH_RH_M1700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -336,12 +337,12 @@ signal samples for plotting
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="391600" NEventsMax="-1" Type="MC" Version="TpTp_M-1700_lepDecay" Cacheable="True">
+<InputData Lumi="832400" NEventsMax="-1" Type="MC" Version="TpTp_M-1700_lepDecay" Cacheable="True">
     &MC_TprimeTprime_M-1700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
+
 <!--
 <InputData Lumi="99800" NEventsMax="-1" Type="MC" Version="Bpb_TW_1200_LH_lepDecay" Cacheable="False">
   &Bpb_TW_1200_LH;
@@ -380,7 +381,7 @@ backgrounds
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
+
 <InputData Lumi="1.25429262306654" NEventsMax="-1" Type="MC" Version="QCD_Pt80to120" Cacheable="True">
     &MC_QCD_Pt80to120;
     <InputTree Name="AnalysisTree" />
@@ -494,6 +495,7 @@ backgrounds
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+-->
 
 
 <!-- -->
