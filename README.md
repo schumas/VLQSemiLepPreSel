@@ -53,3 +53,24 @@ v3
   - "HLT_IsoMu24_eta2p1_v*"
   - "HLT_IsoMu27_v*"
   - "HLT_PFHT800_v*"
+
+
+v4
+--
+
+- IDs: 
+  - ElectronID_Spring15_50ns_medium_noIso, PtEtaCut(20.0, 2.4)
+  - MuonIDTight, PtEtaCut(20.0, 2.4)
+  - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)
+
+- leading ak4Jet pT > 100 GeV 
+- primary lepton pT > 50 GeV (Muon), > 115 GeV (Electron)
+- ST > 400 GeV
+- 2D-Cut (dR(l, j) > 0.4 OR dpt(l, j) > 40.)
+- any of these triggers fired (OR combination):
+  - "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*",
+  - "HLT_Ele32_eta2p1_WPLoose_Gsf_v*",
+  - "HLT_Mu45_eta2p1_v*",
+  - "HLT_IsoMu24_eta2p1_v*",
+  - "HLT_PFHT800_v*",
+
