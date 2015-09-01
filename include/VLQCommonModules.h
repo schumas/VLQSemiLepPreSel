@@ -318,6 +318,7 @@ public:
             }
         }
 
+        e.set(h, 0);
         return false;
     }
 
