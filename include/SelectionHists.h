@@ -93,10 +93,17 @@ public:
                         break;    
                     }
                 }
+
+                bool ignore_sel = v_veto_selections.size() ? false : true;
                 for (const string & sel : v_veto_selections) {
-                    if (sel != v_all_items[j] && !v_accept[j]) {
+                    if (sel == v_all_items[j]) {
+                        ignore_sel = true;   
+                    }
+                }
+                if (!ignore_sel) {
+                    if (!v_accept[j]) {
                         accept_sels = false;
-                        break;    
+                        break;
                     }
                 }
             }

@@ -556,7 +556,6 @@ public:
                         const string & h_in,
                         const string & h_out):
         h_in_(ctx.get_handle<vector<TopJet>>(h_in)),
-        h_name_(h_in),
         h_out_(ctx.get_handle<float>(h_out)) {}
 
     virtual bool process(Event & event) override {
@@ -567,9 +566,6 @@ public:
                     LorentzVector sum_subjets;
                     for (Jet const & subjet : coll[0].subjets())
                         sum_subjets += subjet.v4();
-                    // std::cout << "Masses (v4().M()/sum_subjets.M()/prunedmass()) TopJet of collection "
-                    //     << h_name_ << ": " << coll[0].v4().M() << " / " << sum_subjets.M() << " / "
-                    //     << coll[0].prunedmass() << std::endl; 
                     event.set(h_out_, sum_subjets.M());
                 } else {
                     event.set(h_out_, -1.);    
@@ -585,7 +581,34 @@ public:
     }
 private:
     Event::Handle<vector<TopJet>> h_in_;
-    string h_name_;
+    Event::Handle<float> h_out_;
+};
+
+
+class LeadingTopjetTau21Producer : public AnalysisModule {
+public:
+    explicit LeadingTopjetTau21Producer(Context & ctx,
+                        const string & h_in,
+                        const string & h_out):
+        h_in_(ctx.get_handle<vector<TopJet>>(h_in)),
+        h_out_(ctx.get_handle<float>(h_out)) {}
+
+    virtual bool process(Event & event) override {
+        if (event.is_valid(h_in_)) {
+            vector<TopJet> & coll = event.get(h_in_);
+            if (coll.size()) {
+                event.set(h_out_, coll[0].tau2()/coll[0].tau1());
+            } else {
+                event.set(h_out_, -1.);
+            }
+            return true;
+        } else {
+            event.set(h_out_, -1.);
+            return false;
+        }
+    }
+private:
+    Event::Handle<vector<TopJet>> h_in_;
     Event::Handle<float> h_out_;
 };
 
@@ -808,3 +831,40 @@ private:
 };
 
 }
+
+class AntiHiggsBVetoTag {
+public:
+    explicit AntiHiggsBVetoTag(float minmass = 60.f, float maxmass = std::numeric_limits<float>::infinity(), 
+                               JetId const & id = CSVBTag(CSVBTag::WP_MEDIUM)) :
+        minmass_(minmass), maxmass_(maxmass), btagid_(id) {}
+
+    bool operator()(TopJet const & topjet, uhh2::Event const & event) const {
+        auto subjets = topjet.subjets();
+        if(subjets.size() < 2) return false;
+        unsigned n_sj_btags = 0;
+        unsigned n_sj_btagvetos = 0;
+        for (const auto & sj : subjets) {
+            if (btagid_(sj, event))
+                n_sj_btags++;
+            else if (!btagid_(sj, event))
+                n_sj_btagvetos++;
+        }
+
+        if (!(n_sj_btags == 1 && n_sj_btagvetos >= 1))
+            return false;
+
+        LorentzVector firsttwosubjets = subjets[0].v4() + subjets[1].v4();
+        if(!firsttwosubjets.isTimelike()) {
+            return false;
+        }
+        auto mjet = firsttwosubjets.M();
+        if(mjet < minmass_) return false;
+        if(mjet > maxmass_) return false;
+        return true;
+    }
+
+private:
+    float minmass_, maxmass_;
+    JetId btagid_;
+
+};
