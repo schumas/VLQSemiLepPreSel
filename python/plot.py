@@ -85,9 +85,18 @@ def loader_hook(wrps):
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
     wrps = merge_samples(wrps)
 
-    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'ST', gen.op.rebin, bin_bounds=range(0, 1550, 50))
-    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'leading_jet_pt', gen.op.rebin, bin_bounds=range(0, 760, 20))
-    #wrps = gen.imap_conditional(wrps, lambda w: w.name == 'primary_lepton_pt', gen.op.rebin, bin_bounds=range(0, 520, 20))
+    #wrps = gen.imap_conditional(
+    #    wrps, lambda w: w.name == 'ST', 
+    #    gen.op.rebin, bin_bounds=range(0, 1550, 50)
+    #)
+    #wrps = gen.imap_conditional(
+    #    wrps, lambda w: w.name == 'leading_jet_pt', 
+    #    gen.op.rebin, bin_bounds=range(0, 760, 20)
+    #)
+    #wrps = gen.imap_conditional(
+    #    wrps, lambda w: w.name == 'primary_lepton_pt', 
+    #    gen.op.rebin, bin_bounds=range(0, 520, 20)
+    #)
 
     wrps = common.label_axes(wrps)
     wrps = gen.gen_make_th2_projections(wrps)
