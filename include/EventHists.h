@@ -63,9 +63,9 @@ public:
     ExtendedElectronHists(uhh2::Context & ctx, const std::string & dirname, bool gen_plots = true) :
         ElectronHists(ctx, dirname, gen_plots)
         {
-            isolation   = book<TH1F>("isolation_own",   "relIso electron",          200,0,10);
-            isolation_1 = book<TH1F>("isolation_1_own", "relIso electron 1",        200,0,10);
-            isolation_2 = book<TH1F>("isolation_2_own", "relIso electron 2",        200,0,10);
+            isolation   = book<TH1F>("isolation_own",   "relIso electron",          20,0,4);
+            isolation_1 = book<TH1F>("isolation_1_own", "relIso electron 1",        20,0,4);
+            isolation_2 = book<TH1F>("isolation_2_own", "relIso electron 2",        20,0,4);
         }
 
 };
@@ -77,9 +77,9 @@ public:
     ExtendedMuonHists(uhh2::Context & ctx, const std::string & dirname, bool gen_plots = true) :
         MuonHists(ctx, dirname, gen_plots)
         {
-            isolation   = book<TH1F>("isolation_own",   "relIso electron",          200,0,10);
-            isolation_1 = book<TH1F>("isolation_1_own", "relIso electron 1",        200,0,10);
-            isolation_2 = book<TH1F>("isolation_2_own", "relIso electron 2",        200,0,10);
+            isolation   = book<TH1F>("isolation_own",   "relIso electron",          20,0,4);
+            isolation_1 = book<TH1F>("isolation_1_own", "relIso electron 1",        20,0,4);
+            isolation_2 = book<TH1F>("isolation_2_own", "relIso electron 2",        20,0,4);
         }
 
 };
