@@ -128,6 +128,12 @@ class CutflowTableContent(varial.tools.Tool):
             row.append(1000. * row[-1] / row[0])
             row_err.append(0.)  # TODO uncert for binomial
 
+        for row, row_err in itertools.izip(self.table_sig, self.table_sig_err):
+            if not (row and row_err):
+                continue
+            row.append(1000. * row[-1] / row[0])
+            row_err.append(0.)  # TODO uncert for binomial
+
     def run(self):
         self.get_input_histos()
         self.fill_head_line()
@@ -176,16 +182,16 @@ class CutflowTableTxt(varial.tools.Tool):
     def make_header(self):
         line = self.sep.join(itertools.imap(lambda s: "%24s"%s,
                                             self.cont.head_line))
-        line = 30*" " + self.sep + line + " \n"
+        line = 32*" " + self.sep + line + " \n"
         self.table_lines.append(line)
 
     def _add_mc_stuff(self, iterator):
         for title, vals, errs in iterator:
             zipped = ((a, b) for a, b in itertools.izip(vals, errs))
             self.table_lines.append(
-                "%30s" % title
+                "%32s" % title
                 + self.sep
-                + self.sep.join("%13.1f +- %7.1f" % p for p in zipped)
+                + self.sep.join("%13.2f +- %7.2f" % p for p in zipped)
                 + " \n"
             )
 
@@ -197,9 +203,9 @@ class CutflowTableTxt(varial.tools.Tool):
         self.table_lines.append("\n")
         for title, vals in self.cont.data_title_value_iterator():
             self.table_lines.append(
-                "%30s" % title
+                "%32s" % title
                 + self.sep
-                + self.sep.join("%17d" % v for v in vals)
+                + self.sep.join("%24d" % v for v in vals)
             )
         self.table_lines.append("\n")
 

@@ -684,6 +684,27 @@ const HYP * get_best_hypothesis(
 }
 
 
+class PrimaryLeptonDeltaPhiId {
+public :
+    explicit PrimaryLeptonDeltaPhiId(
+        Context & ctx, 
+        float min_dist, 
+        const string & prim_lep="PrimaryLepton"
+    ):
+        min_dist_(min_dist),
+        prim_lep_(ctx.get_handle<FlavorParticle>(prim_lep)) {}
+
+    bool operator()(const Particle & p, const Event & e) const {
+        const auto & lep = e.get(prim_lep_);
+        return deltaPhi(lep, p) > min_dist_;
+    }
+
+private:
+    float min_dist_;
+    Event::Handle<FlavorParticle> prim_lep_;
+};  // class PrimaryLeptonDeltaPhiId
+
+
 class VectorAndSelection: public Selection {
 public:
     explicit VectorAndSelection(const vector<Selection*> &sel_vec) {
@@ -703,7 +724,7 @@ public:
 
 private:
     vector<unique_ptr<Selection>> sel_vec_;
-};
+};  // VectorAndSelection
 
 
 template<typename TYPE>
