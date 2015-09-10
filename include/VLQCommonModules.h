@@ -585,19 +585,24 @@ private:
 };
 
 
-class LeadingTopjetTau21Producer : public AnalysisModule {
+class LeadingTopjetNSubjettinessProducer : public AnalysisModule {
 public:
-    explicit LeadingTopjetTau21Producer(Context & ctx,
+    explicit LeadingTopjetNSubjettinessProducer(Context & ctx,
                         const string & h_in,
-                        const string & h_out):
+                        const string & h_out,
+                        bool tau21_not_tau32 = true):
         h_in_(ctx.get_handle<vector<TopJet>>(h_in)),
-        h_out_(ctx.get_handle<float>(h_out)) {}
+        h_out_(ctx.get_handle<float>(h_out)),
+        tau21_not_tau32_(tau21_not_tau32) {}
 
     virtual bool process(Event & event) override {
         if (event.is_valid(h_in_)) {
             vector<TopJet> & coll = event.get(h_in_);
             if (coll.size()) {
-                event.set(h_out_, coll[0].tau2()/coll[0].tau1());
+                if (tau21_not_tau32_)
+                    event.set(h_out_, coll[0].tau2()/coll[0].tau1());
+                else
+                    event.set(h_out_, coll[0].tau3()/coll[0].tau2());
             } else {
                 event.set(h_out_, -1.);
             }
@@ -610,6 +615,7 @@ public:
 private:
     Event::Handle<vector<TopJet>> h_in_;
     Event::Handle<float> h_out_;
+    bool tau21_not_tau32_;
 };
 
 
