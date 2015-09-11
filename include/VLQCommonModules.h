@@ -241,17 +241,37 @@ private:
     Event::Handle<FlavorParticle> h_primlep;
 };  // class STCalculator
 
-// DEPRECATED, use PtSorter below instead
-class JetPtSorter : public AnalysisModule {
-public:
-    explicit JetPtSorter() {}
-    virtual bool process(Event & event) override {
-        vector<Jet> & ev_jets = *event.jets;
-        sort_by_pt(ev_jets);
 
+class LepPtPlusMETProducer: public AnalysisModule {
+public:
+    explicit LepPtPlusMETProducer(
+        Context & ctx,
+        const string & prim_lep_name = "PrimaryLepton",
+        const string & out_name = "lep_plus_met",
+        const string & out_name_vec_sum = "lep_plus_met_vec_sum"
+    ):
+        h_primlep(ctx.get_handle<FlavorParticle>(prim_lep_name)),
+        h_out(ctx.get_handle<float>(out_name)),
+        h_out_vec_sum(ctx.get_handle<float>(out_name_vec_sum)) {}
+
+    virtual bool process(Event & e) override {
+        const auto & prim_lep = e.get(h_primlep);
+        e.set(
+            h_out, 
+            prim_lep.pt() + e.met->pt()
+        );
+        e.set(
+            h_out_vec_sum, 
+            (prim_lep.v4() + e.met->v4()).pt()
+        );
         return true;
     }
-};  // class JetPtSorter
+
+private:
+    Event::Handle<FlavorParticle> h_primlep;
+    Event::Handle<float> h_out;
+    Event::Handle<float> h_out_vec_sum;
+};
 
 
 template<typename T>
