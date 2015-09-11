@@ -5,6 +5,8 @@ import shutil
 
 import varial.tools
 import varial.util
+import varial.plotter
+import varial.generators as gen
 
 
 ############################################ fetch histos and table content ###
@@ -354,7 +356,7 @@ def gen_rebin_cutflow(wrps):
     last_bin = None
     for w in wrps:
 
-        if w.obj.Integral() < 0.1:
+        if w.obj.Integral() < 1e-20:
             yield w
             continue
 
@@ -393,9 +395,20 @@ def mk_cutflow_chain(input_pat, loader_hook):
         canvas_decorators=[varial.rendering.Legend]
     )
 
+    cutflow_normed_plots = varial.tools.Plotter(
+        'CutflowNormed',
+        stack=False,
+        plot_grouper=varial.plotter.plot_grouper_by_in_file_path,
+        hook_loaded_histos=gen.gen_norm_to_max_val,
+        input_result_path='../CutflowHistos',
+        save_log_scale=True,
+        canvas_decorators=[varial.rendering.Legend]
+    )
+
     return varial.tools.ToolChain("CutflowTools", [
         cutflow_histos,
         cutflow_stack_plots,
+        cutflow_normed_plots,
         CutflowTableContent(),
         CutflowTableTxt(),
         CutflowTableTex(None, True),
