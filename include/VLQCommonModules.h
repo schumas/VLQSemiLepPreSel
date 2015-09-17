@@ -915,3 +915,24 @@ private:
     JetId btagid_;
 
 };
+
+
+class METProducer: public AnalysisModule {
+public:
+    explicit METProducer(Context & ctx,
+                                  const string & h_name = "met"):
+        h(ctx.get_handle<float>(h_name)) {}
+
+    virtual bool process(Event & e) override {
+        if (e.met) {
+            e.set(h, e.met->pt());
+            return true;
+        } else {
+            e.set(h, 0.);
+            return false;
+        }
+    }
+
+private:
+    Event::Handle<float> h;
+};  // METProducer
