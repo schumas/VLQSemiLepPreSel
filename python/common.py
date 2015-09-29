@@ -7,6 +7,8 @@ import varial
 import varial.history
 import varial.tools
 from varial.extensions.limits import ThetaLimits
+import glob
+import os
 
 
 def label_axes(wrps):
@@ -21,17 +23,18 @@ def label_axes(wrps):
 signal_indicators = ['_TH_', 'TpTp_',]
 
 
-def add_wrp_info(wrps):
+def add_wrp_info(wrps, sig_ind=signal_indicators):
     return varial.generators.gen_add_wrp_info(
         wrps,
         sample=lambda w: w.file_path.split('.')[-2],
         legend=lambda w: w.sample,
-        is_signal=lambda w: any(s in w.sample for s in signal_indicators),
+        is_signal=lambda w: any(s in w.sample for s in sig_ind),
         is_data=lambda w: 'Run20' in w.sample,
+        variable=lambda w: w.in_file_path.split('/')[-1]
     )
 
 
-def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
+def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep'), suffix='', print_warning=True):
     """histos must be sorted!!"""
 
     @varial.history.track_history
@@ -42,10 +45,10 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
         res = varial.operations.merge(buf)
         res.sample = next(res.sample[:-len(p)]
                           for p in postfixes
-                          if res.sample.endswith(p))
+                          if res.sample.endswith(p))+suffix
         res.legend = next(res.legend[:-len(p)]
                           for p in postfixes
-                          if res.legend.endswith(p))
+                          if res.legend.endswith(p))+suffix
         res.file_path = ''
         del buf[:]
         return merge_decay_channel(res)
@@ -58,11 +61,12 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep')):
                 yield do_merging(buf)
         else:
             if buf:
-                print 'WARNING In merge_decay_channels: buffer not empty.\n' \
-                      'postfixes:\n' + str(postfixes) + '\n' \
-                      'Flushing remaining items:\n' + '\n'.join(
-                    '%s, %s' % (w.sample, w.in_file_path) for w in buf
-                )
+                if print_warning:
+                    print 'WARNING In merge_decay_channels: buffer not empty.\n' \
+                          'postfixes:\n' + str(postfixes) + '\n' \
+                          'Flushing remaining items:\n' + '\n'.join(
+                        '%s, %s' % (w.sample, w.in_file_path) for w in buf
+                    )
                 yield do_merging(buf)
             yield w
 
@@ -93,35 +97,44 @@ class TpTpThetaLimits(ThetaLimits):
         super(TpTpThetaLimits, self).run()
         self.result = varial.wrappers.Wrapper(
             name=self.result.name,
-            _res_exp=self.result._res_exp,
-            _res_obs=self.result._res_obs,
-            brs=self.brs
+            res_exp_x=self.result.res_exp_x,  # TODO only TObjects or native python objects (list, dict, int, str ...) allowed
+            res_exp_y=self.result.res_exp_y,
+            res_exp_xerrors=self.result.res_exp_xerrors,
+            res_exp_yerrors=self.result.res_exp_yerrors,
+            brs=self.brs,
+            masses=list(int(x) for x in self.result.res_exp_x)
         )
 
-
 class TriangleLimitPlots(varial.tools.Tool):
-    def __init__(self, name=None):
+    def __init__(self,
+        name=None,
+        limit_rel_path=''
+    ):
         super(TriangleLimitPlots, self).__init__(name)
+        self.limit_rel_path = limit_rel_path
 
-
-    def run(self):
-        # parent = varial.analysis.lookup_tool('../.')
-        # varial.analysis.print_tool_tree()
-        parents = os.listdir(self.cwd+'/..')
-        # print parents
-        theta_tools = list(k for k in parents if k.startswith("ThetaLimit"))
-        # print theta_tools
-        wrps = list(self.lookup_result('../' + k) for k in theta_tools)
-        filename = os.path.join(varial.analysis.cwd, self.name + ".root")
-        f = ROOT.TFile.Open(filename, "RECREATE")
-        f.cd()
-        tri_hist = ROOT.TH2F("triangular_limits", ";br to th;br to tz", 10, 0., 1., 10, 0., 1.)
+    def make_tri_hist(self, wrps, mass_ind):
+        tri_hist = ROOT.TH2F("triangular_limits", ";br to th;br to tz", 11, -0.05, 1.05, 11, -0.05, 1.05)
         for w in wrps:
             br_th = float(w.brs['th'])
             br_tz = float(w.brs['tz'])
-            # limit_f = float(w.res_exp.y[0])
-            tri_hist.Fill(br_th, br_tz, w.res_exp.y[0])
-        tri_hist.Write()
-        f.Close()
+            tri_hist.Fill(br_th, br_tz, w.res_exp_y[mass_ind])
+        return varial.wrappers.HistoWrapper(tri_hist,
+                legend='M-'+str(w.masses[mass_ind]),
+                mass=w.masses[mass_ind])
 
 
+    def run(self):
+        # parents = os.listdir(self.cwd+'/..')
+        theta_tools = glob.glob(os.path.join(self.cwd+'..', self.limit_rel_path))
+        wrps = list(self.lookup_result(k) for k in theta_tools)
+        filename = os.path.join(varial.analysis.cwd, self.name + ".root")
+        # f = ROOT.TFile.Open(filename, "RECREATE")
+        # f.cd()
+        print wrps
+        list_hists=[]
+        for i, m in enumerate(wrps[0].masses):
+            list_hists.append(self.make_tri_hist(wrps, i))
+        # tri_hist.Write()
+        self.result = list_hists
+        # f.Close()

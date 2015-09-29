@@ -39,7 +39,7 @@ class SelectionItemData : public SelectionItem {
 public:
     SelectionItemData(const string & name, const string & title,
                       int n_bins, float x_min, float x_max,
-                      DATATYPE min_val=-99999.0, DATATYPE max_val=99999.0):
+                      DATATYPE min_val=-999999.0, DATATYPE max_val=999999.0):
         SelectionItem(name), title_(title),
         n_bins_(n_bins), x_min_(x_min), x_max_(x_max),
         min_val_(min_val), max_val_(max_val) {}
@@ -83,10 +83,14 @@ class SelItemsHelper {
 public:
     SelItemsHelper(const vector<shared_ptr<SelectionItem>> & sel_items,
                    Context & context,
-                   const vector<string> & names = vector<string>()):
+                   const vector<string> & names = vector<string>(),
+                   const string & h_vec_bool = "sel_accept",
+                   const string & h_all_accept = "sel_all_accepted"):
         items(sel_items),
         ctx(context),
-        item_names(names.size() ? names : all_item_names())
+        item_names(names.size() ? names : all_item_names()),
+        h_vec_bool_(h_vec_bool),
+        h_all_accept_(h_all_accept)
     {
         set<string> name_set;
         for (const auto & it : items) {
@@ -114,17 +118,12 @@ public:
     }
 
     const shared_ptr<SelectionItem> get_sel_item(const string & name) const {
-        static map<string, shared_ptr<SelectionItem>> m;
-        if (!m.size()) {
-            for (const auto & it: items) {
-                m[it->name()] = it;
+        for (auto const & seli : items) {
+            if (seli->name() == name) {
+                return seli;
             }
         }
-        if (m.count(name)) {
-            return m[name];
-        } else {
-            return NULL;
-        }
+        return NULL;
     }
 
     void fill_hists_vector(vector<unique_ptr<Hists>> & target,
@@ -180,10 +179,14 @@ public:
         ofs.close();
     }
 
+    const string & s_vec_bool() const {return h_vec_bool_;}
+    const string & s_all_accept() const {return h_all_accept_;}
+
 private:
     const vector<shared_ptr<SelectionItem>> & items;
     Context & ctx;
     const vector<string> & item_names;
+    string h_vec_bool_, h_all_accept_;
 };
 
 
@@ -191,8 +194,8 @@ class SelectionProducer : public AnalysisModule {
 public:
     explicit SelectionProducer(Context & ctx,
                                const SelItemsHelper & sel_helper):
-        h_sel_res(ctx.get_handle<vector<bool>>("sel_accept")),
-        h_all_acc(ctx.get_handle<bool>("sel_all_accepted"))
+        h_sel_res(ctx.get_handle<vector<bool>>(sel_helper.s_vec_bool())),
+        h_all_acc(ctx.get_handle<bool>(sel_helper.s_all_accept()))
     {
         sel_helper.fill_sel_vector(v_sel);
     }

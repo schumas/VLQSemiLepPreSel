@@ -28,8 +28,8 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
     {
         if (gen_hists)
         {
-            gen_hists->add_genhistcoll(8, 1, true, true, true, true);
-            gen_hists->add_genhistcoll(8, 2, true, true, true, true);
+            gen_hists->add_genhistcoll(8000001, 1, true, true, true, true);
+            gen_hists->add_genhistcoll(8000001, 2, true, true, true, true);
             gen_hists->add_genhistcoll(6, 1, true, true, true, true);
             gen_hists->add_genhistcoll(6, 2, true, true, true, true);
             gen_hists->add_genhistcoll(25, 1, true, true, true, true);

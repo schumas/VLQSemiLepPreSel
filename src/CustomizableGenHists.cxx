@@ -29,6 +29,8 @@ namespace
                 return "t";
             case 8:
                 return "tprime";
+            case 8000001:
+                return "tprime";
             case 11:
                 return "el";
             case 13:
@@ -84,7 +86,7 @@ namespace
 
 std::map<int, std::pair<float, float> > CustomizableGenHists::minmax_masses_ = {
         {6, std::make_pair(150.f, 250.f)},
-        {8, std::make_pair(950.f, 1050.f)},
+        {8000001, std::make_pair(950.f, 1050.f)},
         {25, std::make_pair(110.f, 140.f)}
     };
 

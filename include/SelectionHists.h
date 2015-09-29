@@ -22,7 +22,7 @@ public:
                          const string & dir,
                          const SelItemsHelper & sel_helper):
         Hists(ctx, dir),
-        h_sel_res(ctx.get_handle<vector<bool>>("sel_accept"))
+        h_sel_res(ctx.get_handle<vector<bool>>(sel_helper.s_vec_bool()))
     {
         sel_helper.fill_hists_vector(v_hists, dir);
     }
@@ -65,8 +65,8 @@ public:
                          const vector<string> & selections,
                          const vector<string> & veto_selections = {}):
         Hists(ctx, dir),
-        h_sel_res(ctx.get_handle<vector<bool>>("sel_accept")),
-        v_all_items(sel_helper.all_item_names()),
+        h_sel_res(ctx.get_handle<vector<bool>>(sel_helper.s_vec_bool())),
+        v_all_items(sel_helper.get_item_names()),
         v_selections(selections),
         v_veto_selections(veto_selections)
     {
@@ -128,7 +128,7 @@ public:
                   const string & dir,
                   const SelItemsHelper & sel_helper):
         Hists(ctx, dir),
-        h_sel(ctx.get_handle<vector<bool>>("sel_accept")),
+        h_sel(ctx.get_handle<vector<bool>>(sel_helper.s_vec_bool())),
         v_names(sel_helper.get_item_names()),
         h(book<TH1D>("cutflow", "", 1, 0, -1)),
         init_done(false) {}
