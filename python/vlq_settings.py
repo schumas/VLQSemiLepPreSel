@@ -10,22 +10,27 @@ settings.colors = {
     'TTbar': 632 - 7,
     'WJets': 901,
     'ZJets': 856,
-    'SingleT': 434,
-    'QCD': 870,
+    'SingleT': 433,
+    'QCD': 851,
+
+    # Heiners colors
+    'TpB_TH_700': 634,
+    'TpB_TH_1700': 418,
 }
 # 596, , 797, 800, 891, 401, 800,
 # 838, 420, 403, 893, 881, 804, 599, 615, 831, 403, 593, 872
 
 settings.defaults_Legend.update({
-    'x_pos': 0.85,
+    'x_pos': 0.81,
     'y_pos': 0.5,
-    'label_width': 0.16,
-    'label_height': 0.06,
+    'label_width': 0.2,
+    'label_height': 0.07,
     'opt': 'f',
     'opt_data': 'p',
     'reverse': True
 })
 
+settings.box_text_size = 0.05
 settings.canvas_size_x = 550
 settings.canvas_size_y = 400
 settings.root_style.SetPadRightMargin(0.3)
