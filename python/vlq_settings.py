@@ -7,9 +7,9 @@ from varial import settings
 
 settings.box_text_size = 0.03
 settings.colors = {
-    'TTbar': 632,
-    'WJets': 902,
-    'ZJets': 840,
+    'TTbar': 632 - 7,
+    'WJets': 901,
+    'ZJets': 856,
     'SingleT': 434,
     'QCD': 870,
 }
@@ -19,8 +19,8 @@ settings.colors = {
 settings.defaults_Legend.update({
     'x_pos': 0.85,
     'y_pos': 0.5,
-    'label_width': 0.28,
-    'label_height': 0.04,
+    'label_width': 0.16,
+    'label_height': 0.06,
     'opt': 'f',
     'opt_data': 'p',
     'reverse': True
