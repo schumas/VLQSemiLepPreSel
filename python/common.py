@@ -85,9 +85,7 @@ def yield_n_objs(wrps, n=50):
             break
 
 
-
-
-
+######################################################### limit calculation ###
 class TpTpThetaLimits(ThetaLimits):
     def __init__(self, brs=None, *args ,**kws):
         super(TpTpThetaLimits, self).__init__(*args, **kws)
@@ -104,6 +102,7 @@ class TpTpThetaLimits(ThetaLimits):
             brs=self.brs,
             masses=list(int(x) for x in self.result.res_exp_x)
         )
+
 
 class TriangleLimitPlots(varial.tools.Tool):
     def __init__(self,
