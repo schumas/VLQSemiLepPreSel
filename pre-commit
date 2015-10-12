@@ -14,4 +14,18 @@ cat VARIAL_VERSION
 git add VARIAL_VERSION
 cd $cwd
 
+# where is your varial installation?
+repo_base="$(git rev-parse --show-toplevel)"
+uhh2_dir=$repo_base/../
+
+cwd="$(pwd)"
+cd $uhh2_dir
+git rev-parse --verify HEAD > UHH2_VERSION
+mv UHH2_VERSION $repo_base
+cd $repo_base
+echo "Adding UHH2_VERSION:"
+cat UHH2_VERSION
+git add UHH2_VERSION
+cd $cwd
+
 
