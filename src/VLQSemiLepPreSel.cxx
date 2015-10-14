@@ -41,6 +41,7 @@ private:
     unique_ptr<AnalysisModule> leptonic_decay_checker;
     unique_ptr<AnalysisModule> common_modules_with_lumi_sel;
 
+    std::unique_ptr<Hists> n_input_events_hist;
     std::vector<std::unique_ptr<Hists>> v_hists;
     std::vector<std::unique_ptr<Hists>> v_hists_post;
 };
@@ -52,6 +53,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
     }
+
+    n_input_events_hist.reset(new NInputEventsHist(ctx));
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
@@ -118,6 +121,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
 
 bool VLQSemiLepPreSel::process(Event & event) {
+
+    n_input_events_hist->fill(event);
 
     // signal: check for leptonic decay mode
     if (leptonic_decay_checker.get()

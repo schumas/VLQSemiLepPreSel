@@ -9,6 +9,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/Selection.h"
 #include "UHH2/core/include/Hists.h"
+#include "UHH2/core/include/Utils.h"
 
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/TopJetIds.h"
@@ -877,7 +878,6 @@ private:
     TH2F * hist;
 };
 
-}
 
 class AntiHiggsBVetoTag {
 public:
@@ -936,3 +936,28 @@ public:
 private:
     Event::Handle<float> h;
 };  // METProducer
+
+
+class NInputEventsHist: public Hists {
+public:
+    explicit NInputEventsHist(Context & ctx):
+        Hists(ctx, ""),
+        n_events_total_str(ctx.get("n_events_total")),
+        hist(book<TH1F>("NInputEventsHist", "NInputEventsHist", 1, -.5, 0.5))
+    {
+        hist->SetBit(TH1::kCanRebin);
+    }
+
+    virtual void fill(const Event &) override {
+        // the number of total events should not be added when adding multiple
+        // outputs from proof workers. This is why it's used as axis label.
+        hist->Fill(n_events_total_str.c_str(), 1.);  
+    }
+
+private:
+    string n_events_total_str;
+    TH1F * hist;
+};
+
+
+} // namespace
