@@ -104,20 +104,16 @@ void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bo
 
     float minpt = 0.f, maxpt, minmass, maxmass;
 
-    try {
-        minmass = minmax_masses_.at(pdgid).first;
-        maxmass = minmax_masses_.at(pdgid).second;
-    }
-    catch (const out_of_range& e) {
+    if (minmax_masses_.count(pdgid)) {
+        tie(minmass, maxmass) = minmax_masses_.at(pdgid);
+    } else {
         minmass = 0.f;
         maxmass = 1000.f;
     }
 
-    try {
-        minpt = minmax_pts_.at(pdgid).first;
-        maxpt = minmax_pts_.at(pdgid).second;
-    }
-    catch (const out_of_range& e) {
+    if (minmax_pts_.count(pdgid)) {
+        tie(minpt, maxpt) = minmax_pts_.at(pdgid);
+    } else {
         if (pdgid < 10 || pdgid == 25)
             maxpt = 2000.f;
         else
