@@ -6,7 +6,6 @@ ROOT.gROOT.ProcessLine('gErrorIgnoreLevel = kError;')
 import varial
 import varial.history
 import varial.tools
-from varial.extensions.limits import ThetaLimits
 import glob
 import os
 
@@ -86,6 +85,13 @@ def yield_n_objs(wrps, n=50):
 
 
 ######################################################### limit calculation ###
+try:
+    from varial.extensions.limits import ThetaLimits
+except ImportError:
+    print 'WARNING Theta is not working'
+    ThetaLimits = object
+
+
 class TpTpThetaLimits(ThetaLimits):
     def __init__(self, brs=None, *args ,**kws):
         super(TpTpThetaLimits, self).__init__(*args, **kws)
