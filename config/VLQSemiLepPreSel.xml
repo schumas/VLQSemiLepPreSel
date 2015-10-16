@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
 [
-<!ENTITY Data_SingleMuPD SYSTEM     "../../common/datasets/RunII_50ns_v2/DATA_SingleMu.xml">
-<!ENTITY Data_SingleElePD SYSTEM    "../../common/datasets/RunII_50ns_v2/DATA_SingleEle.xml">
-<!ENTITY Data_JetHTPD SYSTEM        "../../common/datasets/RunII_50ns_v2/DATA_JetHT.xml">
-
 <!ENTITY MC_QCD_Pt15to30 SYSTEM     "../../common/datasets/RunII_50ns_v2/MC_QCD_Pt15to30.xml">
 <!ENTITY MC_QCD_Pt30to50 SYSTEM     "../../common/datasets/RunII_50ns_v2/MC_QCD_Pt30to50.xml">
 <!ENTITY MC_QCD_Pt50to80 SYSTEM     "../../common/datasets/RunII_50ns_v2/MC_QCD_Pt50to80.xml">
@@ -27,6 +23,12 @@
 <!ENTITY MC_TWAntitop SYSTEM        "../../common/datasets/RunII_50ns_v2/MC_ST_tW_antitop.xml">
 <!ENTITY MC_TWTop SYSTEM            "../../common/datasets/RunII_50ns_v2/MC_ST_tW_top.xml">
 
+
+
+
+<!ENTITY Data_SingleMuPD SYSTEM     "../../common/datasets/RunII_25ns_v1/SingleMuon_Run2015D-PromptReco-v3_MINIAOD_JSONv3.xml">
+<!ENTITY Data_SingleElePD SYSTEM    "../../common/datasets/RunII_25ns_v1/SingleElectron_Run2015D-PromptReco-v3_MINIAOD_JSONv3.xml">
+<!ENTITY Data_JetHTPD SYSTEM        "../../common/datasets/RunII_25ns_v1/DATA_JetHT.xml">
 
 
 <!ENTITY MC_TTbar SYSTEM            "../../common/datasets/RunII_25ns_v1/MC_TTbar.xml">
@@ -74,24 +76,167 @@
 
   <!--
   <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="2000" >
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="12" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2000">
   -->
-  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2000">
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="38" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2000" >
   <!--
-  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="20" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2000" >
   -->
 
-<!-- run again !! -->
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Had" Cacheable="True">
+    &Data_JetHTPD;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+-->
+
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Mu" Cacheable="True">
+    &Data_SingleMuPD;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Ele" Cacheable="True">
+    &Data_SingleElePD;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+signal samples: T' to BW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-->
+
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+signal samples: T' to TH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
+
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="True">
+    &MC_TpB_TH_LH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1200" Cacheable="True">
+    &MC_TpB_TH_LH_M1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1700" Cacheable="True">
+    &MC_TpB_TH_LH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0700" Cacheable="True">
+    &MC_TpB_TH_RH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1300" Cacheable="True">
+    &MC_TpB_TH_RH_M1300;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1700" Cacheable="True">
+    &MC_TpB_TH_RH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+-->
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+signal samples: T' T' to TH XY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1000" Cacheable="True">
+    &MC_TpTp_M-1000;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1100" Cacheable="True">
+    &MC_TpTp_M-1100;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1200" Cacheable="True">
+    &MC_TpTp_M-1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1300" Cacheable="True">
+    &MC_TpTp_M-1300;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1400" Cacheable="True">
+    &MC_TpTp_M-1400;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1500" Cacheable="True">
+    &MC_TpTp_M-1500;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1600" Cacheable="True">
+    &MC_TpTp_M-1600;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1700" Cacheable="True">
+    &MC_TpTp_M-1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1800" Cacheable="True">
+    &MC_TpTp_M-1800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-700" Cacheable="True">
+    &MC_TpTp_M-700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
 <InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-800" Cacheable="True">
     &MC_TpTp_M-800;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-data
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-900" Cacheable="True">
+    &MC_TpTp_M-900;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
 -->
+
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,14 +365,7 @@ backgrounds
 </InputData>
 -->
 
-<!-- 
-<InputData Lumi="116014.8" NEventsMax="-1" Type="MC" Version="MC_TTbar" Cacheable="True">
-    &MC_TTbar;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-
+<!--
 <InputData Lumi="6099.987" NEventsMax="-1" Type="MC" Version="MC_WJets_LNu_HT100To200" Cacheable="True">
     &MC_WJets_LNu_HT100To200;
     <InputTree Name="AnalysisTree" />
@@ -269,185 +407,22 @@ backgrounds
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+
+<InputData Lumi="116014.8" NEventsMax="-1" Type="MC" Version="MC_TTbar" Cacheable="True">
+    &MC_TTbar;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
 -->
-
-
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-signal samples: T' to BW
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
-
-
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-signal samples: T' T' to TH XY
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1000" Cacheable="True">
-    &MC_TpTp_M-1000;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1100" Cacheable="True">
-    &MC_TpTp_M-1100;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1200" Cacheable="True">
-    &MC_TpTp_M-1200;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1300" Cacheable="True">
-    &MC_TpTp_M-1300;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1400" Cacheable="True">
-    &MC_TpTp_M-1400;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1500" Cacheable="True">
-    &MC_TpTp_M-1500;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1600" Cacheable="True">
-    &MC_TpTp_M-1600;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1700" Cacheable="True">
-    &MC_TpTp_M-1700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1800" Cacheable="True">
-    &MC_TpTp_M-1800;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-700" Cacheable="True">
-    &MC_TpTp_M-700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-800" Cacheable="True">
-    &MC_TpTp_M-800;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-900" Cacheable="True">
-    &MC_TpTp_M-900;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-
-
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-signal samples: T' to TH
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
--->
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="True">
-    &MC_TpB_TH_LH_M0700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1200" Cacheable="True">
-    &MC_TpB_TH_LH_M1200;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1700" Cacheable="True">
-    &MC_TpB_TH_LH_M1700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0700" Cacheable="True">
-    &MC_TpB_TH_RH_M0700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1300" Cacheable="True">
-    &MC_TpB_TH_RH_M1300;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1700" Cacheable="True">
-    &MC_TpB_TH_RH_M1700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M0700" Cacheable="True">
-    &MC_TpT_TH_LH_M0700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1200" Cacheable="True">
-    &MC_TpT_TH_LH_M1200;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1700" Cacheable="True">
-    &MC_TpT_TH_LH_M1700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M0700" Cacheable="True">
-    &MC_TpT_TH_RH_M0700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1300" Cacheable="True">
-    &MC_TpT_TH_RH_M1300;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1700" Cacheable="True">
-    &MC_TpT_TH_RH_M1700;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
 
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 signal samples for plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
 
 
-<InputData Lumi="98572" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="True">
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="True">
     &MC_TpB_TH_LH_M0700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -459,17 +434,20 @@ signal samples for plotting
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="798600" NEventsMax="-1" Type="MC" Version="TpTp_M-700_lepDecay" Cacheable="True">
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="TpTp_M-700_lepDecay" Cacheable="True">
     &MC_TpTp_M-700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="832400" NEventsMax="-1" Type="MC" Version="TpTp_M-1700_lepDecay" Cacheable="True">
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="TpTp_M-1700_lepDecay" Cacheable="True">
     &MC_TpTp_M-1700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+
+
+-->
 
 
 
@@ -489,10 +467,9 @@ signal samples for plotting
             <Item Name="additionalBranches" Value="slimmedMETsPuppi triggerNames triggerResults slimmedJetsPuppi patJetsAk8CHSJetsSoftDropPacked_daughters patJetsCa15CHSJetsFilteredPacked_daughters patJetsHepTopTagCHSPacked_daughters" />
             <!-- slimmedGenJetsAK8 ak8GenJets ca15GenJets ak8GenJetsSoftDrop -->
 
-            <Item Name="lumi_file" Value="/nfs/dust/cms/user/peiffer/NtupleWriter/Ntuples/RunII_v2/Lumifile.root" />
+            <Item Name="lumi_file" Value="/nfs/dust/cms/user/peiffer/NtupleWriter/Ntuples/RunII_25ns_v1/Lumifile_Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.root" />
             <Item Name="lumihists_lumi_per_bin" Value="0.2"/>
 
-            <Item Name="use_sframe_weight" Value="false" />
 <!--
             <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/reimersa/LQToTopMu/Run2/MCPUReweight/uhh2.AnalysisModuleRunner.DATA.DATA.root"/>
             <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/mameyer/TTDMDM/preselection_RunII/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
@@ -501,6 +478,7 @@ signal samples for plotting
             <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.Data.Data.root" />
             <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
 
+            <Item Name="use_sframe_weight" Value="false" />
             <!-- the class name of the AnalysisModule subclasses to run: -->
             <Item Name="AnalysisModule" Value="VLQSemiLepPreSel" />
             <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->

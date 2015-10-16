@@ -63,6 +63,9 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(20.0, 2.4)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
+
+    commonObjectCleaning->disable_mcpileupreweight();
+
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
@@ -114,7 +117,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", false));
     }
 
-    if (version.substr(version.size() - 4, 100) == "_lepDecay") {
+    if (version.size() > 10 && version.substr(version.size() - 9, 100) == "_lepDecay") {
+        cout << "USING leptonic_decay_checker!" << endl;
         leptonic_decay_checker.reset(new LeptonicDecayVLQ());
     }
 }

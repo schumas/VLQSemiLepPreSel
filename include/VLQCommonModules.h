@@ -497,10 +497,10 @@ private:
 
 class LeptonicDecayVLQ : public AnalysisModule {
 public:
-    explicit LeptonicDecayVLQ() :
+    explicit LeptonicDecayVLQ(const vector<int> &lep_ids = {11, -11, 13, -13}):
         id_(AndId<GenParticle>(
-            GenParticlePdgIdId({11, -11, 13, -13}),
-            GenParticleMotherId({6000006, 6000007, 6000008})
+            GenParticlePdgIdId(lep_ids),
+            GenParticleMotherId({8000001, 6000006, 6000007, 6000008})
         )) {}
 
     virtual bool process(Event & event) override {
