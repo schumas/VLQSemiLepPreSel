@@ -94,13 +94,13 @@ data
 </InputData>
 -->
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Mu" Cacheable="True">
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Mu" Cacheable="True">
     &Data_SingleMuPD;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Ele" Cacheable="True">
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Ele" Cacheable="True">
     &Data_SingleElePD;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
