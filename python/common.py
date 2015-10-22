@@ -68,7 +68,8 @@ def merge_decay_channels(wrps, postfixes=('_Tlep', '_NonTlep'), suffix='', print
                     )
                 yield do_merging(buf)
             yield w
-
+    if buf:
+        yield do_merging(buf)
 
 def is_signal(name):
     return any(t in name for t in signal_indicators)
@@ -136,7 +137,6 @@ class TriangleLimitPlots(varial.tools.Tool):
         filename = os.path.join(varial.analysis.cwd, self.name + ".root")
         # f = ROOT.TFile.Open(filename, "RECREATE")
         # f.cd()
-        print wrps
         list_hists=[]
         for i, m in enumerate(wrps[0].masses):
             list_hists.append(self.make_tri_hist(wrps, i))
