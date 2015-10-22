@@ -411,6 +411,6 @@ def mk_cutflow_chain(input_pat, loader_hook):
         cutflow_normed_plots,
         CutflowTableContent(),
         CutflowTableTxt(),
-        CutflowTableTex(None, True),
+        # CutflowTableTex(None, True),
     ])
 
