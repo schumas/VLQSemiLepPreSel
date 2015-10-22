@@ -88,7 +88,7 @@ v6 (for 25ns runs)
 - ST > 400 GeV
 - 2D-Cut (dR(l, j) > 0.4 OR dpt(l, j) > 40.)
 - number of loose csvv2 btags (ak4Jets) >= 1
-- any of these triggers fired (OR combination):
+- any of these triggers fired (OR combination) (broken for data! re-apply in analysis!):
   - "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*",
   - "HLT_Mu45_eta2p1_v*",
   - "HLT_PFHT800_v*",
