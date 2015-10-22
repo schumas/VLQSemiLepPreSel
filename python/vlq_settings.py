@@ -10,6 +10,7 @@ settings.colors = {
     'TTbar': 632 - 7,
     'WJets': 901,
     'ZJets': 856,
+    'DYJets': 856,
     'SingleT': 433,
     'QCD': 851,
 
