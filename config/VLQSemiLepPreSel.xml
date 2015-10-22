@@ -113,19 +113,12 @@ signal samples: T' to BW
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -->
 
-<InputData Lumi="363191.59" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT600toInf" Cacheable="True">
-    &MC_DYJetsToLL_M50_HT0600toINFT;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 signal samples: T' to TH
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
--->
 
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="True">
     &MC_TpB_TH_LH_M0700;
@@ -162,6 +155,7 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+-->
 
 
 <!--
@@ -351,7 +345,7 @@ backgrounds
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="35.859" NEventsMax="-1" Type="MC" Version="SingleT_WAntitop" Cacheable="True">
+<InputData Lumi="27831.2" NEventsMax="-1" Type="MC" Version="SingleT_WAntitop" Cacheable="True">
     &MC_TWAntitop;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
