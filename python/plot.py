@@ -17,7 +17,6 @@ import varial.history
 
 
 # varial.settings.debug_mode = True
-# varial.settings.max_num_processes = 10
 input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
             'Run2-ntuple/*.root'
 # input_pat = '*.root'
@@ -44,46 +43,10 @@ def fix_mc_norm(wrps):
         yield w
 
 
-def merge_samples(wrps):
-    wrps = common.merge_decay_channels(wrps, (
-        '_Pt470to600',
-        '_Pt2400to3200',
-        '_Pt600to800',
-        '_Pt800to1000',
-        '_Pt120to170',
-        '_Pt1400to1800',
-        '_Pt170to300',
-        '_Pt1800to2400',
-        '_Pt80to120',
-        '_Pt300to470',
-        '_Pt3200toInf',
-        '_Pt1000to1400',
-     #   '_Pt15to30',
-      #  '_Pt30to50',
-       # '_Pt50to80',
-    ))
-    wrps = common.merge_decay_channels(wrps, (
-        'M50toInf',
-        'M10to50',
-    ))
-    wrps = common.merge_decay_channels(wrps, (
-        '_tChannel',
-        '_WAntitop',
-        '_WTop',
-    ))
-    wrps = common.merge_decay_channels(wrps, (
-        '_Ele',
-        '_Mu',
-        '_Had',
-    ))
-    return wrps
-
-
 def loader_hook(wrps):
     # wrps = common.yield_n_objs(wrps, 20)
     wrps = common.add_wrp_info(wrps)
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
-    wrps = merge_samples(wrps)
 
     #wrps = gen.imap_conditional(
     #    wrps, lambda w: w.name == 'ST', 
