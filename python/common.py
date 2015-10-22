@@ -88,7 +88,11 @@ def yield_n_objs(wrps, n=50):
 try:
     from varial.extensions.limits import ThetaLimits
 except ImportError:
-    print 'WARNING Theta is not working'
+    from varial import monitor
+    monitor.message(
+        'UHH2.VLQSemiLepPreSel.common',
+        'WARNING Theta is not working'
+    )
     ThetaLimits = object
 
 
