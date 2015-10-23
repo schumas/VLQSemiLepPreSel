@@ -12,6 +12,8 @@
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/JetIds.h"
 #include "UHH2/common/include/TopJetIds.h"
+#include "UHH2/common/include/LuminosityHists.h"
+
 
 #include "UHH2/VLQSemiLepPreSel/include/CustomizableGenHists.h"
 
@@ -241,6 +243,7 @@ public:
     virtual void fill(const uhh2::Event & ev) override;
 
 private:
+    LuminosityHists * lumi_hist;
     ExtendedElectronHists * el_hists;
     ExtendedMuonHists * mu_hists;
     TauHists * tau_hists;

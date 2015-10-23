@@ -15,6 +15,7 @@ using namespace uhh2;
 
 HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plots, JetId const & btag_id) :
     Hists(ctx, dirname),
+    lumi_hist(new LuminosityHists(ctx, dirname+"/LuminosityHists")),
     el_hists(new ExtendedElectronHists(ctx, dirname+"/ElectronHists", gen_plots)),
     mu_hists(new ExtendedMuonHists(ctx, dirname+"/MuonHists", gen_plots)),
     tau_hists(new TauHists(ctx, dirname+"/TauHists")),
@@ -50,6 +51,7 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
     } 
 
 void HistCollector::fill(const Event & event) {
+    lumi_hist->fill(event);
     el_hists->fill(event);
     mu_hists->fill(event);
     tau_hists->fill(event);
@@ -63,6 +65,7 @@ void HistCollector::fill(const Event & event) {
 }
 
 HistCollector::~HistCollector(){
+    delete lumi_hist;
     delete el_hists;
     delete mu_hists;
     delete tau_hists;
