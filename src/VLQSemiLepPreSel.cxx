@@ -60,7 +60,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)));
     commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
-    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(20.0, 2.4)));
+    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
 
@@ -70,7 +70,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 115., 50.));
-    v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(40., 2.4))));
+    v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(30., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
@@ -104,7 +104,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
 
     // append 2D cut
-    unsigned pos_2d_cut = SEL_ITEMS_PRESEL.size() - 1;
+    unsigned pos_2d_cut = 2;
     sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, DR_2D_CUT_PRESEL, DPT_2D_CUT_PRESEL));
     nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
     cf_hists->insert_step(pos_2d_cut, "2D cut");

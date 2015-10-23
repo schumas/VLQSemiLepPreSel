@@ -18,10 +18,10 @@ static const float DPT_2D_CUT_PRESEL = 40.0;
 
 static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
     shared_ptr<SelectionItem>(new SelDatI("trigger_accept",    "trigger accept",                            2, -.5, 1.5      ,1      )),
+    shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", ";primary lepton p_{T}; events / 20 GeV",    40, 0, 800       ,20     )),
     shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    ";leading jet p_{T}; events / 20 GeV",       40, 0, 800       ,100    )),
     shared_ptr<SelectionItem>(new SelDatD("ST",                ";ST; events / 50 GeV",                      50, 0, 2500      ,400    )),
     shared_ptr<SelectionItem>(new SelDatI("n_btags",           "number of loose btags",                     11, -.5, 10.5    ,1      )),
-    shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", ";primary lepton p_{T}; events / 20 GeV",    40, 0, 800       ,20     )),
 };
 
 
