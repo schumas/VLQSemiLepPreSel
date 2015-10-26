@@ -11,6 +11,7 @@ settings.colors = {
     'WJets': 901,
     'ZJets': 856,
     'DYJets': 856,
+    'DYJetsToLL': 856,
     'SingleT': 433,
     'QCD': 851,
 
