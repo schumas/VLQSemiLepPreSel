@@ -22,10 +22,18 @@ def label_axes(wrps):
 signal_indicators = ['_TH_', 'TpTp_',]
 
 
+def get_samplename(fname):
+    fname = os.path.basename(fname)
+    if fname.startswith('uhh2'):
+        return fname.split('.')[-2]
+    else:
+        return os.path.splitext(fname)[0]
+
+
 def add_wrp_info(wrps, sig_ind=signal_indicators):
     return varial.generators.gen_add_wrp_info(
         wrps,
-        sample=lambda w: w.file_path.split('.')[-2],
+        sample=lambda w: get_samplename(w.file_path),
         legend=lambda w: w.sample,
         is_signal=lambda w: any(s in w.sample for s in sig_ind),
         is_data=lambda w: 'Run20' in w.sample,
