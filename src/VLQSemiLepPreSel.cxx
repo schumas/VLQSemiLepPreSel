@@ -63,9 +63,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
-
-    commonObjectCleaning->disable_mcpileupreweight();
-
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
