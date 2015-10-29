@@ -72,7 +72,7 @@
 >
 
 <!--
-   <ConfigParse NEventsBreak="0" LastBreak="0" FileSplit="5" />
+   <ConfigParse NEventsBreak="0" FileSplit="10" />
    <ConfigSGE RAM ="2" DISK ="2" Mail="heiner@cern.de" Notification="as" Workdir="workdir"/>
 -->
 
@@ -99,13 +99,13 @@ data
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+-->
 
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Ele" Cacheable="True">
     &Data_SingleElePD;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
 
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Mu" Cacheable="True">
     &Data_SingleMuPD;

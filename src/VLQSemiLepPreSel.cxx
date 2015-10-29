@@ -58,7 +58,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
-    commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)));
+    commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)));
     commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);

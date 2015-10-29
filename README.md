@@ -93,3 +93,9 @@ v6 (for 25ns runs)
   - "HLT_Mu45_eta2p1_v*",
   - "HLT_PFHT800_v*",
 
+
+v7 (for 25ns runs)
+------------------
+
+- everything as in v6, except:
+  - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)
