@@ -72,7 +72,7 @@
 >
 
 <!--
-   <ConfigParse NEventsBreak="0" FileSplit="10" />
+   <ConfigParse NEventsBreak="0" FileSplit="8" />
    <ConfigSGE RAM ="2" DISK ="2" Mail="heiner@cern.de" Notification="as" Workdir="workdir"/>
 -->
 
