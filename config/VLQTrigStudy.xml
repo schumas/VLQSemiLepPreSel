@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
+[
+<!ENTITY MC_TpTp_M-1000 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1000.xml">
+<!ENTITY MC_TpTp_M-1100 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1100.xml">
+<!ENTITY MC_TpTp_M-1200 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1200.xml">
+<!ENTITY MC_TpTp_M-1300 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1300.xml">
+<!ENTITY MC_TpTp_M-1400 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1400.xml">
+<!ENTITY MC_TpTp_M-1500 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1500.xml">
+<!ENTITY MC_TpTp_M-1600 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1600.xml">
+<!ENTITY MC_TpTp_M-1700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1700.xml">
+<!ENTITY MC_TpTp_M-1800 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-1800.xml">
+<!ENTITY MC_TpTp_M-700 SYSTEM   "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-700.xml">
+<!ENTITY MC_TpTp_M-800 SYSTEM   "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-800.xml">
+<!ENTITY MC_TpTp_M-900 SYSTEM   "../../common/datasets/RunII_25ns_v1/MC_TpTp_M-900.xml">
+
+<!ENTITY MC_TpB_TH_LH_M0700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_LH_M0700.xml">
+<!ENTITY MC_TpB_TH_LH_M1200 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_LH_M1200.xml">
+<!ENTITY MC_TpB_TH_LH_M1700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_LH_M1700.xml">
+<!ENTITY MC_TpB_TH_RH_M0700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_RH_M0700.xml">
+<!ENTITY MC_TpB_TH_RH_M1300 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_RH_M1300.xml">
+<!ENTITY MC_TpB_TH_RH_M1700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpB_TH_RH_M1700.xml">
+<!ENTITY MC_TpT_TH_LH_M0700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_LH_M0700.xml">
+<!ENTITY MC_TpT_TH_LH_M1200 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_LH_M1200.xml">
+<!ENTITY MC_TpT_TH_LH_M1700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_LH_M1700.xml">
+<!ENTITY MC_TpT_TH_RH_M0700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_RH_M0700.xml">
+<!ENTITY MC_TpT_TH_RH_M1300 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_RH_M1300.xml">
+<!ENTITY MC_TpT_TH_RH_M1700 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_TpT_TH_RH_M1700.xml">
+]
+>
+
+<!--
+   <ConfigParse NEventsBreak="10000" FileSplit="0" />
+   <ConfigSGE RAM ="2" DISK ="2" Mail="heiner@cern.de" Notification="as" Workdir="workdir"/>
+-->
+
+
+<!-- OutputLevel controls which messages are printed; set to VERBOSE or DEBUG for more verbosity, to WARNING or ERROR for less -->
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+    <Library Name="libSUHH2VLQSemiLepPreSel"/>
+    <Package Name="SUHH2VLQSemiLepPreSel.par" />
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="./" PostFix="" TargetLumi="2000" >
+<!--
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="22" OutputDirectory="./" PostFix="" TargetLumi="2000">
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="8" OutputDirectory="./" PostFix="" TargetLumi="2000" >
+  -->
+
+
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+signal samples: T' T' to TH XY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-->
+
+<InputData Lumi="100000" NEventsMax="100000" Type="MC" Version="MC_TpTp_M-700" Cacheable="True">
+    &MC_TpTp_M-700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<!--
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1200" Cacheable="True">
+    &MC_TpTp_M-1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1000000" NEventsMax="-1" Type="MC" Version="MC_TpTp_M-1700" Cacheable="True">
+    &MC_TpTp_M-1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+-->
+
+
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+signal samples: T' to TH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
+-->
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="True">
+    &MC_TpB_TH_LH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1200" Cacheable="True">
+    &MC_TpB_TH_LH_M1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1700" Cacheable="True">
+    &MC_TpB_TH_LH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<!--
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0700" Cacheable="True">
+    &MC_TpB_TH_RH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1300" Cacheable="True">
+    &MC_TpB_TH_RH_M1300;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1700" Cacheable="True">
+    &MC_TpB_TH_RH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+-->
+
+
+
+<!-- -->
+        <UserConfig>
+            <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
+            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
+            <Item Name="TauCollection" Value="slimmedTaus" />
+            <Item Name="JetCollection" Value="slimmedJets" />
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="TopJetCollection" Value="slimmedJetsAK8_CMSTopTag" />
+            <Item Name="METName" Value="slimmedMETsNoHF" />
+            <Item Name="GenParticleCollection" Value="GenParticles" />
+            <Item Name="additionalBranches" Value="slimmedMETsPuppi triggerNames triggerResults" />
+            <!-- slimmedGenJetsAK8 ak8GenJets ca15GenJets ak8GenJetsSoftDrop -->
+
+
+            <Item Name="lumi_file" Value="/nfs/dust/cms/user/peiffer/NtupleWriter/Ntuples/RunII_v2/Lumifile.root" />
+            <Item Name="lumihists_lumi_per_bin" Value="0.2"/>
+
+<!--
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/reimersa/LQToTopMu/Run2/MCPUReweight/uhh2.AnalysisModuleRunner.DATA.DATA.root"/>
+            <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/mameyer/TTDMDM/preselection_RunII/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
+
+  -->
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.Data.Data.root" />
+            <Item Name="pileup_directory_50ns" Value="/nfs/dust/cms/user/gonvaq/CMSSW/CMSSW_7_4_3/src/UHH2/VLQToTopAndLepton/config/PU_reweighting/uhh2.AnalysisModuleRunner.MC.TTbar.root"/>
+
+            <Item Name="use_sframe_weight" Value="false" />
+            <!-- the class name of the AnalysisModule subclasses to run: -->
+            <Item Name="AnalysisModule" Value="VLQTrigStudy" />
+            <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
+            <Item Name="TestKey" Value="VLQTrigStudy" />
+        </UserConfig>
+    </Cycle>
+</JobConfiguration>
