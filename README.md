@@ -99,3 +99,25 @@ v7 (for 25ns runs)
 
 - everything as in v6, except:
   - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)
+
+
+v8 (for 25ns runs)
+------------------
+
+- IDs:
+  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.1)
+  - MuonIDTight, PtEtaCut(20.0, 2.1)
+  - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0, 7.0)
+
+- leading ak4Jet pT > 100 GeV
+- primary lepton pT > 26 GeV (Muon), > 35 GeV (Electron)
+- ST > 400 GeV
+- 2D lepton isolation: (dR(l, j) > 0.4 OR dpt(l, j) > 40.)
+- number of loose csvv2 btags (ak4Jets) >= 1
+- any of these triggers fired (OR combination):
+  - HLT_Ele32_eta2p1_WP75_Gsf_v*
+  - HLT_Ele105_CaloIdVT_GsfTrkIdT_v*
+  - HLT_Ele15_IsoVVVL_PFHT600_v*
+  - HLT_IsoMu24_eta2p1_v*
+  - HLT_Mu45_eta2p1_v*
+  - HLT_Mu15_IsoVVVL_PFHT600_v*

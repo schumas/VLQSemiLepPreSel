@@ -14,24 +14,34 @@
 <!ENTITY MC_QCD_Pt800to1000_MuEnrichedPt5 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-800to1000_MuEnrichedPt5.xml">
 <!ENTITY MC_QCD_Pt1000toInf_MuEnrichedPt5 SYSTEM "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-1000toInf_MuEnrichedPt5.xml">
 
-<!ENTITY MC_ZJetsM10to50 SYSTEM     "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M-10to50.xml">
-<!ENTITY MC_ZJetsM50toInf SYSTEM    "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M-50.xml">
+<!ENTITY MC_QCD_Pt-15to20_EMEnriched      SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-15to20_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-20to30_EMEnriched      SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-20to30_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-30to50_EMEnriched      SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-30to50_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-50to80_EMEnriched      SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-50to80_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-80to120_EMEnriched     SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-80to120_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-120to170_EMEnriched    SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-120to170_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-170to300_EMEnriched    SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-170to300_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-300toInf_EMEnriched    SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt-300toInf_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt_15to20_bcToE           SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_15to20_bcToE.xml">
+<!ENTITY MC_QCD_Pt_20to30_bcToE           SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_20to30_bcToE.xml">
+<!ENTITY MC_QCD_Pt_30to80_bcToE           SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_30to80_bcToE.xml">
+<!ENTITY MC_QCD_Pt_80to170_bcToE          SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_80to170_bcToE.xml">
+<!ENTITY MC_QCD_Pt_170to250_bcToE         SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_170to250_bcToE.xml">
+<!ENTITY MC_QCD_Pt_250toInf_bcToE         SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_QCD_Pt_250toInf_bcToE.xml">
+
 <!ENTITY MC_DYJetsToLL_M50_HT0100to0200 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M50_HT0100to0200.xml">
 <!ENTITY MC_DYJetsToLL_M50_HT0200to0400 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M50_HT0200to0400.xml">
 <!ENTITY MC_DYJetsToLL_M50_HT0400to0600 SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M50_HT0400to0600.xml">
 <!ENTITY MC_DYJetsToLL_M50_HT0600toINFT SYSTEM  "../../common/datasets/RunII_25ns_v1/MC_DYJetsToLL_M50_HT0600toINFT.xml">
+
 <!ENTITY MC_TsChannel SYSTEM        "../../common/datasets/RunII_25ns_v1/MC_ST_s-channel_4f_leptonDecays.xml">
 <!ENTITY MC_TtChannel SYSTEM        "../../common/datasets/RunII_25ns_v1/MC_ST_t-channel_4f_leptonDecays.xml">
 <!ENTITY MC_TWAntitop SYSTEM        "../../common/datasets/RunII_25ns_v1/MC_ST_tW_antitop_5f_inclusiveDecays.xml">
 <!ENTITY MC_TWTop SYSTEM            "../../common/datasets/RunII_25ns_v1/MC_ST_tW_top_5f_inclusiveDecays.xml">
 
-
-
-
 <!ENTITY Data_SingleMuPD SYSTEM     "../../common/datasets/RunII_25ns_v1/SingleMuon_Run2015D-PromptReco-v3_MINIAOD_JSONv3.xml">
 <!ENTITY Data_SingleElePD SYSTEM    "../../common/datasets/RunII_25ns_v1/SingleElectron_Run2015D-PromptReco-v3_MINIAOD_JSONv3.xml">
 <!ENTITY Data_JetHTPD SYSTEM        "../../common/datasets/RunII_25ns_v1/DATA_JetHT.xml">
-
 
 <!ENTITY MC_TTbar SYSTEM            "../../common/datasets/RunII_25ns_v1/MC_TTbar.xml">
 
@@ -252,31 +262,51 @@ signal samples: T' T' to TH XY
 backgrounds
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -->
-<!-- 
-<InputData Lumi="0.616" NEventsMax="-1" Type="MC" Version="QCD_Pt15to20_MuEnr" Cacheable="True">
-    &MC_QCD_Pt15to20_MuEnrichedPt5;
+
+
+<InputData Lumi="23.18" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt-80to120_EMEnriched" Cacheable="True">
+    &MC_QCD_Pt-80to120_EMEnriched;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="1.768" NEventsMax="-1" Type="MC" Version="QCD_Pt20to30_MuEnr" Cacheable="True">
-    &MC_QCD_Pt20to30_MuEnrichedPt5;
+<InputData Lumi="134.7" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt-120to170_EMEnriched" Cacheable="True">
+    &MC_QCD_Pt-120to170_EMEnriched;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
- <InputData Lumi="2.984" NEventsMax="-1" Type="MC" Version="QCD_Pt30to50_MuEnr" Cacheable="True">
-    &MC_QCD_Pt30to50_MuEnrichedPt5;
+<InputData Lumi="304.3" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt-170to300_EMEnriched" Cacheable="True">
+    &MC_QCD_Pt-170to300_EMEnriched;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="11.52" NEventsMax="-1" Type="MC" Version="QCD_Pt50to80_MuEnr" Cacheable="True">
-    &MC_QCD_Pt50to80_MuEnrichedPt5;
+<InputData Lumi="2732.4" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt-300toInf_EMEnriched" Cacheable="True">
+    &MC_QCD_Pt-300toInf_EMEnriched;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
--->
+
+
+
+<InputData Lumi="134.6" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt_80to170_bcToE" Cacheable="True">
+    &MC_QCD_Pt_80to170_bcToE;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="1091.3" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt_170to250_bcToE" Cacheable="True">
+    &MC_QCD_Pt_170to250_bcToE;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="4136.1" NEventsMax="-1" Type="MC" Version="MC_QCD_Pt_250toInf_bcToE" Cacheable="True">
+    &MC_QCD_Pt_250toInf_bcToE;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
 
 
 <InputData Lumi="36.52" NEventsMax="-1" Type="MC" Version="QCD_Pt80to120_MuEnr" Cacheable="True">
@@ -435,6 +465,7 @@ signal samples for plotting
 -->
 
 
+
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="True">
     &MC_TpB_TH_LH_M0700;
     <InputTree Name="AnalysisTree" />
@@ -458,7 +489,6 @@ signal samples for plotting
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
-
 
 
 

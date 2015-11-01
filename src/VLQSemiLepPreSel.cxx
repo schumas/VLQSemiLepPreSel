@@ -59,14 +59,14 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)));
-    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.4)));
+    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
-    v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 115., 50.));
+    v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 26., 35.));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(30., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
@@ -107,12 +107,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     cf_hists->insert_step(pos_2d_cut, "2D cut");
 
     // general histograms
-    if (type == "MC") {
-        //v_hists.emplace_back(new HistCollector(ctx, "EventHistsPre"));
-        v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost"));
-    } else {
-        v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", false));
-    }
+    v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", type == "MC"));
 
     if (version.size() > 10 && version.substr(version.size() - 9, 100) == "_lepDecay") {
         cout << "USING leptonic_decay_checker!" << endl;
