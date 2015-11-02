@@ -15,6 +15,9 @@ typedef SelectionItemData<double>   SelDatD;
 static const float DR_2D_CUT_PRESEL = 0.4;
 static const float DPT_2D_CUT_PRESEL = 40.0;
 
+static const float prim_lep_min_ele_pt = 35;
+static const float prim_lep_min_mu_pt = 29;
+
 
 static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
     shared_ptr<SelectionItem>(new SelDatI("trigger_accept",    "trigger accept",                            2, -.5, 1.5      ,1      )),
@@ -30,7 +33,7 @@ static const vector<std::string> PRESEL_TRIGGER_PATHS {
     "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*",
     "HLT_Ele15_IsoVVVL_PFHT600_v*",
 
-    "HLT_IsoMu24_eta2p1_v*",
+    "HLT_IsoMu27_v*",
     "HLT_Mu45_eta2p1_v*",
     "HLT_Mu15_IsoVVVL_PFHT600_v*",
 
@@ -38,11 +41,11 @@ static const vector<std::string> PRESEL_TRIGGER_PATHS {
 };
 
 static const vector<std::string> PRESEL_TRIGGER_PATHS_DATA {
-    "HLT_Ele32_eta2p1_WPLoose_Gsf_v*",
+    "HLT_Ele32_eta2p1_WPTight_Gsf_v*",
     "HLT_Ele105_CaloIdVT_GsfTrkIdT_v*",
     "HLT_Ele15_IsoVVVL_PFHT600_v*",
 
-    "HLT_IsoMu24_eta2p1_v*",
+    "HLT_IsoMu27_v*",
     "HLT_Mu45_eta2p1_v*",
     "HLT_Mu15_IsoVVVL_PFHT600_v*",
 
@@ -50,7 +53,7 @@ static const vector<std::string> PRESEL_TRIGGER_PATHS_DATA {
 };
 
 static const vector<std::string> PRESEL_TRIGGER_PATHS_DATA_ELE_VETO {
-    "HLT_IsoMu24_eta2p1_v*",
+    "HLT_IsoMu27_v*",
     "HLT_Mu45_eta2p1_v*",
     "HLT_Mu15_IsoVVVL_PFHT600_v*",
 };

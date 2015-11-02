@@ -66,7 +66,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
-    v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 26., 35.));
+    v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", prim_lep_min_ele_pt, prim_lep_min_mu_pt));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(30., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
