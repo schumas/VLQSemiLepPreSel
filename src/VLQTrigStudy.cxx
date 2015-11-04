@@ -115,17 +115,15 @@ VLQTrigStudy::VLQTrigStudy(Context & ctx) {
     leptonic_decay_checker_mu.reset(new LeptonicDecayVLQ({13, -13}));
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
-    CommonModules* commonObjectCleaning = new CommonModules();
-    commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)));
-    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.1)));
-    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
-    commonObjectCleaning->switch_jetlepcleaner(true);
-    commonObjectCleaning->switch_jetPtSorter(true);
-
-    commonObjectCleaning->disable_mcpileupreweight();
-
-    commonObjectCleaning->init(ctx);
-    common_modules_with_lumi_sel.reset(commonObjectCleaning);
+    // CommonModules* commonObjectCleaning = new CommonModules();
+    // commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,3.6)));
+    // commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.1)));
+    // commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
+    // commonObjectCleaning->switch_jetlepcleaner(true);
+    // commonObjectCleaning->switch_jetPtSorter(true);
+    // commonObjectCleaning->disable_mcpileupreweight();
+    // commonObjectCleaning->init(ctx);
+    // common_modules_with_lumi_sel.reset(commonObjectCleaning);
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", 20., 20.));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(40., 2.4))));
