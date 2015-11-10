@@ -69,25 +69,37 @@ private:
     Event::Handle<T> h_out;
 };
 
-class LeptonPtProducer: public AnalysisModule {
+class PrimaryLeptonInfoProducer: public AnalysisModule {
 public:
-    explicit LeptonPtProducer(Context & ctx,
+    explicit PrimaryLeptonInfoProducer(Context & ctx,
                               const string & prim_lep_hndl = "PrimaryLepton",
-                              const string & h_name = "primary_lepton_pt"):
-        h(ctx.get_handle<float>(h_name)),
+                              const string & h_pt = "primary_lepton_pt",
+                              const string & h_eta = "primary_lepton_eta",
+                              const string & h_charge = "primary_lepton_charge"):
+        h_pt(ctx.get_handle<float>(h_pt)),
+        h_eta(ctx.get_handle<float>(h_eta)),
+        h_charge(ctx.get_handle<int>(h_charge)),
         h_prim_lep(ctx.get_handle<FlavorParticle>(prim_lep_hndl)) {}
 
     virtual bool process(Event & e) override {
-        if (e.is_valid(h_prim_lep) && e.get(h_prim_lep).pt() > 0.001) {
-            e.set(h, e.get(h_prim_lep).pt());
+        if (e.is_valid(h_prim_lep)) {
+            auto prim_lep = e.get(h_prim_lep);
+            if (prim_lep.pt() > 0.001) {
+                e.set(h_pt, prim_lep.pt());    
+                e.set(h_eta, prim_lep.eta());    
+                e.set(h_charge, prim_lep.charge());    
+            }
+            
         }
         return true;
     }
 
 private:
-    Event::Handle<float> h;
+    Event::Handle<float> h_pt;
+    Event::Handle<float> h_eta;
+    Event::Handle<int> h_charge;
     Event::Handle<FlavorParticle> h_prim_lep;
-};  // LeptonPtProducer
+};  // PrimaryLeptonInfoProducer
 
 
 class NLeptonsProducer: public AnalysisModule {

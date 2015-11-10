@@ -72,7 +72,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
     v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
-    v_pre_modules.emplace_back(new LeptonPtProducer(ctx));
+    v_pre_modules.emplace_back(new PrimaryLeptonInfoProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
     if (version == "Run2015D_Mu") {
         v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS_DATA, "trigger_accept"));

@@ -17,8 +17,7 @@ import varial.history
 
 
 # varial.settings.debug_mode = True
-input_pat = '/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/' \
-            'Run2-ntuple/*.root'
+input_pat = './Hadd/*.root'
 # input_pat = '*.root'
 
 
