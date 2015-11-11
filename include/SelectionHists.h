@@ -78,15 +78,16 @@ public:
         v_all_items.insert(v_all_items.begin() + pos, sel);
     }
 
+    void insert_additional_hist(Hists * hists) {
+        v_hists.push_back(move(unique_ptr<Hists>(hists)));
+    }
+
     virtual void fill(const Event & event) override {
         const auto & v_accept = event.get(h_sel_res);
-        assert(v_accept.size() == v_hists.size() && v_accept.size() == v_all_items.size());
+        assert(v_accept.size() == v_all_items.size());
         for (unsigned i=0; i<v_hists.size(); ++i) {
             bool accept_sels = true;
             for (unsigned j=0; j<v_accept.size(); ++j) {
-                // if (i==j) {
-                //     continue;
-                // }
                 for (const string & sel : v_selections) {
                     if (sel == v_all_items[j] && !v_accept[j]) {
                         accept_sels = false;
