@@ -25,8 +25,8 @@ using namespace std;
 
 class ExtendedEventHists : public EventHists {
 public:
-    ExtendedEventHists(uhh2::Context & ctx, const std::string & dirname) :
-        EventHists(ctx, dirname), h_btags_(ctx.get_handle<int>("n_btags"))
+    ExtendedEventHists(uhh2::Context & ctx, const std::string & dirname, const std::string & h_btags = "n_btags") :
+        EventHists(ctx, dirname), h_btags_(ctx.get_handle<int>(h_btags))
         // h_toptags_(ctx.get_handle<int>("n_toptags")),
         // h_higgstags_(ctx.get_handle<int>("n_higgstags"))
         {

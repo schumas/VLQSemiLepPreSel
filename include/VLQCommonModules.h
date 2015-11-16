@@ -869,11 +869,12 @@ public:
     explicit TwoDCutHist(Context & ctx,
                          const string & dirname,
                          const string & dr_name = "TwoDCut_dr",
-                         const string & pt_name = "TwoDCut_ptrel"):
+                         const string & pt_name = "TwoDCut_ptrel",
+                         const string & h_name = "TwoDCut"):
         Hists(ctx, dirname),
         h_dr(ctx.get_handle<float>(dr_name)),
         h_pt(ctx.get_handle<float>(pt_name)),
-        hist(book<TH2F>("TwoDCut",
+        hist(book<TH2F>(h_name,
                         ";min #DeltaR(lep., jet);min p_{T,rel}(lep., jet)",
                         200, 0., 1., 200, 0., 500.)) {}
 
