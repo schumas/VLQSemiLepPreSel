@@ -367,10 +367,17 @@ public:
     explicit TwoDCutProducer(Context & ctx,
                              const string & primlep_name = "PrimaryLepton",
                              const string & dr_name = "TwoDCut_dr",
-                             const string & pt_name = "TwoDCut_ptrel"):
+                             const string & pt_name = "TwoDCut_ptrel",
+                             bool declare_for_output = false):
         h_dr(ctx.get_handle<float>(dr_name)),
         h_pt(ctx.get_handle<float>(pt_name)),
-        h_prim_lep(ctx.get_handle<FlavorParticle>(primlep_name)) {}
+        h_prim_lep(ctx.get_handle<FlavorParticle>(primlep_name)) 
+    {
+        if (declare_for_output) {
+            ctx.declare_event_output<float>(dr_name);
+            ctx.declare_event_output<float>(pt_name);
+        }
+    }
 
     bool process(Event & e) override {
         if (e.is_valid(h_prim_lep)) {

@@ -10,6 +10,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/MuonIds.h"
 #include "UHH2/common/include/JetIds.h"
+#include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/TTbarReconstruction.h"
 #include "UHH2/common/include/PartonHT.h"
 #include "UHH2/common/include/EventVariables.h"
@@ -25,6 +26,12 @@
 
 using namespace std;
 using namespace uhh2;
+
+
+template <typename TYPE>
+static bool is_true(const TYPE &, const Event &) {
+    return true;
+}
 
 
 class VLQSemiLepPreSel: public AnalysisModule {
@@ -59,29 +66,57 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)));
-    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.1)));
+    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.5)));
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
+    commonObjectCleaning->disable_jersmear();
     commonObjectCleaning->init(ctx);
     common_modules_with_lumi_sel.reset(commonObjectCleaning);
+
+    if (type == "MC") {
+        v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
+            JERFiles::Summer15_25ns_L123_AK8PFchs_MC, 
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
+            JERFiles::Summer15_25ns_L123_AK4PFchs_MC,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        // v_pre_modules.emplace_back(new GenericTopJetCleaner(ctx,
+        //     PtEtaCut(150., 2.4), 
+        //         "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+    } else {
+        v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
+            JERFiles::Summer15_25ns_L123_AK8PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
+            JERFiles::Summer15_25ns_L123_AK4PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        // v_pre_modules.emplace_back(new GenericTopJetCleaner(ctx,
+        //     PtEtaCut(125., 2.4), 
+        //         "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+    }
 
     v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", prim_lep_min_ele_pt, prim_lep_min_mu_pt));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(30., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_higgstags", TopJetId(HiggsTag())));
-    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, "topjets", "n_toptags", TopJetId(CMSTopTag())));
+    v_pre_modules.emplace_back(new CollectionSizeProducer<TopJet>(ctx, 
+        "patJetsAk8CHSJetsSoftDropPacked_daughters", "n_hcands", 
+            TopJetId(HiggsTag(40., 99999., is_true<Jet>))));
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new PrimaryLeptonInfoProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
     if (version == "Run2015D_Mu") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS_DATA, "trigger_accept"));
+        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
+            PRESEL_TRIGGER_PATHS_DATA, "trigger_accept"));
     } else if (version == "Run2015D_Ele") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_ELE_VETO, "trigger_accept"));
+        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
+            PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_ELE_VETO, "trigger_accept"));
     } else if (version == "Run2015D_Had") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_HAD_VETO, "trigger_accept"));
+        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
+            PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_HAD_VETO, "trigger_accept"));
     } else {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, PRESEL_TRIGGER_PATHS, "trigger_accept"));
+        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
+            PRESEL_TRIGGER_PATHS, "trigger_accept"));
     }
 
     if (type == "MC") {
@@ -101,10 +136,10 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_hists_post.emplace_back(new VLQSemiLepPreSelHists(ctx, "PreSelCtrlPost"));
 
     // append 2D cut
-    unsigned pos_2d_cut = 2;
-    sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, DR_2D_CUT_PRESEL, DPT_2D_CUT_PRESEL));
-    nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
-    cf_hists->insert_step(pos_2d_cut, "2D cut");
+    // unsigned pos_2d_cut = 2;
+    // sel_module->insert_selection(pos_2d_cut, new TwoDCutSel(ctx, DR_2D_CUT_PRESEL, DPT_2D_CUT_PRESEL));
+    // nm1_hists->insert_hists(pos_2d_cut, new TwoDCutHist(ctx, "Nm1Selection"));
+    // cf_hists->insert_step(pos_2d_cut, "2D cut");
 
     // general histograms
     v_hists_post.emplace_back(new HistCollector(ctx, "EventHistsPost", type == "MC"));

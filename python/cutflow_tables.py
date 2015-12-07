@@ -227,26 +227,26 @@ class CutflowTableTxt(varial.tools.Tool):
 
 
 ################################################################# tex table ###
-tex_template = [
-    r"\documentclass[10pt,fullpage]{article}",
-    r"\pagestyle{empty}",
-    r"\usepackage[landscape]{geometry}  % [margin=5mm, ]",
-    r"\usepackage[usenames]{color} % Farbunterstuetzung",
-    r"\usepackage{amssymb}	% Mathe",
-    r"\usepackage{amsmath} % Mathe",
-    r"\usepackage[utf8]{inputenc} % Direkte Eingabe von Umlauten",
-    r"\begin{document}",
-    r"\begin{table}",
-    r"\input{cutflow_tabular.tex}",
-    r"\end{table}",
-    r"\end{document}",
-]
+tex_template = r"""
+\documentclass[10pt,fullpage]{article}
+\pagestyle{empty}
+\usepackage[landscape]{geometry}  % [margin=5mm, ]
+\usepackage[usenames]{color} % Farbunterstuetzung
+\usepackage{amssymb}	% Mathe
+\usepackage{amsmath} % Mathe
+\usepackage[utf8]{inputenc} % Direkte Eingabe von Umlauten
+\begin{document}
+\begin{table}
+\input{cutflow_tabular.tex}
+\end{table}
+\end{document}
+"""
 
 
 class CutflowTableTex(varial.tools.Tool):
     """Reads cutflow histos from pool and creates latex table code."""
 
-    def __init__(self, name=None, compile_latex=False):
+    def __init__(self, compile_latex=False, name=None):
         super(CutflowTableTex, self).__init__(name)
         self.cont           = None
         self.table_lines    = []
@@ -312,10 +312,10 @@ class CutflowTableTex(varial.tools.Tool):
         with open(self.cwd + "cutflow_tabular.tex", "w") as f:
             f.writelines(map(lambda l: l + "\n", self.table_lines))
 
-        with open(self.cwd + "cutflow.tex", "w") as f:
-            f.writelines(map(lambda l: l + "\n", tex_template))
-
         if self.compile_latex:
+            with open(self.cwd + "cutflow.tex", "w") as f:
+                f.write(tex_template)
+
             ret = subprocess.call(
                 ["pdflatex", "cutflow.tex"],
                 cwd=self.cwd
@@ -368,15 +368,18 @@ def gen_rebin_cutflow(wrps):
                 last_bin = i
                 break
 
-        yield varial.op.trim(w, False, right=last_bin)
+        yield varial.op.trim(w, right=last_bin)
 
 
 def mk_cutflow_chain(input_pat, loader_hook):
     cutflow_histos = varial.tools.HistoLoader(
         name='CutflowHistos',
         pattern=input_pat,
-        filter_keyfunc=lambda w: 'cutflow' == w.in_file_path.split('/')[-1],
-        hook_loaded_histos=lambda w: gen_rebin_cutflow(loader_hook(w))
+        filter_keyfunc=lambda w: (
+            'cutflow' == w.in_file_path.split('/')[-1] and
+            not w.sample.startswith('Signal_')
+        ),
+        hook_loaded_histos=lambda w: gen_rebin_cutflow(loader_hook(w)),
     )
 
     #class AxisTitles(varial.util.Decorator):
@@ -391,8 +394,6 @@ def mk_cutflow_chain(input_pat, loader_hook):
         'CutflowStack',
         stack=True,
         input_result_path='../CutflowHistos',
-        save_log_scale=True,
-        canvas_decorators=[varial.rendering.Legend]
     )
 
     cutflow_normed_plots = varial.tools.Plotter(
@@ -401,16 +402,15 @@ def mk_cutflow_chain(input_pat, loader_hook):
         plot_grouper=varial.plotter.plot_grouper_by_in_file_path,
         hook_loaded_histos=gen.gen_norm_to_max_val,
         input_result_path='../CutflowHistos',
-        save_log_scale=True,
         canvas_decorators=[varial.rendering.Legend]
     )
 
     return varial.tools.ToolChain("CutflowTools", [
         cutflow_histos,
         cutflow_stack_plots,
-        cutflow_normed_plots,
+        # cutflow_normed_plots,
         CutflowTableContent(),
         CutflowTableTxt(),
-        # CutflowTableTex(None, True),
+        CutflowTableTex(),
     ])
 

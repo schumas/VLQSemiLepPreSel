@@ -78,7 +78,6 @@ def loader_hook_norm(wrps):
 
 def plotter_factory(**kws):
     kws['hook_loaded_histos'] = loader_hook
-    kws['save_lin_log_scale'] = True
     # kws['canvas_decorators'] += [rnd.TitleBox(
     #       text='CMS Simulation 20fb^{-1} @ 13TeV')]
     return varial.tools.Plotter(**kws)
@@ -86,13 +85,11 @@ def plotter_factory(**kws):
 
 def plotter_factory_norm(**kws):
     kws['hook_loaded_histos'] = loader_hook_norm
-    kws['save_lin_log_scale'] = True
     return varial.tools.Plotter(**kws)
 
 
 def plotter_factory_stack(**kws):
     kws['hook_loaded_histos'] = loader_hook
-    kws['save_lin_log_scale'] = True
     kws['plot_setup'] = gen.mc_stack_n_data_sum
     return varial.tools.Plotter(**kws)
 
@@ -125,8 +122,6 @@ if __name__ == '__main__':
             cutflow_tables.mk_cutflow_chain(input_pat, loader_hook),
         ]
     )
-
-    time.sleep(1)
 
     #import cProfile
     #varial.settings.use_parallel_chains = False

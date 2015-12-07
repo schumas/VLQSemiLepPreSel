@@ -12,19 +12,18 @@ typedef SelectionItemData<float>    SelDatF;
 typedef SelectionItemData<double>   SelDatD;
 
 
-static const float DR_2D_CUT_PRESEL = 0.4;
-static const float DPT_2D_CUT_PRESEL = 40.0;
+static const float DR_2D_CUT_PRESEL = 0.2;
+static const float DPT_2D_CUT_PRESEL = 20.0;
 
-static const float prim_lep_min_ele_pt = 35;
+static const float prim_lep_min_ele_pt = 99999.;
 static const float prim_lep_min_mu_pt = 29;
 
 
 static const vector<shared_ptr<SelectionItem>> SEL_ITEMS_PRESEL {
-    shared_ptr<SelectionItem>(new SelDatI("trigger_accept",    "trigger accept",                            2, -.5, 1.5      ,1      )),
     shared_ptr<SelectionItem>(new SelDatF("primary_lepton_pt", ";primary lepton p_{T}; events / 20 GeV",    40, 0, 800       ,20     )),
-    shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    ";leading jet p_{T}; events / 20 GeV",       40, 0, 800       ,100    )),
-    shared_ptr<SelectionItem>(new SelDatD("ST",                ";ST; events / 50 GeV",                      50, 0, 2500      ,400    )),
-    shared_ptr<SelectionItem>(new SelDatI("n_btags",           "number of loose btags",                     11, -.5, 10.5    ,1      )),
+    shared_ptr<SelectionItem>(new SelDatF("leading_jet_pt",    ";leading jet p_{T}; events / 20 GeV",       40, 0, 800       ,80     )),
+    shared_ptr<SelectionItem>(new SelDatD("ST",                ";ST; events / 50 GeV",                      50, 0, 2500      ,300    )),
+    shared_ptr<SelectionItem>(new SelDatI("n_hcands",          ";number of ak8 jet with mass > 40; events",  6, -.5, 5.5     ,1      )),
 };
 
 

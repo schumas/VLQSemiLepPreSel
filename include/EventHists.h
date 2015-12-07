@@ -252,6 +252,10 @@ public:
 
     virtual void fill(const uhh2::Event & event) override
     {
+        if (!collection.empty() && !event.is_valid(h_topjets)) {
+            return;
+        }
+
         TopJetHists::fill(event);
 
         auto w = event.weight;
