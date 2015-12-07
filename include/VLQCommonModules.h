@@ -20,7 +20,7 @@
 using namespace std;
 using namespace uhh2;
 
-namespace {
+// namespace {
 
 template<typename T>
 class AbsValueProducer: public AnalysisModule {
@@ -876,7 +876,7 @@ public:
         h_pt(ctx.get_handle<float>(pt_name)),
         hist(book<TH2F>(h_name,
                         ";min #DeltaR(lep., jet);min p_{T,rel}(lep., jet)",
-                        200, 0., 1., 200, 0., 500.)) {}
+                        20, 0., 1., 25, 0., 500.)) {}
 
     virtual void fill(const Event & e) override {
         if (!e.is_valid(h_dr) || !e.is_valid(h_pt)) {
@@ -973,4 +973,4 @@ private:
 };
 
 
-} // namespace
+// } // namespace
