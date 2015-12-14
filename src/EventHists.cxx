@@ -15,7 +15,6 @@ using namespace uhh2;
 
 HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plots, JetId const & btag_id) :
     Hists(ctx, dirname),
-    lumi_hist(new LuminosityHists(ctx, dirname+"/LuminosityHists")),
     el_hists(new ExtendedElectronHists(ctx, dirname+"/ElectronHists", gen_plots)),
     mu_hists(new ExtendedMuonHists(ctx, dirname+"/MuonHists", gen_plots)),
     tau_hists(new TauHists(ctx, dirname+"/TauHists")),
@@ -25,7 +24,8 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
     heptopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/HEPTopJetHists", btag_id, 4, "patJetsHepTopTagCHSPacked_daughters")),
     ca8prunedtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/Ak8SoftDropTopJetHists", btag_id, 4, "patJetsAk8CHSJetsSoftDropPacked_daughters")),
     ca15filteredtopjet_hists(new ExtendedTopJetHists(ctx, dirname+"/CA15FilteredTopJetHists", btag_id, 4, "patJetsCa15CHSJetsFilteredPacked_daughters")),
-    gen_hists(gen_plots ? new CustomizableGenHists(ctx, dirname+"/GenHists", "parton_ht") : NULL)
+    gen_hists(gen_plots ? new CustomizableGenHists(ctx, dirname+"/GenHists", "parton_ht") : NULL),
+    lumi_hist((ctx.get("dataset_type", "") != "MC") ? new LuminosityHists(ctx, dirname+"/LuminosityHists") : NULL)
     {
         if (gen_hists)
         {
@@ -51,7 +51,7 @@ HistCollector::HistCollector(Context & ctx, const string & dirname, bool gen_plo
     } 
 
 void HistCollector::fill(const Event & event) {
-    lumi_hist->fill(event);
+    if (lumi_hist) lumi_hist->fill(event);
     el_hists->fill(event);
     mu_hists->fill(event);
     tau_hists->fill(event);

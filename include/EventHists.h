@@ -25,15 +25,24 @@ using namespace std;
 
 class ExtendedEventHists : public EventHists {
 public:
-    ExtendedEventHists(uhh2::Context & ctx, const std::string & dirname, const std::string & h_btags = "n_btags") :
-        EventHists(ctx, dirname), h_btags_(ctx.get_handle<int>(h_btags))
+    ExtendedEventHists(uhh2::Context & ctx, const std::string & dirname,
+        const std::string & h_btags_loose = "n_btags",
+        const std::string & h_btags_medium = "",
+        const std::string & h_btags_tight = ""
+        ) :
+        EventHists(ctx, dirname),
+        h_btags_loose_(ctx.get_handle<int>(h_btags_loose)),
+        h_btags_medium_(ctx.get_handle<int>(h_btags_medium)),
+        h_btags_tight_(ctx.get_handle<int>(h_btags_tight))
         // h_toptags_(ctx.get_handle<int>("n_toptags")),
         // h_higgstags_(ctx.get_handle<int>("n_higgstags"))
         {
             Weights = book<TH1F>("Weights_own", "weights", 2000,0,200);
             MET = book<TH1F>("MET_own", "missing E_{T}", 50,0,1000);
             HTLep = book<TH1F>("HTLep_own", "H_{T} Lep", 50, 0, 1000);
-            h_n_btags = book<TH1F>("jets_Nbs", "N_{b-tags}", 20, 0, 20);
+            h_n_btags_loose = book<TH1F>("jets_Nbs_loose", "N_{b-tags loose}", 11, -.5, 10.5);
+            h_n_btags_medium = book<TH1F>("jets_Nbs_medium", "N_{b-tags medium}", 11, -.5, 10.5);
+            h_n_btags_tight = book<TH1F>("jets_Nbs_tight", "N_{b-tags tight}", 11, -.5, 10.5);
             // h_n_toptags = book<TH1F>("jets_Ntops", "N_{cms top tags}", 20, 0, 20);
             // h_n_higgstags = book<TH1F>("jets_Nhiggs", "N_{higgs tags}", 20, 0, 20);
 
@@ -43,19 +52,23 @@ public:
     virtual void fill(const uhh2::Event & event) override {
         EventHists::fill(event);
         double w = event.weight;
-        int n_btags = event.is_valid(h_btags_) ? event.get(h_btags_) : 0;
+        int n_btags_loose = event.is_valid(h_btags_loose_) ? event.get(h_btags_loose_) : 0;
+        int n_btags_medium = event.is_valid(h_btags_medium_) ? event.get(h_btags_medium_) : 0;
+        int n_btags_tight = event.is_valid(h_btags_tight_) ? event.get(h_btags_tight_) : 0;
         // int n_toptags = event.is_valid(h_toptags_) ? event.get(h_toptags_) : 0;
         // int n_higgstags = event.is_valid(h_higgstags_) ? event.get(h_higgstags_) : 0;        
 
-        h_n_btags->Fill(n_btags, w);
+        h_n_btags_loose->Fill(n_btags_loose, w);
+        h_n_btags_medium->Fill(n_btags_medium, w);
+        h_n_btags_tight->Fill(n_btags_tight, w);
         // h_n_toptags->Fill(n_toptags, w);
         // h_n_higgstags->Fill(n_higgstags, w);
 
     }
 
 private:
-    TH1F *h_n_btags; // , *h_n_toptags, *h_n_higgstags
-    uhh2::Event::Handle<int> h_btags_; // , h_toptags_, h_higgstags_
+    TH1F *h_n_btags_loose, *h_n_btags_medium, *h_n_btags_tight; // , *h_n_toptags, *h_n_higgstags
+    uhh2::Event::Handle<int> h_btags_loose_, h_btags_medium_, h_btags_tight_; // , h_toptags_, h_higgstags_
 };
 
 // new el hists class based on the ElectronHists class in the common package but changing the histogram ranges for some of the histograms
@@ -82,7 +95,33 @@ public:
             isolation   = book<TH1F>("isolation_own",   "relIso electron",          20,0,4);
             isolation_1 = book<TH1F>("isolation_1_own", "relIso electron 1",        20,0,4);
             isolation_2 = book<TH1F>("isolation_2_own", "relIso electron 2",        20,0,4);
+            // deltaR_ak8 = book<TH1F>("deltaR_ak8_cleaned", "dR closest Ak8 jet", 40, 0., 2.);
+            // deltaR_ak8_uncleaned = book<TH1F>("deltaR_ak8_uncleaned", "dR closest Ak8 jet", 40, 0., 2.);
+            // h_ak8 = ctx.get_handle<vector<TopJet>>("topjets");
+            // h_ak8_uncleaned = ctx.get_handle<vector<TopJet>>("ak8jets_uncleaned");
         }
+    // virtual void fill(const uhh2::Event & event) override {
+    //     MuonHists::fill(event);
+    //     if (event.muons->size()) {
+    //         const Muon & muon = (*event.muons)[0];
+    //         if (event.is_valid(h_ak8)) {
+    //             vector<TopJet> const & ak8_jets = event.get(h_ak8);
+    //             auto nj = closestParticle(muon, ak8_jets);
+    //             auto drmin_val = nj ? deltaR(muon, *nj) : numeric_limits<float>::infinity();
+    //             deltaR_ak8->Fill(drmin_val, event.weight);
+    //         }
+    //         if (event.is_valid(h_ak8_uncleaned)) {
+    //             vector<TopJet> const & ak8_jets = event.get(h_ak8_uncleaned);
+    //             auto nj = closestParticle(muon, ak8_jets);
+    //             auto drmin_val = nj ? deltaR(muon, *nj) : numeric_limits<float>::infinity();
+    //             deltaR_ak8_uncleaned->Fill(drmin_val, event.weight);
+    //         }
+    //     }
+    // }
+
+protected:
+    TH1F *deltaR_ak8, *deltaR_ak8_uncleaned;
+    Event::Handle<std::vector<TopJet>> h_ak8, h_ak8_uncleaned;
 
 };
 
@@ -247,7 +286,6 @@ public:
     virtual void fill(const uhh2::Event & ev) override;
 
 private:
-    LuminosityHists * lumi_hist;
     ExtendedElectronHists * el_hists;
     ExtendedMuonHists * mu_hists;
     TauHists * tau_hists;
@@ -258,4 +296,5 @@ private:
     ExtendedTopJetHists * ca8prunedtopjet_hists;
     ExtendedTopJetHists * ca15filteredtopjet_hists;
     CustomizableGenHists * gen_hists;
+    LuminosityHists * lumi_hist;
 };
