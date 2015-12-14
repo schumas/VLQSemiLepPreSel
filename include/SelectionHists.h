@@ -146,7 +146,7 @@ public:
         const float w = e.weight;
         const auto & sel = e.get(h_sel);
         assert(sel.size() == v_names.size());
-        // h->Fill("input", w);
+        h->Fill("no sel.", w);
         for (unsigned i = 0; i < v_names.size(); ++i) {
             if (sel[i]) {
                 h->Fill(v_names[i].c_str(), w);
@@ -159,7 +159,7 @@ public:
 private:
     void initialize_histo() {
         h->SetBit(TH1::kCanRebin);
-        // h->Fill("input", 1e-7);
+        h->Fill("no sel.", 1e-7);
         for (const string & name : v_names) {
             h->Fill(name.c_str(), 1e-7);
         }
