@@ -958,6 +958,105 @@ private:
 };  // METProducer
 
 
+class TriggerXOR: public AnalysisModule {
+public:
+    explicit TriggerXOR(Context & ctx,
+                        const string & inp1,
+                        const string & inp2,
+                        const string & outp):
+        h_inp1(ctx.get_handle<int>(inp1)),
+        h_inp2(ctx.get_handle<int>(inp2)),
+        h_outp(ctx.get_handle<int>(outp)) {}
+
+    virtual bool process(Event & e) override {
+        e.set(h_outp, int(e.get(h_inp1) != e.get(h_inp2)));
+        return true;
+    }
+
+private:
+    Event::Handle<int> h_inp1;
+    Event::Handle<int> h_inp2;
+    Event::Handle<int> h_outp;
+};  // TriggerXOR
+
+
+class EleChJetCuts: public AnalysisModule {
+public:
+    explicit EleChJetCuts(Context & ctx,
+                          const string & jets,
+                          const string & trg_el,
+                          const string & out):
+        h_jets(ctx.get_handle<vector<Jet>>(jets)),
+        h_trg_el(ctx.get_handle<int>(trg_el)),
+        h_out(ctx.get_handle<int>(out)) {}
+
+    virtual bool process(Event & e) override {
+        const auto & jets = e.get(h_jets);
+        if (e.get(h_trg_el)) {
+            e.set(h_out, int(jets.size() > 1 &&
+                             jets[0].pt() >= 250. &&
+                             jets[1].pt() >= 65.));
+        } else {
+            e.set(h_out, 1);  // if the ele trigger did not fire, return true
+        }
+        return true;
+    }
+
+private:
+    Event::Handle<vector<Jet>> h_jets;
+    Event::Handle<int> h_trg_el;
+    Event::Handle<int> h_out;
+};  // EleChJetCuts
+
+
+class TriggerAwarePrimaryLepton: public AnalysisModule {
+public:
+    explicit TriggerAwarePrimaryLepton(uhh2::Context & ctx,
+                                       const std::string & h_name,
+                                       const std::string & trg_el,
+                                       const std::string & trg_mu,
+                                       float min_el_pt = 0.,
+                                       float min_mu_pt = 0.) :
+    h_primlep(ctx.get_handle<FlavorParticle>(h_name)),
+    h_trg_el(ctx.get_handle<int>(trg_el)),
+    h_trg_mu(ctx.get_handle<int>(trg_mu)),
+    min_el_pt_(min_el_pt),
+    min_mu_pt_(min_mu_pt) {}
+
+    virtual bool process(Event & e) override {
+        double ptmax = -infinity;
+        FlavorParticle primlep;
+        if(e.electrons && e.get(h_trg_el)) {
+            for(const auto & ele : *e.electrons) {
+                float ele_pt = ele.pt();
+                if(ele_pt > min_el_pt_ && ele_pt > ptmax) {
+                    ptmax = ele_pt;
+                    primlep = ele;
+                }
+            }
+        }
+        if(e.muons && e.get(h_trg_mu)) {
+            for(const auto & mu : *e.muons) {
+                float mu_pt = mu.pt();
+                if(mu_pt > min_mu_pt_ && mu_pt > ptmax) {
+                    ptmax = mu_pt;
+                    primlep = mu;
+                }
+            }
+        }
+        e.set(h_primlep, std::move(primlep));
+        return true;
+    }
+
+private:
+    Event::Handle<FlavorParticle> h_primlep;
+    Event::Handle<int> h_trg_el;
+    Event::Handle<int> h_trg_mu;
+    float min_el_pt_;
+    float min_mu_pt_;
+};  // TriggerAwarePrimaryLepton
+
+
 class NInputEventsHist: public Hists {
 public:
     explicit NInputEventsHist(Context & ctx):
