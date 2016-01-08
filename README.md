@@ -121,3 +121,17 @@ v8 (for 25ns runs)
   - HLT_IsoMu24_eta2p1_v*
   - HLT_Mu45_eta2p1_v*
   - HLT_Mu15_IsoVVVL_PFHT600_v*
+
+
+v10 (for 25ns runs)
+------------------
+
+- IDs:
+  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.1)
+  - MuonIDMedium, PtEtaCut(20.0, 2.1)
+  - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0, 7.0)
+
+- leading ak4Jet pT > 80 GeV
+- primary lepton pT > 20 GeV
+- ST > 200 GeV
+- one ak8 jet with mass > 40 GeV

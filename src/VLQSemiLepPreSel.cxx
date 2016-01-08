@@ -67,7 +67,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0,7.0)));
     commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(20.0, 2.5)));
-    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDTight(),PtEtaCut(20.0, 2.1)));
+    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(20.0, 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
     commonObjectCleaning->disable_jersmear();
@@ -96,6 +96,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         //         "patJetsAk8CHSJetsSoftDropPacked_daughters"));
     }
 
+    v_pre_modules.emplace_back(new EventWeightOutputHandle(ctx, "weight"));
     v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", prim_lep_min_ele_pt, prim_lep_min_mu_pt));
     v_pre_modules.emplace_back(new STCalculator(ctx, "ST", JetId(PtEtaCut(30., 2.4))));
     v_pre_modules.emplace_back(new CollectionSizeProducer<Jet>(ctx, "jets", "n_btags", JetId(CSVBTag(CSVBTag::WP_LOOSE))));
@@ -105,19 +106,19 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new LeadingJetPtProducer(ctx));
     v_pre_modules.emplace_back(new PrimaryLeptonInfoProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
-    if (version == "Run2015D_Mu") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
-            PRESEL_TRIGGER_PATHS_DATA, "trigger_accept"));
-    } else if (version == "Run2015D_Ele") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
-            PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_ELE_VETO, "trigger_accept"));
-    } else if (version == "Run2015D_Had") {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
-            PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_HAD_VETO, "trigger_accept"));
-    } else {
-        v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx, 
-            PRESEL_TRIGGER_PATHS, "trigger_accept"));
-    }
+    // if (version == "Run2015D_Mu") {
+    //     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx,
+    //         PRESEL_TRIGGER_PATHS_DATA, "trigger_accept"));
+    // } else if (version == "Run2015D_Ele") {
+    //     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx,
+    //         PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_ELE_VETO, "trigger_accept"));
+    // } else if (version == "Run2015D_Had") {
+    //     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx,
+    //         PRESEL_TRIGGER_PATHS_DATA, PRESEL_TRIGGER_PATHS_DATA_HAD_VETO, "trigger_accept"));
+    // } else {
+    //     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx,
+    //         PRESEL_TRIGGER_PATHS, "trigger_accept"));
+    // }
 
     if (type == "MC") {
         v_pre_modules.emplace_back(new PartonHT(ctx.get_handle<double>("parton_ht")));
