@@ -105,7 +105,7 @@ v8 (for 25ns runs)
 ------------------
 
 - IDs:
-  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.1)
+  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.5)
   - MuonIDTight, PtEtaCut(20.0, 2.1)
   - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0, 7.0)
 
@@ -127,7 +127,7 @@ v10 (for 25ns runs)
 ------------------
 
 - IDs:
-  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.1)
+  - ElectronID_Spring15_25ns_medium_noIso, PtEtaCut(20.0, 2.5)
   - MuonIDMedium, PtEtaCut(20.0, 2.1)
   - JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.0, 7.0)
 
@@ -135,3 +135,13 @@ v10 (for 25ns runs)
 - primary lepton pT > 20 GeV
 - ST > 200 GeV
 - one ak8 jet with mass > 40 GeV
+
+
+v11
+---
+
+as v10 but with
+- IDs:
+  - ElectronID_MVAnotrig_Spring15_25ns_tight, PtEtaCut(50.0, 2.5)
+  - MuonIDMedium, PtEtaCut(45.0, 2.1)
+
