@@ -352,34 +352,38 @@ class CutflowTableTex(varial.tools.Tool):
         self.copy_to_target_dir()
 
 
-def gen_rebin_cutflow(wrps):
-    last_bin = None
+def rebin_cutflow(wrps):
+    wrps = list(wrps)
+    last_bin = 2
     for w in wrps:
+        maybe_last_bin = 0
+        for i in xrange(w.histo.GetNbinsX(), last_bin, -1):
+            if w.histo.GetBinContent(i) == w.histo.GetBinContent(i-1):
+                continue
+            maybe_last_bin = i
+            break
 
-        if w.obj.Integral() < 1e-20:
-            yield w
-            continue
+        if last_bin < maybe_last_bin:
+            last_bin = maybe_last_bin
 
-        w = varial.op.trim(w)
-        if not last_bin:
-            for i in xrange(w.histo.GetNbinsX(), 0, -1):
-                if w.histo.GetBinContent(i) == w.histo.GetBinContent(i - 1):
-                    continue
-                last_bin = i
-                break
-
-        yield varial.op.trim(w, right=last_bin)
+    return gen.gen_trim(wrps, left=False, right=last_bin)
 
 
-def mk_cutflow_chain(input_pat, loader_hook):
+def mk_cutflow_chain(input_pat, loader_hook, filter_keyfunc=None):
+
+    cutflow_fk = lambda w: (w.in_file_path.split('/')[-1] == 'cutflow' and
+                            not w.sample.startswith('Signal_'))
+
+    if filter_keyfunc:
+        final_fk = lambda w: filter_keyfunc(w) and cutflow_fk(w)
+    else:
+        final_fk = cutflow_fk
+
     cutflow_histos = varial.tools.HistoLoader(
         name='CutflowHistos',
         pattern=input_pat,
-        filter_keyfunc=lambda w: (
-            'cutflow' == w.in_file_path.split('/')[-1] and
-            not w.sample.startswith('Signal_')
-        ),
-        hook_loaded_histos=lambda w: gen_rebin_cutflow(loader_hook(w)),
+        filter_keyfunc=final_fk,
+        hook_loaded_histos=lambda w: rebin_cutflow(loader_hook(w, 0)),
     )
 
     #class AxisTitles(varial.util.Decorator):

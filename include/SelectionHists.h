@@ -131,7 +131,6 @@ public:
         Hists(ctx, dir),
         h_sel(ctx.get_handle<vector<bool>>(sel_helper.s_vec_bool())),
         v_names(sel_helper.get_item_names()),
-        h(book<TH1D>("cutflow", "", 1, 0, -1)),
         init_done(false) {}
 
     void insert_step(unsigned pos, const string & name) {
@@ -158,7 +157,7 @@ public:
 
 private:
     void initialize_histo() {
-        h->SetBit(TH1::kCanRebin);
+        h = book<TH1D>("cutflow", "", v_names.size()+1, 0, v_names.size()+1);
         h->Fill("no sel.", 1e-7);
         for (const string & name : v_names) {
             h->Fill(name.c_str(), 1e-7);

@@ -32,6 +32,14 @@ settings.defaults_Legend.update({
     'reverse': True
 })
 
+settings.stacking_order = [
+    'TTbar',
+    'WJets',
+    'SingleT',
+    'DYJets',
+    'QCD',
+]
+
 settings.box_text_size = 0.05
 settings.canvas_size_x = 550
 settings.canvas_size_y = 400

@@ -204,6 +204,10 @@ public:
         v_sel.insert(v_sel.begin() + pos, move(unique_ptr<Selection>(sel)));
     }
 
+    void replace_selection(unsigned pos, Selection * sel) {
+        v_sel[pos] = move(unique_ptr<Selection>(sel));
+    }
+
     virtual bool process(Event & event) override {
         bool all_accepted = true;
         vector<bool> v_accept(v_sel.size());

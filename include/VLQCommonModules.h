@@ -980,33 +980,41 @@ private:
 };  // TriggerXOR
 
 
-class EleChJetCuts: public AnalysisModule {
+template<typename HANDLETYPE>
+class TriggerAwareHandleSelection: public Selection {
 public:
-    explicit EleChJetCuts(Context & ctx,
-                          const string & jets,
-                          const string & trg_el,
-                          const string & out):
-        h_jets(ctx.get_handle<vector<Jet>>(jets)),
-        h_trg_el(ctx.get_handle<int>(trg_el)),
-        h_out(ctx.get_handle<int>(out)) {}
+    explicit TriggerAwareHandleSelection(Context & ctx,
+                                         const string & handlename,
+                                         const string & triggerhandlename,
+                                         HANDLETYPE min_val_with_trg=-99999.0,
+                                         HANDLETYPE min_val_wout_trg=-99999.0):
+        name_(handlename),
+        hndl(ctx.get_handle<HANDLETYPE>(handlename)),
+        hndl_trg(ctx.get_handle<int>(triggerhandlename)),
+        min_with_trg_(min_val_with_trg),
+        min_wout_trg_(min_val_wout_trg) {}
 
-    virtual bool process(Event & e) override {
-        const auto & jets = e.get(h_jets);
-        if (e.get(h_trg_el)) {
-            e.set(h_out, int(jets.size() > 1 &&
-                             jets[0].pt() >= 250. &&
-                             jets[1].pt() >= 65.));
-        } else {
-            e.set(h_out, 1);  // if the ele trigger did not fire, return true
+    virtual bool passes(const Event & e) override {
+        if (!e.is_valid(hndl)) {
+            return false;
         }
-        return true;
+        HANDLETYPE value = e.get(hndl);
+        if (e.get(hndl_trg)) {
+            return min_with_trg_ <= value;
+        } else {
+            return min_wout_trg_ <= value;
+        }
     }
 
+    const string &name() const {return name_;}
+
 private:
-    Event::Handle<vector<Jet>> h_jets;
-    Event::Handle<int> h_trg_el;
-    Event::Handle<int> h_out;
-};  // EleChJetCuts
+    string name_;
+    Event::Handle<HANDLETYPE> hndl;
+    Event::Handle<int> hndl_trg;
+    HANDLETYPE min_with_trg_;
+    HANDLETYPE min_wout_trg_;
+};
 
 
 class TriggerAwarePrimaryLepton: public AnalysisModule {

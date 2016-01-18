@@ -42,10 +42,12 @@ def fix_mc_norm(wrps):
         yield w
 
 
-def loader_hook(wrps):
+def loader_hook(wrps, rebin_max_bins=40):
+    if rebin_max_bins:
+        wrps = varial.gen.gen_noex_rebin_nbins_max(wrps, rebin_max_bins)
+
     # wrps = common.yield_n_objs(wrps, 20)
     wrps = common.add_wrp_info(wrps)
-    wrps = varial.gen.gen_noex_rebin_nbins_max(wrps, 40)
     wrps = sorted(wrps, key=lambda w: w.in_file_path + '__' + w.sample)
 
     #wrps = gen.imap_conditional(
