@@ -1194,18 +1194,28 @@ public:
                             string const & h_weight = "jetpt_weight") :
         h_in_(ctx.get_handle<std::vector<T>>(h_in)),
         offset_(offset), gradient_(gradient),
-        h_weight_(ctx.declare_event_output<float>(h_weight)) {}
+        h_weight_(ctx.declare_event_output<float>(h_weight)) {
+            auto dataset_type = ctx.get("dataset_type");
+            is_mc = dataset_type == "MC";
+            if (!is_mc) {
+                cout << "Warning: JetPtAndMultFixerWeight will not have an effect on "
+                <<" this non-MC sample (dataset_type = '" + dataset_type + "')" << endl;
+                return;
+            }
+        }
 
     virtual bool process(uhh2::Event & event) override {
         if (!event.is_valid(h_in_))
             return false;
         auto const & coll = event.get(h_in_);
-        float weight;
-        for (auto const & part : coll) {
-            float part_pt = part.pt();
-            float sf = std::min(1.0f, offset_ + part_pt * gradient_);
+        float weight = 1.f;
+        if (is_mc) {
+            for (auto const & part : coll) {
+                float part_pt = part.pt();
+                float sf = std::min(1.0f, offset_ + part_pt * gradient_);
 
-            weight *= sf;
+                weight *= sf;
+            }
         }
         event.set(h_weight_, weight);
         // event.weight *= weight;
@@ -1217,6 +1227,7 @@ private:
     uhh2::Event::Handle<std::vector<T>> h_in_;
     float offset_, gradient_;
     uhh2::Event::Handle<float> h_weight_;
+    bool is_mc;
     
 
 };
