@@ -980,6 +980,27 @@ private:
 };  // TriggerXOR
 
 
+class TriggerAwareEventWeight: public AnalysisModule {
+public:
+    explicit TriggerAwareEventWeight(Context & ctx,
+                                     const string & triggerhandlename,
+                                     float weight_factor):
+        hndl_trg(ctx.get_handle<int>(triggerhandlename)),
+        weight_factor_(weight_factor) {}
+
+    virtual bool process(Event & e) override {
+        if (e.get(hndl_trg)) {
+            e.weight *= weight_factor_;
+        }
+        return true;
+    }
+
+private:
+    Event::Handle<int> hndl_trg;
+    float weight_factor_;
+};
+
+
 template<typename HANDLETYPE>
 class TriggerAwareHandleSelection: public Selection {
 public:

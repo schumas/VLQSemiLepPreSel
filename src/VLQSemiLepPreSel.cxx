@@ -61,6 +61,12 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         cout << " " << kv.first << " = " << kv.second << endl;
     }
 
+    if (version == "Run2015D_Ele") {
+        ctx.set("lumi_file", "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_15_patch1/src/UHH2/common/data/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_NoBadBSRuns.root");
+    } else if (version == "Run2015D_Mu") {
+        ctx.set("lumi_file", "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_15_patch1/src/UHH2/common/data/Latest_2015_Golden_JSON.root");
+    }
+
     n_input_events_hist.reset(new NInputEventsHist(ctx));
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
