@@ -106,10 +106,9 @@ except ImportError:
 
 
 class TpTpThetaLimits(ThetaLimits):
-    def __init__(self, brs=None, higgstag_cat='', *args ,**kws):
+    def __init__(self, brs=None, *args ,**kws):
         super(TpTpThetaLimits, self).__init__(*args, **kws)
         self.brs = brs
-        self.higgstag_cat = higgstag_cat
 
     def run(self):
         super(TpTpThetaLimits, self).run()
@@ -124,7 +123,6 @@ class TpTpThetaLimits(ThetaLimits):
             res_obs_xerrors=self.result.res_obs_xerrors,
             res_obs_yerrors=self.result.res_obs_yerrors,
             brs=self.brs,
-            higgstag_cat=self.higgstag_cat,
             masses=list(int(x) for x in self.result.res_exp_x)
         )
 

@@ -814,9 +814,9 @@ public:
                 }
                 return true;
             } else {
-                const TYPE * closest_part = closestParticle<TYPE>(part, comp_coll);
-                if (closest_part){
-                    if (use_min_ ? deltaR(part, *closest_part) <= dyn_mindr : deltaR(part, *closest_part) > dyn_mindr)
+                // const TYPE * closest_part = closestParticle<TYPE>(part, comp_coll);
+                for (auto const & comp_part : comp_coll){
+                    if (use_min_ ? deltaR(part, comp_part) <= dyn_mindr : deltaR(part, comp_part) > dyn_mindr)
                         return false;
                 }
                 return true;
