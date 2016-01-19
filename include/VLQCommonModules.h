@@ -1087,4 +1087,119 @@ private:
 };
 
 
+class PrimaryLeptonFlavInfo: public uhh2::AnalysisModule {
+public:
+    explicit PrimaryLeptonFlavInfo(uhh2::Context & ctx, 
+                           const std::string & h_name="PrimaryLepton",
+                           float min_ele_pt = 0.,
+                           float min_mu_pt = 0.,
+                           const std::string & label_mu="is_muon") :
+        h_primlep(ctx.get_handle<FlavorParticle>(h_name)),
+        min_ele_pt_(min_ele_pt),
+        min_mu_pt_(min_mu_pt),
+        h_is_muon(ctx.get_handle<int>(label_mu)) {}
+
+    virtual bool process(uhh2::Event & event) override {
+        assert(event.muons || event.electrons);
+        double ptmax = -infinity;
+        FlavorParticle primlep;
+        bool is_mu = false;
+        if(event.electrons) {
+            for(const auto & ele : *event.electrons) {
+                float ele_pt = ele.pt();
+                if(ele_pt > min_ele_pt_ && ele_pt > ptmax) {
+                    ptmax = ele_pt;
+                    primlep = ele;
+                }
+            }
+        }
+        if(event.muons) {
+            for(const auto & mu : *event.muons) {
+                float mu_pt = mu.pt();
+                if(mu_pt > min_mu_pt_ && mu_pt > ptmax) {
+                    ptmax = mu_pt;
+                    primlep = mu;
+                    is_mu = true;
+                }
+            }
+        }
+        event.set(h_primlep, std::move(primlep));
+        if (is_mu) {event.set(h_is_muon, 1);}
+        else {event.set(h_is_muon, 0);}
+        return true;
+    }
+
+private:
+    uhh2::Event::Handle<FlavorParticle> h_primlep;
+    float min_ele_pt_;
+    float min_mu_pt_;
+    uhh2::Event::Handle<int> h_is_muon;
+
+};
+
+
+template<typename TYPE>
+class JetPtAndMultFixerRemove {
+public:
+    explicit JetPtAndMultFixerRemove(double offset, double gradient) :
+        offset_(offset), gradient_(gradient) {}
+
+    bool operator()(TYPE const & part, uhh2::Event const &) const {
+        double part_pt = part.pt();
+        double sf = offset_ + part_pt * gradient_;
+        
+        srand(part.eta());
+
+        double rand_num = rand() % 1000000;
+        rand_num /= 1000000.;
+
+        if (rand_num > sf)
+            return false;
+
+        return true;
+    }
+
+private:
+    double offset_, gradient_;
+
+};
+
+template<typename T>
+class JetPtAndMultFixerWeight: public uhh2::AnalysisModule {
+public:
+    explicit JetPtAndMultFixerWeight(uhh2::Context & ctx,
+                            string const & h_in,
+                            float offset, float gradient,
+                            string const & h_weight = "jetpt_weight") :
+        h_in_(ctx.get_handle<std::vector<T>>(h_in)),
+        offset_(offset), gradient_(gradient),
+        h_weight_(ctx.declare_event_output<float>(h_weight)) {}
+
+    virtual bool process(uhh2::Event & event) override {
+        if (!event.is_valid(h_in_))
+            return false;
+        auto const & coll = event.get(h_in_);
+        float weight;
+        for (auto const & part : coll) {
+            float part_pt = part.pt();
+            float sf = std::min(1.0f, offset_ + part_pt * gradient_);
+
+            weight *= sf;
+        }
+        event.set(h_weight_, weight);
+        // event.weight *= weight;
+        return true;
+    }
+
+
+private:
+    uhh2::Event::Handle<std::vector<T>> h_in_;
+    float offset_, gradient_;
+    uhh2::Event::Handle<float> h_weight_;
+    
+
+};
+    
+
+
 // } // namespace
