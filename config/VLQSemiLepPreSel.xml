@@ -408,25 +408,25 @@ backgrounds
 
 
 
-<InputData Lumi="19552.8" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT100to200" Cacheable="False">
+<InputData Lumi="18491.55" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT100to200" Cacheable="False">
     &MC_DYJetsToLL_M50_HT0100to0200;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="22782.2" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT200to400" Cacheable="False">
+<InputData Lumi="23760.36" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT200to400" Cacheable="False">
     &MC_DYJetsToLL_M50_HT0200to0400;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="194244" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT400to600" Cacheable="False">
+<InputData Lumi="188052" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT400to600" Cacheable="False">
     &MC_DYJetsToLL_M50_HT0400to0600;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="451996" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT600toInf" Cacheable="False">
+<InputData Lumi="454464" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT600toInf" Cacheable="False">
     &MC_DYJetsToLL_M50_HT0600toINFT;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
