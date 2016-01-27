@@ -32,11 +32,23 @@ def get_samplename(wrp):
         return os.path.splitext(fname)[0]
 
 
+def get_legend(wrp, sig_ind):
+    smpl = get_samplename(wrp)
+    if 'Run20' in smpl:
+        return 'Data'
+    elif any(s in smpl for s in sig_ind):
+        mass = smpl.split('_')[-1]
+        if mass.startswith('M'):
+            mass = mass[1:]
+        return 'T(%d)#rightarrowtH' % int(mass)
+    else:
+        return smpl
+
 def add_wrp_info(wrps, sig_ind=signal_indicators):
     return varial.generators.gen_add_wrp_info(
         wrps,
         sample=lambda w: get_samplename(w),
-        legend=lambda w: w.sample,
+        legend=lambda w: get_legend(w, sig_ind),
         is_signal=lambda w: any(s in w.sample for s in sig_ind),
         is_data=lambda w: 'Run20' in w.sample,
         variable=lambda w: w.in_file_path.split('/')[-1]
