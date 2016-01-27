@@ -7,6 +7,7 @@
 #include "UHH2/core/include/Hists.h"
 
 #include "UHH2/common/include/CommonModules.h"
+#include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/MuonIds.h"
 #include "UHH2/common/include/JetIds.h"
@@ -72,8 +73,8 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(30.,7.)));
-    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_medium_noIso,PtEtaCut(50.0, 2.5)));
-    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(45., 2.1)));
+    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_tight_noIso,PtEtaCut(50.0, 2.5)));
+    commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(47., 2.1)));
     commonObjectCleaning->switch_jetlepcleaner(true);
     commonObjectCleaning->switch_jetPtSorter(true);
     commonObjectCleaning->disable_jersmear();
@@ -87,9 +88,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
             JERFiles::Summer15_25ns_L123_AK4PFchs_MC,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
-        // v_pre_modules.emplace_back(new GenericTopJetCleaner(ctx,
-        //     PtEtaCut(150., 2.4), 
-        //         "patJetsAk8CHSJetsSoftDropPacked_daughters"));
     } else {
         v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
             JERFiles::Summer15_25ns_L123_AK8PFchs_DATA,
@@ -97,9 +95,6 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
             JERFiles::Summer15_25ns_L123_AK4PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
-        // v_pre_modules.emplace_back(new GenericTopJetCleaner(ctx,
-        //     PtEtaCut(125., 2.4), 
-        //         "patJetsAk8CHSJetsSoftDropPacked_daughters"));
     }
 
     v_pre_modules.emplace_back(new EventWeightOutputHandle(ctx, "weight"));
