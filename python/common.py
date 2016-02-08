@@ -44,14 +44,28 @@ def get_legend(wrp, sig_ind):
     else:
         return smpl
 
-def add_wrp_info(wrps, sig_ind=signal_indicators):
+
+def get_sys_info(w):
+    def get_info(tok):
+        if tok in w.file_path:
+            return next(s
+                        for s in w.file_path.split('/') 
+                        if s.endswith(tok))
+        else:
+            return ''
+    return get_info('__minus') or get_info('__plus')
+
+
+def add_wrp_info(wrps, sig_ind=None):
+    sig_ind = sig_ind or signal_indicators
     return varial.generators.gen_add_wrp_info(
         wrps,
-        sample=lambda w: get_samplename(w),
+        sample=get_samplename,
         legend=lambda w: get_legend(w, sig_ind),
         is_signal=lambda w: any(s in w.sample for s in sig_ind),
         is_data=lambda w: 'Run20' in w.sample,
-        variable=lambda w: w.in_file_path.split('/')[-1]
+        variable=lambda w: w.in_file_path.split('/')[-1],
+        sys_info=get_sys_info,
     )
 
 
