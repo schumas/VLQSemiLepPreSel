@@ -16,8 +16,15 @@ settings.colors = {
     'QCD': 851,
 
     # Heiners colors
-    'TpB_TH_700': 634,
-    'TpB_TH_1700': 418,
+    'TpB_TH_0700': ROOT.kBlue,
+    'TpB_TH_1200': ROOT.kGreen,
+    'TpB_TH_1700': ROOT.kRed,
+    'Signal_TpB_TH_LH_M0700': ROOT.kBlue,
+    'Signal_TpB_TH_LH_M1200': ROOT.kGreen,
+    'Signal_TpB_TH_LH_M1700': ROOT.kRed,
+
+    'Bkg': ROOT.kYellow - 6,
+    'BkgPostFit': ROOT.kSpring + 6,
 }
 # 596, , 797, 800, 891, 401, 800,
 # 838, 420, 403, 893, 881, 804, 599, 615, 831, 403, 593, 872
