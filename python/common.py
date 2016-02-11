@@ -40,7 +40,8 @@ def get_legend(wrp, sig_ind):
         mass = smpl.split('_')[-1]
         if mass.startswith('M'):
             mass = mass[1:]
-        return 'T(%d)#rightarrowtH' % int(mass)
+        hnd = 'rh' if '_RH_' in smpl else 'lh'
+        return 'T_{%s}(%d)#rightarrowtH' % (hnd, int(mass))
     else:
         return smpl
 
