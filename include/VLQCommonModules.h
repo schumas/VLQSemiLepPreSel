@@ -1279,6 +1279,9 @@ public:
         if (is_mc) {
             for (auto const & part : coll) {
                 float part_pt = part.pt();
+                if (part_pt < 250.) {
+                    continue;
+                }
                 float sf = offset_ + part_pt * gradient_;
                 float sf_err = std::sqrt(cov_p0_p0_ + 2 * part_pt * cov_p0_p1_ + part_pt * part_pt * cov_p1_p1_);
 
@@ -1303,10 +1306,36 @@ private:
     float cov_p0_p0_, cov_p0_p1_, cov_p1_p1_;
     uhh2::Event::Handle<float> h_weight_, h_weight_up_, h_weight_down_;
     bool is_mc, apply_event_weight_;
+};  // JetPtAndMultFixerWeight
     
 
-};
-    
+
+
+class PDFWeightBranchCreator: public AnalysisModule {
+public:
+    explicit PDFWeightBranchCreator(Context & ctx, int first_index):
+        first_index_(first_index)
+    {
+        for (unsigned i=0; i < 100; ++i) {
+            hndls.push_back(ctx.declare_event_output<float>("weight_pdf_"+to_string(i)));
+        }
+    }
+
+    virtual bool process(Event & e) override {
+        // cout << "e.genInfo->pdf_scalePDF()" << e.genInfo->pdf_scalePDF() << endl;
+        const auto & sys_weights = e.genInfo->systweights();
+        float orig_weight = e.genInfo->pdf_scalePDF();
+        for (unsigned i=0; i < 100; ++i) {
+            e.set(hndls[i], sys_weights[i+first_index_]/orig_weight);
+        }
+        return true;
+    }
+
+private:
+    int first_index_;
+    vector<Event::Handle<float>> hndls;
+};  // PDFWeightBranchCreator
+
 
 
 // } // namespace
