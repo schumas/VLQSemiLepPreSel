@@ -69,6 +69,32 @@
 <!ENTITY MC_TpB_TH_RH_M1600               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpB_TH_M1600_RH.xml">
 <!ENTITY MC_TpB_TH_RH_M1700               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpB_TH_M1700_RH.xml">
 <!ENTITY MC_TpB_TH_RH_M1800               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpB_TH_M1800_RH.xml">
+
+<!ENTITY MC_TpT_TH_LH_M1000               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1000.xml">
+<!ENTITY MC_TpT_TH_LH_M1100               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1100.xml">
+<!ENTITY MC_TpT_TH_LH_M1200               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1200.xml">
+<!ENTITY MC_TpT_TH_LH_M1300               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1300.xml">
+<!ENTITY MC_TpT_TH_LH_M1500               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1500.xml">
+<!ENTITY MC_TpT_TH_LH_M1600               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1600.xml">
+<!ENTITY MC_TpT_TH_LH_M1700               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1700.xml">
+<!ENTITY MC_TpT_TH_LH_M1800               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M1800.xml">
+<!ENTITY MC_TpT_TH_LH_M0700               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M0700.xml">
+<!ENTITY MC_TpT_TH_LH_M0800               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M0800.xml">
+<!ENTITY MC_TpT_TH_LH_M0900               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_LH_M0900.xml">
+
+<!ENTITY MC_TpT_TH_RH_M1000               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1000.xml">
+<!ENTITY MC_TpT_TH_RH_M1100               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1100.xml">
+<!ENTITY MC_TpT_TH_RH_M1200               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1200.xml">
+<!ENTITY MC_TpT_TH_RH_M1300               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1300.xml">
+<!ENTITY MC_TpT_TH_RH_M1400               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1400.xml">
+<!ENTITY MC_TpT_TH_RH_M1500               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1500.xml">
+<!ENTITY MC_TpT_TH_RH_M1600               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1600.xml">
+<!ENTITY MC_TpT_TH_RH_M1700               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1700.xml">
+<!ENTITY MC_TpT_TH_RH_M1800               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M1800.xml">
+<!ENTITY MC_TpT_TH_RH_M0700               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M0700.xml">
+<!ENTITY MC_TpT_TH_RH_M0800               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M0800.xml">
+<!ENTITY MC_TpT_TH_RH_M0900               SYSTEM  "../../common/datasets/RunII_25ns_v2/MC_TpT_TH_RH_M0900.xml">
+
 ]
 >
 
@@ -263,6 +289,148 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+
+
+
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1000" Cacheable="False">
+    &MC_TpT_TH_LH_M1000;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1000" Cacheable="False">
+    &MC_TpT_TH_RH_M1000;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1100" Cacheable="False">
+    &MC_TpT_TH_LH_M1100;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1100" Cacheable="False">
+    &MC_TpT_TH_RH_M1100;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1200" Cacheable="False">
+    &MC_TpT_TH_LH_M1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1200" Cacheable="False">
+    &MC_TpT_TH_RH_M1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1300" Cacheable="False">
+    &MC_TpT_TH_LH_M1300;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1300" Cacheable="False">
+    &MC_TpT_TH_RH_M1300;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1400" Cacheable="False">
+    &MC_TpT_TH_RH_M1400;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1500" Cacheable="False">
+    &MC_TpT_TH_LH_M1500;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1500" Cacheable="False">
+    &MC_TpT_TH_RH_M1500;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1600" Cacheable="False">
+    &MC_TpT_TH_LH_M1600;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1600" Cacheable="False">
+    &MC_TpT_TH_RH_M1600;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1700" Cacheable="False">
+    &MC_TpT_TH_LH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1700" Cacheable="False">
+    &MC_TpT_TH_RH_M1700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M1800" Cacheable="False">
+    &MC_TpT_TH_LH_M1800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M1800" Cacheable="False">
+    &MC_TpT_TH_RH_M1800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M0700" Cacheable="False">
+    &MC_TpT_TH_LH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M0700" Cacheable="False">
+    &MC_TpT_TH_RH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M0800" Cacheable="False">
+    &MC_TpT_TH_LH_M0800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M0800" Cacheable="False">
+    &MC_TpT_TH_RH_M0800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_LH_M0900" Cacheable="False">
+    &MC_TpT_TH_LH_M0900;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpT_TH_RH_M0900" Cacheable="False">
+    &MC_TpT_TH_RH_M0900;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
 
 
 
