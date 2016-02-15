@@ -1278,6 +1278,8 @@ public:
         float weight_down = 1.0f;
         if (is_mc) {
             for (auto const & part : coll) {
+                if (part.pt() < 250.)
+                    continue;
                 float part_pt = part.pt();
                 if (part_pt < 250.) {
                     continue;
