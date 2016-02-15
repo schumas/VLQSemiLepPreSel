@@ -1278,6 +1278,8 @@ public:
         float weight_down = 1.0f;
         if (is_mc) {
             for (auto const & part : coll) {
+                if (part.pt() < 250.)
+                    continue;
                 float part_pt = part.pt();
                 float sf = offset_ + part_pt * gradient_;
                 float sf_err = std::sqrt(cov_p0_p0_ + 2 * part_pt * cov_p0_p1_ + part_pt * part_pt * cov_p1_p1_);
