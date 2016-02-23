@@ -16,11 +16,85 @@
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/common/include/GenTools.h"
+#include <UHH2/common/include/TTbarGen.h>
 
 using namespace std;
 using namespace uhh2;
 
 // namespace {
+
+
+class TopPtWeight : public AnalysisModule {
+public:
+explicit TopPtWeight(uhh2::Context& ctx,
+                     const std::string& ttgen_name,
+                     float a, float b,
+                     const std::string& weight_name="weight_ttbar",
+                     bool apply_weight=false):
+    h_ttbargen_(ctx.get_handle<TTbarGen>(ttgen_name)),
+    h_weight_(ctx.get_handle<float>(weight_name)),
+    a_(a), b_(b),
+    apply_weight_(apply_weight) {}
+
+    virtual bool process(uhh2::Event& event) override {
+
+        if (event.isRealData) {
+            return true;
+        }
+
+        const TTbarGen& ttbargen = event.get(h_ttbargen_);
+        float wgt = 1.;
+
+        if (ttbargen.DecayChannel() != TTbarGen::e_notfound) {
+
+            float tpt1 = ttbargen.Top()    .v4().Pt();
+            float tpt2 = ttbargen.Antitop().v4().Pt();
+
+            tpt1 = std::min(tpt1, float(400.));
+            tpt2 = std::min(tpt2, float(400.));
+
+            wgt = sqrt(exp(a_+b_*tpt1)*exp(a_+b_*tpt2));
+        }
+
+        event.set(h_weight_, wgt);
+        if (apply_weight_) {
+            event.weight *= wgt;
+        }
+
+        return true;
+    }
+
+protected:
+    uhh2::Event::Handle<TTbarGen> h_ttbargen_;
+    uhh2::Event::Handle<float> h_weight_;
+    float a_, b_;
+    bool apply_weight_;
+};  // TopPtWeight
+
+
+class TopPtWeightHist: public Hists {
+public:
+    explicit TopPtWeightHist(Context & ctx,
+                             const string & dirname,
+                             const string & weight_name):
+        Hists(ctx, dirname),
+        h_weight_(ctx.get_handle<float>(weight_name)),
+        hist(book<TH1F>("ttbar_reweight_n_events",
+                        ";bin 0: no weight, bin 1: with weight;events",
+                        2, -.5, 1.5)) {}
+
+    virtual void fill(const Event & event) override {
+        if (event.is_valid(h_weight_)) {
+            hist->Fill(0.);
+            hist->Fill(1., event.get(h_weight_));
+        }
+    }
+
+private:
+    uhh2::Event::Handle<float> h_weight_;
+    TH1F * hist;
+};
+
 
 template<typename T>
 class AbsValueProducer: public AnalysisModule {
@@ -92,11 +166,11 @@ public:
                 eta = prim_lep.eta();
                 charge = prim_lep.charge();
             }
-            
+
         }
-        e.set(h_pt, pt);    
-        e.set(h_eta, eta);    
-        e.set(h_charge, charge);    
+        e.set(h_pt, pt);
+        e.set(h_eta, eta);
+        e.set(h_charge, charge);
         return true;
     }
 
@@ -276,11 +350,11 @@ public:
     virtual bool process(Event & e) override {
         const auto & prim_lep = e.get(h_primlep);
         e.set(
-            h_out, 
+            h_out,
             prim_lep.pt() + e.met->pt()
         );
         e.set(
-            h_out_vec_sum, 
+            h_out_vec_sum,
             (prim_lep.v4() + e.met->v4()).pt()
         );
         return true;
@@ -377,7 +451,7 @@ public:
                              bool declare_for_output = false):
         h_dr(ctx.get_handle<float>(dr_name)),
         h_pt(ctx.get_handle<float>(pt_name)),
-        h_prim_lep(ctx.get_handle<FlavorParticle>(primlep_name)) 
+        h_prim_lep(ctx.get_handle<FlavorParticle>(primlep_name))
     {
         if (declare_for_output) {
             ctx.declare_event_output<float>(dr_name);
@@ -614,7 +688,7 @@ public:
                         sum_subjets += subjet.v4();
                     event.set(h_out_, sum_subjets.M());
                 } else {
-                    event.set(h_out_, -1.);    
+                    event.set(h_out_, -1.);
                 }
             } else {
                 event.set(h_out_, -1.);
@@ -739,8 +813,8 @@ const HYP * get_best_hypothesis(
 class PrimaryLeptonDeltaPhiId {
 public :
     explicit PrimaryLeptonDeltaPhiId(
-        Context & ctx, 
-        float min_dist, 
+        Context & ctx,
+        float min_dist,
         const string & prim_lep="PrimaryLepton"
     ):
         min_dist_(min_dist),
@@ -907,7 +981,7 @@ private:
 
 class AntiHiggsBVetoTag {
 public:
-    explicit AntiHiggsBVetoTag(float minmass = 60.f, float maxmass = std::numeric_limits<float>::infinity(), 
+    explicit AntiHiggsBVetoTag(float minmass = 60.f, float maxmass = std::numeric_limits<float>::infinity(),
                                JetId const & id = CSVBTag(CSVBTag::WP_MEDIUM)) :
         minmass_(minmass), maxmass_(maxmass), btagid_(id) {}
 
@@ -1137,7 +1211,7 @@ public:
     virtual void fill(const Event &) override {
         // the number of total events should not be added when adding multiple
         // outputs from proof workers. This is why it's used as axis label.
-        hist->Fill(n_events_total_str.c_str(), 1.);  
+        hist->Fill(n_events_total_str.c_str(), 1.);
     }
 
 private:
@@ -1148,7 +1222,7 @@ private:
 
 class PrimaryLeptonFlavInfo: public uhh2::AnalysisModule {
 public:
-    explicit PrimaryLeptonFlavInfo(uhh2::Context & ctx, 
+    explicit PrimaryLeptonFlavInfo(uhh2::Context & ctx,
                            const std::string & h_name="PrimaryLepton",
                            float min_ele_pt = 0.,
                            float min_mu_pt = 0.,
@@ -1206,7 +1280,7 @@ public:
     bool operator()(TYPE const & part, uhh2::Event const &) const {
         double part_pt = part.pt();
         double sf = offset_ + part_pt * gradient_;
-        
+
         srand(part.eta());
 
         double rand_num = rand() % 1000000;
@@ -1307,7 +1381,7 @@ private:
     uhh2::Event::Handle<float> h_weight_, h_weight_up_, h_weight_down_;
     bool is_mc, apply_event_weight_;
 };  // JetPtAndMultFixerWeight
-    
+
 
 
 

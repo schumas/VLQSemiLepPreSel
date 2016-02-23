@@ -15,12 +15,20 @@ settings.colors = {
     'SingleT': 433,
     'QCD': 851,
 
+#     'TTbar': 800 + 8,
+#     'WJets': 856,
+#     'ZJets': 851,
+#     'DYJets': 851,
+#     'DYJetsToLL': 851,
+#     'SingleT': 800 - 3,
+#     'QCD': 433,
+
     # Heiners colors
-    'TpB_TH_0700': ROOT.kBlue,
-    'TpB_TH_1200': ROOT.kGreen,
+    'TpB_TH_0700': ROOT.kGreen + 1,
+    'TpB_TH_1200': ROOT.kBlue,
     'TpB_TH_1700': ROOT.kRed,
-    'Signal_TpB_TH_LH_M0700': ROOT.kBlue,
-    'Signal_TpB_TH_LH_M1200': ROOT.kGreen,
+    'Signal_TpB_TH_LH_M0700': ROOT.kGreen + 1,
+    'Signal_TpB_TH_LH_M1200': ROOT.kBlue,
     'Signal_TpB_TH_LH_M1700': ROOT.kRed,
 
     'Bkg': ROOT.kYellow - 6,
