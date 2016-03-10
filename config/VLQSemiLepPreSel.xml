@@ -127,6 +127,7 @@ data
 </InputData>
 -->
 
+
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Ele" Cacheable="False">
     &Data_SingleElePD;
     &Data_SingleElePD_prompt;
@@ -141,6 +142,7 @@ data
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+
 
 
 
@@ -433,7 +435,6 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
 
 
 
-
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 backgrounds
@@ -567,15 +568,6 @@ backgrounds
 
 
 
-<InputData Lumi="116421" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="False">
-    &MC_TTbar;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
-
-
-
-
 <InputData Lumi="18491.55" NEventsMax="-1" Type="MC" Version="DYJetsToLL_HT100to200" Cacheable="False">
     &MC_DYJetsToLL_M50_HT0100to0200;
     <InputTree Name="AnalysisTree" />
@@ -647,11 +639,24 @@ backgrounds
 
 
 
+
+
+<InputData Lumi="116421" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="False">
+    &MC_TTbar;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+
+
+
+
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 signal samples for plotting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -->
+
 
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="False">
     &MC_TpB_TH_LH_M0700;
@@ -670,7 +675,6 @@ signal samples for plotting
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
-
 
 
 
