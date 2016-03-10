@@ -1352,8 +1352,6 @@ public:
         float weight_down = 1.0f;
         if (is_mc) {
             for (auto const & part : coll) {
-                if (part.pt() < 250.)
-                    continue;
                 float part_pt = part.pt();
                 if (part_pt < 250.) {
                     continue;
@@ -1389,8 +1387,9 @@ private:
 
 class PDFWeightBranchCreator: public AnalysisModule {
 public:
-    explicit PDFWeightBranchCreator(Context & ctx, int first_index):
-        first_index_(first_index)
+    explicit PDFWeightBranchCreator(Context & ctx, int first_index, bool use_pdf_scale = true):
+        first_index_(first_index),
+        use_pdf_scale_(use_pdf_scale)
     {
         for (unsigned i=0; i < 100; ++i) {
             hndls.push_back(ctx.declare_event_output<float>("weight_pdf_"+to_string(i)));
@@ -1399,8 +1398,15 @@ public:
 
     virtual bool process(Event & e) override {
         // cout << "e.genInfo->pdf_scalePDF()" << e.genInfo->pdf_scalePDF() << endl;
+        if (first_index_ < 0) {
+            for (unsigned i=0; i < 100; ++i) 
+                e.set(hndls[i], 1.);
+            return true;
+        }
         const auto & sys_weights = e.genInfo->systweights();
-        float orig_weight = e.genInfo->pdf_scalePDF();
+        float orig_weight = 1.f;
+        if (use_pdf_scale_) orig_weight = e.genInfo->pdf_scalePDF();
+        else orig_weight = e.genInfo->originalXWGTUP();
         for (unsigned i=0; i < 100; ++i) {
             e.set(hndls[i], sys_weights[i+first_index_]/orig_weight);
         }
@@ -1409,9 +1415,40 @@ public:
 
 private:
     int first_index_;
+    bool use_pdf_scale_;
     vector<Event::Handle<float>> hndls;
 };  // PDFWeightBranchCreator
 
 
+class ScaleVariationWeightBranchCreator: public AnalysisModule {
+public:
+    explicit ScaleVariationWeightBranchCreator(Context & ctx, bool set_to_one = false) :
+    set_to_one_(set_to_one)
+    {
+        // IMPORTANT: 0 corresponds to nominal weight, keep in mind that indizes 5 and 7 correspond to unphysical values!!!
+        for (unsigned i=0; i < 9; ++i) {
+            hndls.push_back(ctx.declare_event_output<float>("weight_muRF_"+to_string(i)));
+        }
+    }
+
+    virtual bool process(Event & e) override {
+        // cout << "e.genInfo->pdf_scalePDF()" << e.genInfo->pdf_scalePDF() << endl;
+        if (set_to_one_) {
+            for (unsigned i=0; i < 9; ++i)
+                e.set(hndls[i], 1.);
+            return true;
+        }
+        const auto & sys_weights = e.genInfo->systweights();
+        float orig_weight = e.genInfo->originalXWGTUP();
+        for (unsigned i=0; i < 9; ++i) {
+            e.set(hndls[i], sys_weights[i]/orig_weight);
+        }
+        return true;
+    }
+
+private:
+    bool set_to_one_;
+    vector<Event::Handle<float>> hndls;
+};
 
 // } // namespace

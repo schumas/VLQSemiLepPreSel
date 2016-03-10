@@ -141,18 +141,10 @@ class TpTpThetaLimits(ThetaLimits):
 
     def run(self):
         super(TpTpThetaLimits, self).run()
-        self.result = varial.wrappers.Wrapper(
-            name=self.result.name,
-            res_exp_x=self.result.res_exp_x,  # TODO only TObjects or native python objects (list, dict, int, str ...) allowed
-            res_exp_y=self.result.res_exp_y,
-            res_exp_xerrors=self.result.res_exp_xerrors,
-            res_exp_yerrors=self.result.res_exp_yerrors,
-            res_obs_x=self.result.res_obs_x,  # TODO only TObjects or native python objects (list, dict, int, str ...) allowed
-            res_obs_y=self.result.res_obs_y,
-            res_obs_xerrors=self.result.res_obs_xerrors,
-            res_obs_yerrors=self.result.res_obs_yerrors,
-            brs=self.brs,
-            masses=list(int(x) for x in self.result.res_exp_x)
+        self.result.__dict__.update({
+            'brs' : self.brs,
+            # 'masses' : list(int(x) for x in self.result.res_exp_x)
+            }
         )
 
 
