@@ -13,6 +13,7 @@ settings.colors = {
     'DYJets': 856,
     'DYJetsToLL': 856,
     'SingleT': 433,
+    'SingleTop': 433,
     'QCD': 851,
 
 #     'TTbar': 800 + 8,

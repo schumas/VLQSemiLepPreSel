@@ -184,6 +184,7 @@ public:
         TH1F *higgs_n_subjet_btags, *higgs_mass_two_leading_subjets;
         // for cmstoptagging
         TH1F *cmstoptag_mass_allsubjets, *cmstoptag_min_mass_disubj;
+        TH1F *deltaRmu, *deltaRel;
     };
     ExtendedTopJetHists(uhh2::Context & ctx, const std::string & dirname, const JetId & b_tag = CSVBTag(CSVBTag::WP_MEDIUM), const unsigned int NumberOfPlottedJets=4, const std::string & collection = "") :
         TopJetHists(ctx, dirname, NumberOfPlottedJets, collection), b_tag_(b_tag)
@@ -211,6 +212,8 @@ public:
         tag_vars.higgs_mass_two_leading_subjets = book<TH1F>("higgs_mass_two_leading_subjets"+histSuffix, "mass of two leading b-tagged subjets "+axisSuffix, 100, 0., 500.);
         tag_vars.cmstoptag_mass_allsubjets = book<TH1F>("cmstoptag_mass_allsubjets"+histSuffix, "mass of all subjets "+axisSuffix, 100, 0., 500.);
         tag_vars.cmstoptag_min_mass_disubj = book<TH1F>("cmstoptag_min_mass_disubj"+histSuffix, "min mass of two subjets "+axisSuffix, 100, 0., 500.);
+        tag_vars.deltaRmu = book<TH1F>("deltaRmu"+histSuffix, "min deltaR(tj, mu) "+axisSuffix, 50, 0., 5.);
+        tag_vars.deltaRel = book<TH1F>("deltaRel"+histSuffix, "min deltaR(tj, el) "+axisSuffix, 50, 0., 5.);
         return tag_vars;
 
     }
@@ -248,6 +251,19 @@ public:
                 tag_vars.cmstoptag_min_mass_disubj->Fill(mmin, weight);
             }
         }
+
+        auto const * closestMu = closestParticle(topjet, *event.muons);
+        if (closestMu) {
+            auto dR = deltaR(topjet, *closestMu);
+            tag_vars.deltaRmu->Fill(dR, weight);
+        }
+
+        auto const * closestEl = closestParticle(topjet, *event.electrons);
+        if (closestEl) {
+            auto dR = deltaR(topjet, *closestEl);
+            tag_vars.deltaRel->Fill(dR, weight);
+        }
+
     }
 
     virtual void fill(const uhh2::Event & event) override
