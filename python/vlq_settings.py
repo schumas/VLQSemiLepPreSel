@@ -41,7 +41,7 @@ settings.defaults_Legend.update({
     'x_pos': 0.81,
     'y_pos': 0.5,
     'label_width': 0.2,
-    'label_height': 0.07,
+    'label_height': 0.04,
     'opt': 'f',
     'opt_data': 'p',
     'reverse': True
@@ -55,9 +55,9 @@ settings.stacking_order = [
     'QCD',
 ]
 
-settings.box_text_size = 0.05
-settings.canvas_size_x = 550
-settings.canvas_size_y = 400
+settings.box_text_size = 0.04
+settings.canvas_size_x = 600
+settings.canvas_size_y = 500
 settings.root_style.SetPadRightMargin(0.3)
 settings.rootfile_postfixes = ['.root', '.png']
 

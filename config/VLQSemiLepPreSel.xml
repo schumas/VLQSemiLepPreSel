@@ -99,7 +99,7 @@
 >
 
 <!--
-   <ConfigParse NEventsBreak="0" FileSplit="5" AutoResubmit="2"/>
+   <ConfigParse NEventsBreak="0" FileSplit="20" AutoResubmit="2"/>
    <ConfigSGE RAM="2" DISK="2" Mail="heiner@cern.de" Notification="as" Workdir="workdir"/>
 -->
 
@@ -108,7 +108,7 @@
     <Library Name="libSUHH2VLQSemiLepPreSel"/>
     <Package Name="SUHH2VLQSemiLepPreSel.par" />
 
-  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2215." > 
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="2215." >
   <!--
   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/nowatsd/proof-wd/" ProofNodes="12" OutputDirectory="./Run2-ntuple-v6/" PostFix="" TargetLumi="552.67">
   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="32" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="552.67" >
@@ -117,7 +117,14 @@
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-data
+         88
+         88              ,d
+         88              88
+ ,adPPYb,88 ,adPPYYba, MM88MMM ,adPPYYba,
+a8"    `Y88 ""     `Y8   88    ""     `Y8
+8b       88 ,adPPPPP88   88    ,adPPPPP88
+"8a,   ,d88 88,    ,88   88,   88,    ,88
+ `"8bbdP"Y8 `"8bbdP"Y8   "Y888 `"8bbdP"Y8
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015B_Had" Cacheable="False">
@@ -128,13 +135,15 @@ data
 -->
 
 
+
+
+
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Ele" Cacheable="False">
     &Data_SingleElePD;
     &Data_SingleElePD_prompt;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
-
 
 <InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="Run2015D_Mu" Cacheable="False">
     &Data_SingleMuPD;
@@ -149,7 +158,16 @@ data
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-signal samples: T' to TH
+          88                                    88
+          ""                                    88
+                                                88
+,adPPYba, 88  ,adPPYb,d8 8b,dPPYba,  ,adPPYYba, 88
+I8[    "" 88 a8"    `Y88 88P'   `"8a ""     `Y8 88
+ `"Y8ba,  88 8b       88 88       88 ,adPPPPP88 88
+aa    ]8I 88 "8a,   ,d88 88       88 88,    ,88 88
+`"YbbdP"' 88  `"YbbdP"Y8 88       88 `"8bbdP"Y8 88
+              aa,    ,88
+               "Y8bbdP"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
 -->
@@ -437,7 +455,16 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
 
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-backgrounds
+88          88
+88          88
+88          88
+88,dPPYba,  88   ,d8  ,adPPYb,d8
+88P'    "8a 88 ,a8"  a8"    `Y88
+88       d8 8888[    8b       88
+88b,   ,a8" 88`"Yba, "8a,   ,d88
+8Y"Ybbd8"'  88   `Y8a `"YbbdP"Y8
+                      aa,    ,88
+                       "Y8bbdP"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -->
 
@@ -651,11 +678,21 @@ backgrounds
 
 
 
+
+
 <!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-signal samples for plotting
+            88                            88
+            88              ,d      ,d    ""
+            88              88      88
+8b,dPPYba,  88  ,adPPYba, MM88MMM MM88MMM 88 8b,dPPYba,   ,adPPYb,d8
+88P'    "8a 88 a8"     "8a  88      88    88 88P'   `"8a a8"    `Y88
+88       d8 88 8b       d8  88      88    88 88       88 8b       88
+88b,   ,a8" 88 "8a,   ,a8"  88,     88,   88 88       88 "8a,   ,d88
+88`YbbdP"'  88  `"YbbdP"'   "Y888   "Y888 88 88       88  `"YbbdP"Y8
+88                                                        aa,    ,88
+88                                                         "Y8bbdP"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--->
 
 
 <InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TpB_TH_LH_M0700_lepDecay" Cacheable="False">
@@ -675,6 +712,7 @@ signal samples for plotting
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
+-->
 
 
 
@@ -687,6 +725,7 @@ signal samples for plotting
             <Item Name="TauCollection" Value="slimmedTaus" />
             <Item Name="JetCollection" Value="slimmedJets" />
             <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="GenTopJetCollection" Value="ak8GenJetsSoftDrop" />
             <Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
             <Item Name="METName" Value="slimmedMETs" />
             <Item Name="GenParticleCollection" Value="GenParticles" />
