@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <typeinfo>
+#include <set>
 
 using namespace std;
 using namespace uhh2;
@@ -93,14 +94,18 @@ std::map<int, std::pair<float, float> > CustomizableGenHists::minmax_masses_ = {
 std::map<int, std::pair<float, float> > CustomizableGenHists::minmax_pts_ = {};
 
 
-void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bool mass, bool charge, bool decay,
-                            bool mother, const boost::optional<GenParticleId> & genp_id,
-                            std::string suffix)
+void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, const vector<string> & variables,
+                            const boost::optional<GenParticleId> & genp_id, const std::string & suffix)
 {
     GenHistColl new_genhistcoll;
     new_genhistcoll.pdgid = pdgid;
     new_genhistcoll.order_num = order_num;
     new_genhistcoll.genp_id = genp_id;
+
+    std::set<string> set_variables;
+    for (auto const & var : variables) {
+        set_variables.insert(var);
+    }
 
     float minpt = 0.f, maxpt, minmass, maxmass;
 
@@ -114,7 +119,7 @@ void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bo
     if (minmax_pts_.count(pdgid)) {
         tie(minpt, maxpt) = minmax_pts_.at(pdgid);
     } else {
-        if (pdgid < 10 || pdgid == 25)
+        if (pdgid < 10 || std::abs(pdgid) == 25 || std::abs(pdgid) > 8000000)
             maxpt = 2000.f;
         else
             maxpt = 400.f;
@@ -132,11 +137,14 @@ void CustomizableGenHists::add_genhistcoll(int pdgid, unsigned int order_num, bo
     new_genhistcoll.h_pt = book<TH1F>(particle+"_pt_"+order_str, particle+" p_{T} "+order_str, n_ptbins, minpt, maxpt);
     new_genhistcoll.h_eta = book<TH1F>(particle+"_eta_"+order_str, particle+" eta "+order_str, 100, -5.0, 5.0);
     new_genhistcoll.h_phi = book<TH1F>(particle+"_phi_"+order_str, particle+" phi "+order_str, 64, -M_PI, M_PI);
-    new_genhistcoll.h_n = order_num <= 1 ? book<TH1F>(particle+"_n", particle+" number", 21, -0.5, 20.5) : NULL;
-    new_genhistcoll.h_mass = mass ? book<TH1F>(particle+"_mass_"+order_str, particle+" mass "+order_str, n_massbins, minmass, maxmass) : NULL;
-    new_genhistcoll.h_charge = charge ? book<TH1F>(particle+"_charge_"+order_str, particle+" charge "+order_str, 3, -1.5, 1.5) : NULL;
-    new_genhistcoll.h_decay = decay ? book<TH1F>(particle+"_decay_"+order_str, particle+" decay "+order_str, 60, -30.5, 30.5) : NULL;
-    new_genhistcoll.h_mother = mother ? book<TH1F>(particle+"_mother_"+order_str, particle+" mother "+order_str, 60, -30.5, 30.5) : NULL;
+    new_genhistcoll.h_n = set_variables.find("number") != set_variables.end() ? book<TH1F>(particle+"_n", particle+" number", 21, -0.5, 20.5) : NULL;
+    new_genhistcoll.h_mass = set_variables.find("mass") != set_variables.end() ? book<TH1F>(particle+"_mass_"+order_str, particle+" mass "+order_str, n_massbins, minmass, maxmass) : NULL;
+    new_genhistcoll.h_charge = set_variables.find("charge") != set_variables.end() ? book<TH1F>(particle+"_charge_"+order_str, particle+" charge "+order_str, 3, -1.5, 1.5) : NULL;
+    new_genhistcoll.h_decay = set_variables.find("decay") != set_variables.end() ? book<TH1F>(particle+"_decay_"+order_str, particle+" decay "+order_str, 60, -30.5, 30.5) : NULL;
+    new_genhistcoll.h_mother = set_variables.find("mother") != set_variables.end() ? book<TH1F>(particle+"_mother_"+order_str, particle+" mother "+order_str, 60, -30.5, 30.5) : NULL;
+    new_genhistcoll.h_dRDecay = set_variables.find("dRDecay") != set_variables.end() ? book<TH1F>(particle+"_dRDecay_"+order_str, particle+" dR(decay products) "+order_str, 50, 0., 5.0) : NULL;
+    new_genhistcoll.h_dPhiDecay = set_variables.find("dPhiDecay") != set_variables.end() ? book<TH1F>(particle+"_dPhiDecay_"+order_str, particle+" dPhi(decay products) "+order_str, 50, 0., 5.0) : NULL;
+    new_genhistcoll.h_dEtaDecay = set_variables.find("dEtaDecay") != set_variables.end() ? book<TH1F>(particle+"_dEtaDecay_"+order_str, particle+" dEta(decay products) "+order_str, 50, 0., 5.0) : NULL;
 
     all_hists_.push_back(new_genhistcoll);
 
@@ -160,6 +168,17 @@ void CustomizableGenHists::fill_hists(const T * ipart, const std::vector<GenPart
         const GenParticle * daughter2 = genpart->daughter(&genparticles, 2);
         if (daughter1) gen_histcoll.h_decay->Fill(daughter1->pdgId(), w);
         if (daughter2) gen_histcoll.h_decay->Fill(daughter2->pdgId(), w);
+        if (daughter1 && daughter2) {
+            if (gen_histcoll.h_dRDecay) {
+                gen_histcoll.h_dRDecay->Fill(uhh2::deltaR(*daughter1, *daughter2), w);
+            }
+            if (gen_histcoll.h_dPhiDecay) {
+                gen_histcoll.h_dPhiDecay->Fill(uhh2::deltaPhi(*daughter1, *daughter2), w);
+            }
+            if (gen_histcoll.h_dEtaDecay) {
+                gen_histcoll.h_dEtaDecay->Fill(std::abs(daughter1->eta()-daughter2->eta()), w);
+            }
+        }
     }
     if (gen_histcoll.h_mother && genpart)
     {

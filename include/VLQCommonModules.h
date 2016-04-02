@@ -32,7 +32,7 @@ explicit TopPtWeight(uhh2::Context& ctx,
                      const std::string& weight_name="weight_ttbar",
                      bool apply_weight=false):
     h_ttbargen_(ctx.get_handle<TTbarGen>(ttgen_name)),
-    h_weight_(ctx.get_handle<float>(weight_name)),
+    h_weight_(ctx.declare_event_output<float>(weight_name)),
     a_(a), b_(b),
     apply_weight_(apply_weight) {}
 
@@ -1379,6 +1379,53 @@ private:
     float offset_, gradient_;
     float cov_p0_p0_, cov_p0_p1_, cov_p1_p1_;
     uhh2::Event::Handle<float> h_weight_, h_weight_up_, h_weight_down_;
+    bool is_mc, apply_event_weight_;
+};  // JetPtAndMultFixerWeight
+
+
+
+template<typename T>
+class HTReweighting: public uhh2::AnalysisModule {
+public:
+    explicit HTReweighting(uhh2::Context & ctx,
+                            float offset, float gradient,
+                            string const & h_in = "HT",
+                            string const & h_weight = "weight_htreweight",
+                            bool apply_event_weight = false) :
+        offset_(offset), gradient_(gradient),
+        h_in_(ctx.get_handle<double>(h_in)),
+        h_weight_(ctx.declare_event_output<float>(h_weight)),
+        apply_event_weight_(apply_event_weight) {
+            auto dataset_type = ctx.get("dataset_type");
+            is_mc = dataset_type == "MC";
+            if (!is_mc) {
+                cout << "Warning: JetPtAndMultFixerWeight will not have an effect on "
+                <<" this non-MC sample (dataset_type = '" + dataset_type + "')" << endl;
+                return;
+            }
+        }
+
+    virtual bool process(uhh2::Event & event) override {
+        if (!event.is_valid(h_in_))
+            return false;
+        double ht = event.get(h_in_);
+        float weight = 1.0f;
+        if (is_mc) {
+            float sf = offset_ + ht * gradient_;
+
+            weight *= std::min(1.0f, sf);
+        }
+        if (apply_event_weight_) {
+            event.weight *= weight;
+        }
+        event.set(h_weight_, weight);
+        return true;
+    }
+
+private:
+    uhh2::Event::Handle<double> h_in_;
+    float offset_, gradient_;
+    uhh2::Event::Handle<float> h_weight_;
     bool is_mc, apply_event_weight_;
 };  // JetPtAndMultFixerWeight
 

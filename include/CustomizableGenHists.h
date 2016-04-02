@@ -17,16 +17,15 @@ public:
     {
         int pdgid;
         unsigned int order_num;
-        TH1F *h_pt, *h_eta, *h_phi, *h_n, *h_mass, *h_charge, *h_decay, *h_mother;
+        TH1F *h_pt, *h_eta, *h_phi, *h_n, *h_mass, *h_charge, *h_decay, *h_mother, *h_dRDecay, *h_dPhiDecay, *h_dEtaDecay;
         boost::optional<GenParticleId> genp_id;
     };
 
     // use the same constructor arguments as Hists for forwarding:
     CustomizableGenHists(uhh2::Context & ctx, const std::string & dirname, const std::string & h_part_ht = "parton_ht");
     virtual void fill(const uhh2::Event & ev) override;
-    void add_genhistcoll(int pdgid, unsigned int order_num, bool mass = false, bool charge = false,
-                bool decay = false, bool mother = false, const boost::optional<GenParticleId> & genp_id = boost::none,
-                std::string suffix = "");
+    void add_genhistcoll(int pdgid, unsigned int order_num, const std::vector<std::string> & variables = {"number", "mass", "charge", "decay", "mother", "dRDecay", "dPhiDecay", "dEtaDecay"}, const boost::optional<GenParticleId> & genp_id = boost::none,
+                const std::string & suffix = "");
 
     void fill_genhistcoll(const uhh2::Event & ev, GenHistColl & gen_histcoll);
 
