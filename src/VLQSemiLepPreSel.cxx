@@ -62,20 +62,21 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         cout << " " << kv.first << " = " << kv.second << endl;
     }
 
-    if (version == "Run2015D_Ele") {
+    ctx.set("lumi_file", "/nfs/dust/cms/user/schumas/ANALYSIS/80XMoriond17/CMSSW_8_0_24_patch1/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root");
+    /*if (version == "Run2015D_Ele") {
         ctx.set("lumi_file", "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_15_patch1/src/UHH2/common/data/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_NoBadBSRuns.root");
     } else if (version == "Run2015D_Mu") {
         ctx.set("lumi_file", "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_15_patch1/src/UHH2/common/data/Latest_2015_Golden_JSON.root");
-    }
+	}*/
 
     n_input_events_hist.reset(new NInputEventsHist(ctx));
 
     // use centrally managed PU reweighting, jet corrections, jet lepton cleaning, jet smearing ....
     CommonModules* commonObjectCleaning = new CommonModules();
     commonObjectCleaning->set_jet_id(AndId<Jet>(JetPFID(JetPFID::WP_LOOSE), PtEtaCut(25.,7.)));
-    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring15_25ns_tight_noIso,PtEtaCut(50.0, 2.5)));
+    commonObjectCleaning->set_electron_id(AndId<Electron>(ElectronID_Spring16_tight_noIso,PtEtaCut(50.0, 2.5)));
     commonObjectCleaning->set_muon_id(AndId<Muon>(MuonIDMedium(),PtEtaCut(47., 2.1)));
-    commonObjectCleaning->switch_jetlepcleaner(true);
+    commonObjectCleaning->switch_jetlepcleaner(false);
     commonObjectCleaning->switch_jetPtSorter(true);
     commonObjectCleaning->disable_jersmear();
     commonObjectCleaning->init(ctx);
@@ -83,18 +84,44 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
 
     if (type == "MC") {
         v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
-            JERFiles::Summer15_25ns_L123_AK8PFchs_MC, 
+            JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_MC, 
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
         v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
-            JERFiles::Summer15_25ns_L123_AK4PFchs_MC,
+            JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
     } else {
+      if (version == "DataSingleEleB1" || version == "DataSingleEleB2" || version == "DataSingleEleC" || version == "DataSingleEleD" || version == "DataSingleMuB1" || version == "DataSingleMuB2" || version == "DataSingleMuC" || version == "DataSingleMuD") {
         v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
-            JERFiles::Summer15_25ns_L123_AK8PFchs_DATA,
+            JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK8PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
         v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
-            JERFiles::Summer15_25ns_L123_AK4PFchs_DATA,
+            JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK4PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+      }
+      if (version == "DataSingleEleE" || version == "DataSingleEleF" || version == "DataSingleMuE" || version == "DataSingleMuF") {
+        v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_EF_L123_AK8PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+      }
+      if (version == "DataSingleEleG" || version == "DataSingleMuG") {
+        v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_G_L123_AK8PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_G_L123_AK4PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+      }
+      if (version == "DataSingleEleH" || version == "DataSingleMuH") {
+        v_pre_modules.emplace_back(new GenericTopJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_H_L123_AK8PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+        v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
+            JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA,
+                "patJetsAk8CHSJetsSoftDropPacked_daughters"));
+      }
     }
 
     v_pre_modules.emplace_back(new EventWeightOutputHandle(ctx, "weight"));
@@ -108,11 +135,11 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
     v_pre_modules.emplace_back(new PrimaryLeptonInfoProducer(ctx));
     v_pre_modules.emplace_back(new TwoDCutProducer(ctx));
 
-    if (version == "TTbar") {
-        v_pre_modules.emplace_back(new TTbarGenProducer(ctx, "ttbargen", false));
-        v_pre_modules.emplace_back(new TopPtWeight(ctx, "ttbargen", 0.156, -0.00137, "weight_ttbar", false));
-        v_hists.emplace_back(new TopPtWeightHist(ctx, "TTbarReweight", "weight_ttbar"));
-    }
+    //if (version == "TTbar") {
+    //    v_pre_modules.emplace_back(new TTbarGenProducer(ctx, "ttbargen", false));
+    //    v_pre_modules.emplace_back(new TopPtWeight(ctx, "ttbargen", 0.156, -0.00137, "weight_ttbar", false));
+    //    v_hists.emplace_back(new TopPtWeightHist(ctx, "TTbarReweight", "weight_ttbar"));
+    //}
 
     // if (version == "Run2015D_Mu") {
     //     v_pre_modules.emplace_back(new TriggerAcceptProducer(ctx,
@@ -164,17 +191,19 @@ bool VLQSemiLepPreSel::process(Event & event) {
 
     n_input_events_hist->fill(event);
 
+
+
     // signal: check for leptonic decay mode
     if (leptonic_decay_checker.get()
         && !leptonic_decay_checker->process(event)) {
         return false;
     }
-
+ 
     // common modules & check lumi selection on data
     if (!common_modules_with_lumi_sel->process(event)) {
         return false;
     }
-
+    cout << "TEST" << endl;
     // run all event modules
     for (auto & mod : v_pre_modules) {
         mod->process(event);
@@ -182,6 +211,8 @@ bool VLQSemiLepPreSel::process(Event & event) {
 
     // run selection
     bool all_accepted = sel_module->process(event);
+
+    cout << "all_accepted = " << all_accepted << endl;
 
     // fill ctrl hists
     for (auto & h : v_hists) {

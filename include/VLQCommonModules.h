@@ -1205,7 +1205,7 @@ public:
         n_events_total_str(ctx.get("n_events_total")),
         hist(book<TH1F>("NInputEventsHist", "NInputEventsHist", 1, -.5, 0.5))
     {
-        hist->SetBit(TH1::kCanRebin);
+        hist->SetCanExtend(TH1::kXaxis);
     }
 
     virtual void fill(const Event &) override {
