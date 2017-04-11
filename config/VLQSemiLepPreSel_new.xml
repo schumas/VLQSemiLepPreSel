@@ -32,23 +32,21 @@
 <!ENTITY MC_TWAntitop SYSTEM        "../../common/datasets/RunII_80X_v3/ST_tW_antitop_5f_inclusiveDecays_13TeV.xml">
 <!ENTITY MC_TWTop SYSTEM            "../../common/datasets/RunII_80X_v3/ST_tW_top_5f_inclusiveDecays_13TeV.xml">
 
-<!ENTITY Data_SingleMuB1 SYSTEM      "../../common/datasets/RunII_80X_v3/SingleMuonB.xml">
-<!ENTITY Data_SingleMuB2 SYSTEM      "../../common/datasets/RunII_80X_v3/SingleMuonB_v3.xml">
-<!ENTITY Data_SingleMuC SYSTEM      "../../common/datasets/RunII_80X_v3/SingleMuonC.xml">
-<!ENTITY Data_SingleMuD SYSTEM      "../../common/datasets/RunII_80X_v3/SingleMuonD.xml">
-<!ENTITY Data_SingleMuE SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016E_23Sep.xml">
-<!ENTITY Data_SingleMuF SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016F_23Sep.xml">
-<!ENTITY Data_SingleMuG SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016G_23Sep.xml">
-<!ENTITY Data_SingleMuH SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016H_PromptReco.xml">
+<!ENTITY Data_SingleMuB SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016B_03Feb.xml">
+<!ENTITY Data_SingleMuC SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016C_03Feb.xml">
+<!ENTITY Data_SingleMuD SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016D_03Feb.xml">
+<!ENTITY Data_SingleMuE SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016E_03Feb.xml">
+<!ENTITY Data_SingleMuF SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016F_03Feb.xml">
+<!ENTITY Data_SingleMuG SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016G_03Feb.xml">
+<!ENTITY Data_SingleMuH SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016H_03Feb.xml">
 
-<!ENTITY Data_SingleEleB1 SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016Bv2_23Sep.xml">
-<!ENTITY Data_SingleEleB2 SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016Bv3_23Sep.xml">
-<!ENTITY Data_SingleEleC SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016C_23Sep.xml">
-<!ENTITY Data_SingleEleD SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016D_23Sep.xml">
-<!ENTITY Data_SingleEleE SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016E_23Sep.xml">
-<!ENTITY Data_SingleEleF SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016F_23Sep.xml">
-<!ENTITY Data_SingleEleG SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016G_23Sep.xml">
-<!ENTITY Data_SingleEleH SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016H_23Sep.xml">
+<!ENTITY Data_SingleEleB SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016B_03Feb.xml">
+<!ENTITY Data_SingleEleC SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016C_03Feb.xml">
+<!ENTITY Data_SingleEleD SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016D_03Feb.xml">
+<!ENTITY Data_SingleEleE SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016E_03Feb.xml">
+<!ENTITY Data_SingleEleF SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016F_03Feb.xml">
+<!ENTITY Data_SingleEleG SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016G_03Feb.xml">
+<!ENTITY Data_SingleEleH SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016H_03Feb.xml">
 
 <!ENTITY MC_QCD_Pt80to120_MuEnrichedPt5   SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-80to120_MuEnrichedPt5.xml">
 <!ENTITY MC_QCD_Pt120to170_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-120to170_MuEnrichedPt5.xml">
@@ -131,7 +129,7 @@
     <Library Name="libSUHH2VLQSemiLepPreSel"/>
     <Package Name="SUHH2VLQSemiLepPreSel.par" />
 
-  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/schumas/ANALYSIS/80XMoriond17/CMSSW_8_0_24_patch1/src/UHH2/Files/80XMoriond17/Presel/" PostFix="" TargetLumi="35867.059983" >
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/Files/80X_v4/Presel/" PostFix="" TargetLumi="35867.059983" >
   <!--
   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/nowatsd/proof-wd/" ProofNodes="12" OutputDirectory="./Run2-ntuple-v6/" PostFix="" TargetLumi="552.67">
   <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="32" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="552.67" >
@@ -151,14 +149,9 @@ a8"    `Y88 ""     `Y8   88    ""     `Y8
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -->
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleEleB1" Cacheable="False">
-    &Data_SingleEleB1;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
 
-<!--InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleEleB2" Cacheable="False">
-    &Data_SingleEleB2;
+<!--InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleEleB" Cacheable="False">
+    &Data_SingleEleB;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
@@ -200,14 +193,9 @@ a8"    `Y88 ""     `Y8   88    ""     `Y8
 </InputData>
 
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleMuB1" Cacheable="False">
-    &Data_SingleMuB1;
-    <InputTree Name="AnalysisTree" />
-    <OutputTree Name="AnalysisTree" />
-</InputData>
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleMuB2" Cacheable="False">
-    &Data_SingleMuB2;
+<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleMuB" Cacheable="False">
+    &Data_SingleMuB;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
@@ -266,7 +254,7 @@ aa    ]8I 88 "8a,   ,d88 88       88 88,    ,88 88
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
 -->
 
-<!--InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="False">
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="False">
     &MC_TpB_TH_LH_M0700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -330,7 +318,7 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     &MC_TpB_TH_LH_M1800;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
-</InputData-->
+</InputData>
 
 <!--InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0700" Cacheable="False">
     &MC_TpB_TH_RH_M0700;
@@ -875,8 +863,8 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
             <!-- <Item Name="lumi_file" Value="set in main AnalysisModule" /> -->
             <Item Name="lumihists_lumi_per_bin" Value="250"/>
 
-            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80XMoriond17/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyDataPileupHistogram.root" />
-            <Item Name="pileup_directory_25ns" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80XMoriond17/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyMCPileupHistogram.root"/>
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyDataPileupHistogram.root" />
+            <Item Name="pileup_directory_25ns" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyMCPileupHistogram.root"/>
 
             <Item Name="use_sframe_weight" Value="false" />
             <!-- the class name of the AnalysisModule subclasses to run: -->

@@ -62,7 +62,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
         cout << " " << kv.first << " = " << kv.second << endl;
     }
 
-    ctx.set("lumi_file", "/nfs/dust/cms/user/schumas/ANALYSIS/80XMoriond17/CMSSW_8_0_24_patch1/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root");
+    ctx.set("lumi_file", "/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root");
     /*if (version == "Run2015D_Ele") {
         ctx.set("lumi_file", "/afs/desy.de/user/t/tholenhe/xxl-af-cms/CMSSW_7_4_15_patch1/src/UHH2/common/data/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_NoBadBSRuns.root");
     } else if (version == "Run2015D_Mu") {
@@ -203,6 +203,8 @@ bool VLQSemiLepPreSel::process(Event & event) {
     if (!common_modules_with_lumi_sel->process(event)) {
         return false;
     }
+
+
     cout << "TEST" << endl;
     // run all event modules
     for (auto & mod : v_pre_modules) {
