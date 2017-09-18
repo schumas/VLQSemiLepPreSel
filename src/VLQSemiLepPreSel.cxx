@@ -103,7 +103,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
             JERFiles::Summer16_23Sep2016_V4_EF_L123_AK8PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
         v_pre_modules.emplace_back(new GenericSubJetCorrector(ctx,
-            JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA,
+            JERFiles::Summer16_23Sep2016_V4_EF_L123_AK4PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
       }
       if (version == "DataSingleEleG" || version == "DataSingleMuG") {
@@ -122,7 +122,7 @@ VLQSemiLepPreSel::VLQSemiLepPreSel(Context & ctx) {
             JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA,
                 "patJetsAk8CHSJetsSoftDropPacked_daughters"));
       }
-    }
+      }
 
     v_pre_modules.emplace_back(new EventWeightOutputHandle(ctx, "weight"));
     v_pre_modules.emplace_back(new PrimaryLepton(ctx, "PrimaryLepton", prim_lep_min_ele_pt, prim_lep_min_mu_pt));
@@ -205,7 +205,7 @@ bool VLQSemiLepPreSel::process(Event & event) {
     }
 
 
-    cout << "TEST" << endl;
+
     // run all event modules
     for (auto & mod : v_pre_modules) {
         mod->process(event);
@@ -214,7 +214,7 @@ bool VLQSemiLepPreSel::process(Event & event) {
     // run selection
     bool all_accepted = sel_module->process(event);
 
-    cout << "all_accepted = " << all_accepted << endl;
+
 
     // fill ctrl hists
     for (auto & h : v_hists) {

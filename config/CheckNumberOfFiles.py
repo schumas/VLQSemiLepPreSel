@@ -9,8 +9,16 @@ RealNumbers = []
 
 directory = sys.argv[1]
 MCorDATA = sys.argv[2]
-
-file = open("samples.txt","r")
+if MCorDATA == "DATA":
+    file = open("samples_DATA.txt","r")
+elif MCorDATA == "MC":
+    file = open("samples_MC.txt","r")
+else:
+    MCorDATA = raw_input("Do you have MC or DATA samples? (MC/DATA) ")
+    if MCorDATA == "DATA":
+        file = open("samples_DATA.txt","r")
+    elif MCorDATA == "MC":
+        file = open("samples_MC.txt","r")
 for line in file:
     cleaned = line.strip()
     cleaned = cleaned.replace(":","")
@@ -56,23 +64,24 @@ if missing:
 #Check if all files contain an input tree
 checkinputtree = raw_input("Do you want check if all files contain an InputTree? (y/n) ")
 if checkinputtree == "y":
-    for i in range(0, ExpNumbers[expectedfiles.index(name)]):
-        f = ROOT.TFile(directory + str(name + "_" + str(i) + ".root"))
-        try:
-            t = f.Get("AnalysisTree")
+    for name in expectedfiles:
+        for i in range(0, ExpNumbers[expectedfiles.index(name)]):
+            f = ROOT.TFile(directory + str("uhh2.AnalysisModuleRunner." + MCorDATA + "." + name + "_" + str(i) + ".root"))
+            try:
+                t = f.Get("AnalysisTree")
         
-        except:
-            print 'file ' + str(name + "_" + str(i) + ".root") + ' has no AnalysisTree' 
-            rerun = raw_input("Do you want rerun the broken file locally? (y/n) ")
-            if rerun == "y":
-                os.system("sframe_main workdir/" + str(name) + "_" + str(i+1) + ".xml")
-                f1 = ROOT.TFile(directory + str(name + "_" + str(i) + ".root"))
-                try:
-                    t = f1.Get("AnalysisTree")
-                except:
-                    print 'file ' + str(name + "_" + str(i) + ".root") + ' has still no AnalysisTree' 
-                f1. Close()
-        f.Close()
+            except:
+                print 'file ' + str( name + "_" + str(i) + ".root") + ' has no AnalysisTree' 
+                rerun = raw_input("Do you want rerun the broken file locally? (y/n) ")
+                if rerun == "y":
+                    os.system("sframe_main workdir/" + str(name) + "_" + str(i+1) + ".xml")
+                    f1 = ROOT.TFile(directory + str("uhh2.AnalysisModuleRunner." + MCorDATA + "." + name + "_" + str(i) + ".root"))
+                    try:
+                        t = f1.Get("AnalysisTree")
+                    except:
+                        print 'file ' + str(name + "_" + str(i) + ".root") + ' has still no AnalysisTree' 
+                    f1. Close()
+            f.Close()
 
 
 

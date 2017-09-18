@@ -442,6 +442,42 @@ private:
 };  // TriggerAcceptProducer
 
 
+class FakeTriggerAcceptProducer : public AnalysisModule {
+public:
+    explicit FakeTriggerAcceptProducer(Context & ctx,
+				   const string & prim_lept = "PrimaryLepton",
+				   const string & faketrig_name = "electrons",                  //"muons" or "electrons"
+                                   const string & h_name = "trigger_accept"):
+        h_primlept(ctx.get_handle<FlavorParticle>(prim_lept)),
+        s_faketrig_name(faketrig_name),
+        h(ctx.get_handle<int>(h_name)) {}
+        
+
+    virtual bool process(Event & e) override {
+        float prim_lep_pt = e.get(h_primlept).pt();
+       
+	if (s_faketrig_name == "electrons" && e.electrons->size() && fabs(e.electrons->at(0).pt() - prim_lep_pt) < 1e-40) {
+	  e.set(h, 1);
+	  return true;
+	}
+	
+ 	if (s_faketrig_name == "muons" && e.muons->size() && fabs(e.muons->at(0).pt() - prim_lep_pt) < 1e-40) {
+	  e.set(h, 1);
+	  return true;
+	}
+    
+        e.set(h, 0);
+        return false;
+    }
+
+private:
+    Event::Handle<FlavorParticle> h_primlept;
+    string s_faketrig_name;
+    Event::Handle<int> h;
+}; // FakeTriggerAcceptProducer
+
+
+
 class TwoDCutProducer: public AnalysisModule {
 public:
     explicit TwoDCutProducer(Context & ctx,

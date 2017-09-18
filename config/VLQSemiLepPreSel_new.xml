@@ -3,6 +3,7 @@
 [
 <!ENTITY MC_TTbar SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4.xml">
 <!ENTITY MC_TTbar_ext SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4_ext.xml">
+<!ENTITY MC_TTbar_both SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4_both.xml">
 
 <!ENTITY MC_DYJetsToLL_M50_HT0100to0200 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
 <!ENTITY MC_DYJetsToLL_M50_HT0200to0400 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
@@ -78,43 +79,20 @@
 <!ENTITY MC_TpB_TH_LH_M1700               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1700_LHanded.xml">
 <!ENTITY MC_TpB_TH_LH_M1800               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1800_LHanded.xml">
 
-<!ENTITY MC_TpB_TH_RH_M0700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M0700_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M0800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M0800_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M0900               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M0900_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1000               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1000_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1100               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1100_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1200               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1200_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1300               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1300_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1400               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1400_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1500               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1500_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1600               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1600_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1700_RH.xml">
-<!ENTITY MC_TpB_TH_RH_M1800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpB_TH_M1800_RH.xml">
-
-<!ENTITY MC_TpT_TH_LH_M1000               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1000.xml">
-<!ENTITY MC_TpT_TH_LH_M1100               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1100.xml">
-<!ENTITY MC_TpT_TH_LH_M1200               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1200.xml">
-<!ENTITY MC_TpT_TH_LH_M1300               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1300.xml">
-<!ENTITY MC_TpT_TH_LH_M1500               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1500.xml">
-<!ENTITY MC_TpT_TH_LH_M1600               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1600.xml">
-<!ENTITY MC_TpT_TH_LH_M1700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1700.xml">
-<!ENTITY MC_TpT_TH_LH_M1800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M1800.xml">
-<!ENTITY MC_TpT_TH_LH_M0700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M0700.xml">
-<!ENTITY MC_TpT_TH_LH_M0800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M0800.xml">
-<!ENTITY MC_TpT_TH_LH_M0900               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_LH_M0900.xml">
-
-<!ENTITY MC_TpT_TH_RH_M1000               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1000.xml">
-<!ENTITY MC_TpT_TH_RH_M1100               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1100.xml">
-<!ENTITY MC_TpT_TH_RH_M1200               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1200.xml">
-<!ENTITY MC_TpT_TH_RH_M1300               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1300.xml">
-<!ENTITY MC_TpT_TH_RH_M1400               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1400.xml">
-<!ENTITY MC_TpT_TH_RH_M1500               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1500.xml">
-<!ENTITY MC_TpT_TH_RH_M1600               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1600.xml">
-<!ENTITY MC_TpT_TH_RH_M1700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1700.xml">
-<!ENTITY MC_TpT_TH_RH_M1800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M1800.xml">
-<!ENTITY MC_TpT_TH_RH_M0700               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M0700.xml">
-<!ENTITY MC_TpT_TH_RH_M0800               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M0800.xml">
-<!ENTITY MC_TpT_TH_RH_M0900               SYSTEM  "../../common/datasets/RunII_80X_v3/MC_TpT_TH_RH_M0900.xml">
+<!ENTITY  TprimeBToTH_M-1000_Width-10p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1000_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1000_Width-20p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1000_Width-20p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1000_Width-30p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1000_Width-30p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1100_Width-10p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1100_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1200_Width-10p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1200_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1200_Width-20p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1200_Width-20p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1200_Width-30p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1200_Width-30p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1300_Width-10p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1300_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-800_Width-10p_LH             SYSTEM  "LargeWidthSamples/TprimeBToTH_M-800_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-800_Width-20p_LH             SYSTEM  "LargeWidthSamples/TprimeBToTH_M-800_Width-20p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-800_Width-30p_LH             SYSTEM  "LargeWidthSamples/TprimeBToTH_M-800_Width-30p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1800_Width-10p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1800_Width-10p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1800_Width-20p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1800_Width-20p_LHanded.xml">
+<!ENTITY  TprimeBToTH_M-1800_Width-30p_LH            SYSTEM  "LargeWidthSamples/TprimeBToTH_M-1800_Width-30p_LHanded.xml">
 
 ]
 >
@@ -190,11 +168,11 @@ a8"    `Y88 ""     `Y8   88    ""     `Y8
     &Data_SingleEleH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData-->
 
 
 
-<InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleMuB" Cacheable="False">
+<!--InputData Lumi="1" NEventsMax="-1" Type="DATA" Version="DataSingleMuB" Cacheable="False">
     &Data_SingleMuB;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -254,7 +232,7 @@ aa    ]8I 88 "8a,   ,d88 88       88 88,    ,88 88
 das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
 -->
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="False">
+<!--InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="False">
     &MC_TpB_TH_LH_M0700;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -318,57 +296,93 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     &MC_TpB_TH_LH_M1800;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData-->
 
-<!--InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0700" Cacheable="False">
-    &MC_TpB_TH_RH_M0700;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1000_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-1000_Width-10p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0800" Cacheable="False">
-    &MC_TpB_TH_RH_M0800;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1000_Width-20p_LH" Cacheable="False">
+    &TprimeBToTH_M-1000_Width-20p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M0900" Cacheable="False">
-    &MC_TpB_TH_RH_M0900;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1000_Width-30p_LH" Cacheable="False">
+    &TprimeBToTH_M-1000_Width-30p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1000" Cacheable="False">
-    &MC_TpB_TH_RH_M1000;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1100_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-1100_Width-10p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1100" Cacheable="False">
-    &MC_TpB_TH_RH_M1100;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1200_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-1200_Width-10p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1200" Cacheable="False">
-    &MC_TpB_TH_RH_M1200;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1200_Width-20p_LH" Cacheable="False">
+    &TprimeBToTH_M-1200_Width-20p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1300" Cacheable="False">
-    &MC_TpB_TH_RH_M1300;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1200_Width-30p_LH" Cacheable="False">
+    &TprimeBToTH_M-1200_Width-30p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1400" Cacheable="False">
-    &MC_TpB_TH_RH_M1400;
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1300_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-1300_Width-10p_LH;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1500" Cacheable="False">
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1800_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-1800_Width-10p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1800_Width-20p_LH" Cacheable="False">
+    &TprimeBToTH_M-1800_Width-20p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-1800_Width-30p_LH" Cacheable="False">
+    &TprimeBToTH_M-1800_Width-30p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-800_Width-10p_LH" Cacheable="False">
+    &TprimeBToTH_M-800_Width-10p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-800_Width-20p_LH" Cacheable="False">
+    &TprimeBToTH_M-800_Width-20p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="TprimeBToTH_M-800_Width-30p_LH" Cacheable="False">
+    &TprimeBToTH_M-800_Width-30p_LH;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<!--InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_RH_M1500" Cacheable="False">
     &MC_TpB_TH_RH_M1500;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
@@ -794,13 +808,20 @@ das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-m
     <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<InputData Lumi="92847.910" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="False">
+<InputData Lumi="186543.3502" NEventsMax="-1" Type="MC" Version="TTbar_both" Cacheable="False">
+    &MC_TTbar_both;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData-->
+
+
+<!--InputData Lumi="92847.910" NEventsMax="-1" Type="MC" Version="TTbar" Cacheable="False">
     &MC_TTbar;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData-->
 
-<InputData Lumi="93695.440" NEventsMax="-1" Type="MC" Version="TTbar_ext" Cacheable="False">
+<!--InputData Lumi="93695.440" NEventsMax="-1" Type="MC" Version="TTbar_ext" Cacheable="False">
     &MC_TTbar_ext;
     <InputTree Name="AnalysisTree" />
     <OutputTree Name="AnalysisTree" />
