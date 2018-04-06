@@ -24,6 +24,16 @@ public:
             ";primary electron p_{T};events",
             100, 0, 1000
         )),
+        muoEta(book<TH1F>(
+            "PrimaryMuonEta",
+            ";primary muon #eta;events",
+	    100, -6., 6.
+        )),
+        eleEta(book<TH1F>(
+            "PrimaryEleEta",
+            ";primary electron #eta;events",
+	    100, -6., 6.
+        )),
         leadingJetPt(book<TH1F>(
             "LeadingJetPt",
             ";leading jet p_{T};events",
@@ -47,10 +57,12 @@ public:
         if (event.electrons->size()
             && fabs(event.electrons->at(0).pt() - lep_pt) < 1e-40) {
             elePt->Fill(event.electrons->at(0).pt(), w);
+	    eleEta->Fill(event.electrons->at(0).eta(), w);
         }
         if (event.muons->size()
             && fabs(event.muons->at(0).pt() - lep_pt) < 1e-40) {
             muoPt->Fill(event.muons->at(0).pt(), w);
+            muoEta->Fill(event.muons->at(0).eta(), w);
         }
     }
 
@@ -59,6 +71,8 @@ public:
     TH1F * lepPt;
     TH1F * muoPt;
     TH1F * elePt;
+    TH1F * muoEta;
+    TH1F * eleEta;
     TH1F * leadingJetPt;
     TH1F * st;
 };

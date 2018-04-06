@@ -1480,13 +1480,15 @@ public:
     }
 
     virtual bool process(Event & e) override {
-        // cout << "e.genInfo->pdf_scalePDF()" << e.genInfo->pdf_scalePDF() << endl;
+      //cout << "e.genInfo->pdf_scalePDF()" << e.genInfo->pdf_scalePDF() << endl;
+      //cout << "first_index_"  << first_index_ << endl;
         if (first_index_ < 0) {
             for (unsigned i=0; i < 100; ++i) 
                 e.set(hndls[i], 1.);
             return true;
         }
         const auto & sys_weights = e.genInfo->systweights();
+	//cout << sys_weights[110] << endl;
         float orig_weight = 1.f;
         if (use_pdf_scale_) orig_weight = e.genInfo->pdf_scalePDF();
         else orig_weight = e.genInfo->originalXWGTUP();

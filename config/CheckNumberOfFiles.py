@@ -66,7 +66,20 @@ checkinputtree = raw_input("Do you want check if all files contain an InputTree?
 if checkinputtree == "y":
     for name in expectedfiles:
         for i in range(0, ExpNumbers[expectedfiles.index(name)]):
-            f = ROOT.TFile(directory + str("uhh2.AnalysisModuleRunner." + MCorDATA + "." + name + "_" + str(i) + ".root"))
+            try:
+                f = ROOT.TFile(directory + str("uhh2.AnalysisModuleRunner." + MCorDATA + "." + name + "_" + str(i) + ".root"))
+            except:
+                print 'file ' + str( name + "_" + str(i) + ".root") + ' has no AnalysisTree' 
+                rerun = raw_input("Do you want rerun the broken file locally? (y/n) ")
+                if rerun == "y":
+                    os.system("sframe_main workdir/" + str(name) + "_" + str(i+1) + ".xml")
+                    f1 = ROOT.TFile(directory + str("uhh2.AnalysisModuleRunner." + MCorDATA + "." + name + "_" + str(i) + ".root"))
+                    try:
+                        t = f1.Get("AnalysisTree")
+                    except:
+                        print 'file ' + str(name + "_" + str(i) + ".root") + ' has still no AnalysisTree' 
+                    f1. Close()
+
             try:
                 t = f.Get("AnalysisTree")
         

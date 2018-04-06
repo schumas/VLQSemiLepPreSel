@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd"
+[
+<!ENTITY MC_TTbar SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4.xml">
+<!ENTITY MC_TTbar_ext SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4_ext.xml">
+<!ENTITY MC_TTbar_both SYSTEM            "../../common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4_both.xml">
+
+<!ENTITY MC_DYJetsToLL_M50_HT0100to0200 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT0200to0400 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT0400to0600 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-400to600.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT0600to0800 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-600to800.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT0800to1200 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-800to1200.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT1200to2500 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
+<!ENTITY MC_DYJetsToLL_M50_HT2500toINFT SYSTEM  "../../common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
+
+<!ENTITY MC_WJets_LNu_HT100To200   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-100To200.xml">
+<!ENTITY MC_WJets_LNu_HT200To400   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-200To400.xml">
+<!ENTITY MC_WJets_LNu_HT400To600   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-400To600.xml">
+<!ENTITY MC_WJets_LNu_HT600To800   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-600To800.xml">
+<!ENTITY MC_WJets_LNu_HT800To1200  SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-800To1200.xml">
+<!ENTITY MC_WJets_LNu_HT1200To2500 SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-1200To2500.xml">
+<!ENTITY MC_WJets_LNu_HT2500ToInf  SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_HT-2500ToInf.xml">
+
+<!ENTITY MC_WJetsToLNu_Pt-100To250   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-100To250.xml">
+<!ENTITY MC_WJetsToLNu_Pt-250To400   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-250To400.xml">
+<!ENTITY MC_WJetsToLNu_Pt-400To600   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-400To600.xml">
+<!ENTITY MC_WJetsToLNu_Pt-600ToInf   SYSTEM  "../../common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-600ToInf.xml">
+
+
+<!ENTITY MC_TsChannel SYSTEM        "../../common/datasets/RunII_80X_v3/ST_s-channel_4f_leptonDecays_13TeV.xml">
+<!ENTITY MC_TtChannel_antitop SYSTEM        "../../common/datasets/RunII_80X_v3/MC_ST_t-channel_antitop_4f_inclusiveDecays.xml">
+<!ENTITY MC_TtChannel_top SYSTEM        "../../common/datasets/RunII_80X_v3/MC_ST_t-channel_top_4f_inclusiveDecays.xml">
+<!ENTITY MC_TWAntitop SYSTEM        "../../common/datasets/RunII_80X_v3/ST_tW_antitop_5f_inclusiveDecays_13TeV.xml">
+<!ENTITY MC_TWTop SYSTEM            "../../common/datasets/RunII_80X_v3/ST_tW_top_5f_inclusiveDecays_13TeV.xml">
+
+<!ENTITY Data_SingleMuB SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016B_03Feb.xml">
+<!ENTITY Data_SingleMuC SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016C_03Feb.xml">
+<!ENTITY Data_SingleMuD SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016D_03Feb.xml">
+<!ENTITY Data_SingleMuE SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016E_03Feb.xml">
+<!ENTITY Data_SingleMuF SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016F_03Feb.xml">
+<!ENTITY Data_SingleMuG SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016G_03Feb.xml">
+<!ENTITY Data_SingleMuH SYSTEM      "../../common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016H_03Feb.xml">
+
+<!ENTITY Data_SingleEleB SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016B_03Feb.xml">
+<!ENTITY Data_SingleEleC SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016C_03Feb.xml">
+<!ENTITY Data_SingleEleD SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016D_03Feb.xml">
+<!ENTITY Data_SingleEleE SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016E_03Feb.xml">
+<!ENTITY Data_SingleEleF SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016F_03Feb.xml">
+<!ENTITY Data_SingleEleG SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016G_03Feb.xml">
+<!ENTITY Data_SingleEleH SYSTEM     "../../common/datasets/RunII_80X_v3/DATA_SingleElectron_Run2016H_03Feb.xml">
+
+<!ENTITY MC_QCD_Pt80to120_MuEnrichedPt5   SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-80to120_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt120to170_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-120to170_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt170to300_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-170to300_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt300to470_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-300to470_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt470to600_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-470to600_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt600to800_MuEnrichedPt5  SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-600to800_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt800to1000_MuEnrichedPt5 SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-800to1000_MuEnrichedPt5.xml">
+<!ENTITY MC_QCD_Pt1000toInf_MuEnrichedPt5 SYSTEM "../../common/datasets/RunII_80X_v3/MC_QCD_Pt-1000toInf_MuEnrichedPt5.xml">
+
+<!ENTITY MC_QCD_Pt-80to120_EMEnriched     SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt80to120_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-120to170_EMEnriched    SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt120to170_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-170to300_EMEnriched    SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt170to300_EMEnriched.xml">
+<!ENTITY MC_QCD_Pt-300toInf_EMEnriched    SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt300toInf_EMEnriched.xml">
+
+<!ENTITY MC_QCD_Pt_80to170_bcToE          SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt_80to170_bcToE.xml">
+<!ENTITY MC_QCD_Pt_170to250_bcToE         SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt_170to250_bcToE.xml">
+<!ENTITY MC_QCD_Pt_250toInf_bcToE         SYSTEM  "../../common/datasets/RunII_80X_v3/MC_QCD_Pt_250toInf_bcToE.xml">
+
+<!ENTITY MC_TpB_TH_LH_M0700               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-700_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M0800               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-800_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M0900               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-900_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1000               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1000_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1100               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1100_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1200               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1200_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1300               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1300_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1400               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1400_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1500               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1500_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1700               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1700_LHanded.xml">
+<!ENTITY MC_TpB_TH_LH_M1800               SYSTEM  "../../common/datasets/RunII_80X_v3/TprimeBToTH_M-1800_LHanded.xml">
+
+<!ENTITY TprimeBToTH_M-1000_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1000_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1000_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1000_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1000_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1000_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1100_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1100_Width-10p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1200_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1200_Width-10p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1200_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1200_Width-20p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1200_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1200_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1300_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1300_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1400_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1400_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1400_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1400_Width-20p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1400_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1400_Width-30p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1500_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1500_Width-10p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1600_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1600_Width-10p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1600_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1600_Width-20p_LHanded.xml"> 
+<!ENTITY TprimeBToTH_M-1600_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1600_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1700_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1700_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1800_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1800_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1800_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1800_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1800_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1800_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-1900_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-1900_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2000_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2000_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2000_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2000_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2000_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2000_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2200_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2200_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2200_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2200_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2200_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2200_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2400_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2400_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2400_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2400_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2400_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2400_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2600_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2600_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2600_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2600_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-2600_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-2600_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-700_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-700_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-800_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-800_Width-10p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-800_Width-20p_LH SYSTEM "xml_large_width/TprimeBToTH_M-800_Width-20p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-800_Width-30p_LH SYSTEM "xml_large_width/TprimeBToTH_M-800_Width-30p_LHanded.xml">
+<!ENTITY TprimeBToTH_M-900_Width-10p_LH SYSTEM "xml_large_width/TprimeBToTH_M-900_Width-10p_LHanded.xml">
+
+]
+>
+
+<!--
+   <ConfigParse NEventsBreak="0" FileSplit="10" AutoResubmit="2"/>
+   <ConfigSGE RAM="8" DISK="2" Mail="svenja.schumann@desy.de" Notification="as" Workdir="workdir_Ele"/>
+-->
+
+
+<JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
+    <Library Name="libSUHH2VLQSemiLepPreSel"/>
+    <Package Name="SUHH2VLQSemiLepPreSel.par" />
+
+  <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/FILES/TRIGGER/" PostFix="" TargetLumi="35867.059983" >
+  <!--
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://" ProofWorkDir="/nfs/dust/cms/user/nowatsd/proof-wd/" ProofNodes="12" OutputDirectory="./Run2-ntuple-v6/" PostFix="" TargetLumi="552.67">
+  <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="tholenhe@naf-uhhcms04.desy.de:21001"  ProofWorkDir="/nfs/dust/cms/user/tholenhe/proof-wd/" ProofNodes="32" OutputDirectory="/nfs/dust/cms/user/tholenhe/VLQSemiLepPreSel/Run2-ntuple-tmp/" PostFix="" TargetLumi="552.67" >
+  -->
+
+
+
+
+
+
+<!--
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          88                                    88
+          ""                                    88
+                                                88
+,adPPYba, 88  ,adPPYb,d8 8b,dPPYba,  ,adPPYYba, 88
+I8[    "" 88 a8"    `Y88 88P'   `"8a ""     `Y8 88
+ `"Y8ba,  88 8b       88 88       88 ,adPPPPP88 88
+aa    ]8I 88 "8a,   ,d88 88       88 88,    ,88 88
+`"YbbdP"' 88  `"YbbdP"Y8 88       88 `"8bbdP"Y8 88
+              aa,    ,88
+               "Y8bbdP"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+das_client.py - -query="dataset dataset=/Tprime*ToTH_M-*_*H_TuneCUETP8M1_13TeV-madgraph-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM site=T2_DE_DESY"
+-->
+
+<!-- NARROW WIDTH SAMPLES -->
+
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M0700" Cacheable="False">
+    &MC_TpB_TH_LH_M0700;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1200" Cacheable="False">
+    &MC_TpB_TH_LH_M1200;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<InputData Lumi="100000" NEventsMax="-1" Type="MC" Version="MC_TpB_TH_LH_M1800" Cacheable="False">
+    &MC_TpB_TH_LH_M1800;
+    <InputTree Name="AnalysisTree" />
+    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+
+
+
+
+
+
+<!-- -->
+        <UserConfig>
+            <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
+            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
+            <Item Name="TauCollection" Value="slimmedTaus" />
+            <Item Name="JetCollection" Value="slimmedJets" />
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="GenTopJetCollection" Value="ak8GenJetsSoftDrop" />
+            <Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
+            <Item Name="METName" Value="slimmedMETs" />
+            <Item Name="GenParticleCollection" Value="GenParticles" />
+            <Item Name="additionalBranches" Value="triggerNames triggerResults patJetsAk8CHSJetsSoftDropPacked_daughters slimmedGenJetsAK8 slimmedGenJets" />
+
+            <!-- <Item Name="lumi_file" Value="set in main AnalysisModule" /> -->
+            <Item Name="lumihists_lumi_per_bin" Value="250"/>
+
+            <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyDataPileupHistogram.root" />
+            <Item Name="pileup_directory_25ns" Value="/nfs/dust/cms/user/schumas/ANALYSIS/80X_v4/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyMCPileupHistogram.root"/>
+
+            <Item Name="use_sframe_weight" Value="false" />
+            <!-- the class name of the AnalysisModule subclasses to run: -->
+            <Item Name="AnalysisModule" Value="VLQSemiLepPreSelTrigger_test" />
+            <!-- set this to the name of an AndSelection to control what is written to the output. If not given, *all* events are written to the output tree. -->
+            <Item Name="TestKey" Value="VLQSemiLepPreSelTrigger_test" />
+        </UserConfig>
+    </Cycle>
+</JobConfiguration>

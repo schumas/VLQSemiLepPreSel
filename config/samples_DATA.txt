@@ -1,14 +1,7 @@
-		DataSingleMuB:    520    532 097  Working 
-                 DataSingleMuC:    151    227 066  Working 
+                 DataSingleMuB:      0    532 000  Working 
+                 DataSingleMuC:      0    227 000  Working 
                  DataSingleMuD:      0    330 000  Working 
                  DataSingleMuE:      0    306 000  Working 
                  DataSingleMuF:      0    221 000  Working 
                  DataSingleMuG:      0    505 000  Working 
                  DataSingleMuH:      0    586 000  Working 
-                DataSingleEleB:    816    828 098  Working 
-                DataSingleEleC:     43    327 013  Working 
-                DataSingleEleD:      0    498 000  Working 
-                DataSingleEleE:      0    394 000  Working 
-                DataSingleEleF:      0    238 000  Working 
-                DataSingleEleG:      0    516 000  Working 
-                DataSingleEleH:      0    434 000  Working 
